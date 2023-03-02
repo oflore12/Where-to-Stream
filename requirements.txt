@@ -72,9 +72,10 @@ To activate environment
 	Once you see (env) prior to the username on the terminal
 	Run
 		pip install flask
-To run flask application
-	export FLASK_APP=(app_name)
+To run test.py flask application
+	export FLASK_APP=test
 	export FLASK_ENV=development
 	flask run
 In the vm open the web browser and go to http://127.0.0.1:5000/
 You should be able to see the web page
+
