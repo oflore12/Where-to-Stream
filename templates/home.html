@@ -3,25 +3,39 @@
 {% block title %}Home{% endblock %}
 
 {% block content %}
-<div class="input-group mb-3">
-    <button class="btn btn-outline-secondary dropdown-toggle" type="button" data-bs-toggle="dropdown" aria-expanded="false">Services</button>
-    <ul class="dropdown-menu">
-        <li><a class="dropdown-item" href="#">Alt Balaji</a></li>
-      <li><a class="dropdown-item" href="#">Amazon Prime Video</a></li>
-      <li><a class="dropdown-item" href="#">Apple TV+</a></li>
-      <li><a class="dropdown-item" href="#">Disney+ & ESPN+</a></li>
-      <li><a class="dropdown-item" href="#">HBO Max and Discovery+</a></li>
-      <li><a class="dropdown-item" href="#">Hulu</a></li>
-      <li><a class="dropdown-item" href="#">iQIYI</a></li>
-      <li><a class="dropdown-item" href="#">Netflix</a></li>
-      <li><a class="dropdown-item" href="#">Paramount+ & Showtime</a></li>
-      <li><a class="dropdown-item" href="#">Tencent Video</a></li>
-      <li><a class="dropdown-item" href="#">Viu</a></li>
-      <li><a class="dropdown-item" href="#">Youku</a></li>
-      <li><a class="dropdown-item" href="#">YouTube Premium</a></li>
-    </ul>
-  
-    <input type="text" class="form-control" placeholder="" aria-label="Example text with button addon" aria-describedby="button-addon1">
-    <button class="btn btn-outline-secondary" type="button" id="button-addon1">Search</button>
-  </div>  
+<form method="get">
+    <div class="input-group my-3">
+        <button class="btn btn-outline-secondary dropdown-toggle" type="button" data-bs-toggle="dropdown"
+            id="servicesLabel" aria-expanded="false">All Services</button>
+        <ul class="dropdown-menu" id="servicesMenu">
+            <li class="dropdown-item" data-form-val="all">All Services</a></li>
+            <li class="dropdown-item" data-form-val="alt-balaji">Alt Balaji</li>
+            <li class="dropdown-item" data-form-val="prime">Amazon Prime Video</li>
+            <li class="dropdown-item" data-form-val="apple">Apple TV+</li>
+            <li class="dropdown-item" data-form-val="disney-espn">Disney+ & ESPN+</li>
+            <li class="dropdown-item" data-form-val="hbo-disc">HBO Max and Discovery+</li>
+            <li class="dropdown-item" data-form-val="hulu">Hulu</li>
+            <li class="dropdown-item" data-form-val="iqiyi">iQIYI</li>
+            <li class="dropdown-item" data-form-val="netflix">Netflix</li>
+            <li class="dropdown-item" data-form-val="para-show">Paramount+ & Showtime</li>
+            <li class="dropdown-item" data-form-val="tencent">Tencent Video</li>
+            <li class="dropdown-item" data-form-val="viu">Viu</li>
+            <li class="dropdown-item" data-form-val="youku">Youku</li>
+            <li class="dropdown-item" data-form-val="yt">YouTube Premium</li>
+        </ul>
+        <input type="hidden" name="service" value="all" id="servicesValue" />
+
+        <input name="q" type="text" class="form-control" placeholder="" aria-label="Example text with button addon"
+            aria-describedby="button-addon1">
+        <button class="btn btn-outline-secondary" type="submit" id="button-addon1">Search</button>
+    </div>
+</form>
+
+<script>
+    document.addEventListener('click', function (event) {
+        if (!event.target.matches('#servicesMenu .dropdown-item')) return;
+        document.getElementById("servicesLabel").innerText = event.target.innerText;
+        document.getElementById("servicesValue").value = event.target.dataset.formVal;
+    }, false);
+</script>
 {% endblock %}
