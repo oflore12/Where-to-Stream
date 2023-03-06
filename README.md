@@ -27,3 +27,8 @@ To run Flask application
 - `flask run`
 
 In the VM, open a web browser and go to http://127.0.0.1:5000/. You should be able to see the web page.
+
+## Testing
+In the Python environment, simply run `pytest` to run a test session on all testing files. All testing files are located in the *tests/* directory.
+
+To run a specific testing file, run `pytest test/<name_of_test>.py`.
