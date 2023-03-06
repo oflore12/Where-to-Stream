@@ -8,4 +8,4 @@ def test1_search_all_query(client):
         "q": "The Simsons",
     })
     # Check that "The Simpsons" was returned as a search result
-    assert b"The Simpsons" in getResponse1.data
+    assert b"The Simpsons" in getResponse2.data
