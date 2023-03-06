@@ -3,7 +3,7 @@ def test1_search_all_query(client):
     # Check that search page could be accessed
     assert getResponse1.status_code == 200
 
-    getResponse2 = client.post('/', data={
+    getResponse2 = client.get('/', data={
         "service": "all",
         "q": "The Simsons",
     })
