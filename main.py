@@ -32,13 +32,6 @@ class mediaResult(db.Model):
 
 @app.route('/')
 def home():
-    if request.method == 'GET' and request.args.get('q'):
-        db.drop_all()
-        db.create_all()
-        q = request.args.get('q')
-        q = q.strip()
-        getResults(q)
-        return redirect(url_for('results'))
     return render_template('home.html')
 
 
@@ -48,6 +41,7 @@ def results():
         db.drop_all()
         db.create_all()
         q = request.args.get('q')
+        print("q is", request.args.get('service'))
         q = q.strip()
         getResults(q)
 
