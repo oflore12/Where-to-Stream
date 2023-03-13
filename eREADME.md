@@ -17,7 +17,7 @@ To set that up run these commands:
 The prompt should change from the bash to `postgres=#`, then run these commands:
 
 - `CREATE USER test WITH PASSWORD '447';`
-- `CREATE DATABASE test_result`;
+- `CREATE DATABASE test_result;`;
 - `GRANT ALL PRIVILEGES ON DATABASE test_result TO test;`
 - `\q` to exit postgresql
 

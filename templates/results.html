@@ -1,0 +1,32 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <title>Where To Stream</title>
+</head>
+<body>
+	<h2>Search Results:</h2>
+	{% for r in results %}
+	<div>
+		<h4>{{r.title}}</h4>
+		<p>Avaiable to buy on:</p>
+		<ul>
+		{% for p in r.buy_providers %}
+		<li>{{p}}</li>
+		{% endfor %}
+		</ul>
+		<p>Avaiable to stream on subscription services:</p>
+		<ul>
+		{% for p in r.flatrate_providers %}
+		<li>{{p}}</li>
+		{% endfor %}
+		</ul>
+		<p>Avaiable to rent on:</p>
+		<ul>
+		{% for p in r.rent_providers %}
+		<li>{{p}}</li>
+		{% endfor %}
+		</ul>
+	</div>
+	{% endfor %}
+</body>
