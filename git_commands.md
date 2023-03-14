@@ -25,4 +25,4 @@ it should look something like this "git commit -m "C447-18 <message>"
 	- EX: `git commit -m "C447-18 <message>"`
 
 **TO UPDATE YOUR LOCAL REPO WITH THE REMOTE REPO**
-- 'git pull git@github.com:oflore12/CMSC447Project.git' (you might have to be in the CMSC447Project directory)
+- `git pull git@github.com:oflore12/CMSC447Project.git` (you might have to be in the CMSC447Project directory)
