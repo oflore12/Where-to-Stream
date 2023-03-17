@@ -1,6 +1,7 @@
 from urllib.request import urlopen
 import urllib.parse
 import json
+import tmdbsimple as tmdb
 from flask import Flask, render_template, request, url_for, redirect
 from flask_sqlalchemy import SQLAlchemy
 
@@ -16,6 +17,9 @@ database = "test_result"
 app.config["SQLALCHEMY_DATABASE_URI"] = "postgresql://test:447@localhost:5432/test_result"
 db = SQLAlchemy(app)
 
+tmdb.API_KEY = apiKey
+# Recommended by the tmdbsimple devs, so if the site is down the code won't get stuck there
+tmdb.REQUESTS_TIMEOUT = 5
 
 class mediaResult(db.Model):
     __tablename__ = 'results'
@@ -49,11 +53,14 @@ def results():
     return render_template("results.html", results=results)
 
 
-def getResults(query):
-    uriQ = urllib.parse.quote(query)
-    response = urlopen(searchRequest.format(apiKey, "en-US", uriQ))
-    results = json.loads(response.read())["results"]
-    for result in results:
+def getResults(q):
+	# Not needed now using tmdbsimple
+    #uriQ = urllib.parse.quote(query)
+    search = tmdb.Search()
+    response = search.multi(query=q)
+    #response = urlopen(searchRequest.format(apiKey, "en-US", uriQ))
+    #results = json.loads(response.read())["results"]
+    for result in search.results:
         if result["media_type"] == "person":
             continue
 
@@ -61,9 +68,13 @@ def getResults(query):
         media_type = result["media_type"]
         title = result["title"] if media_type == "movie" else result["name"]
 
-        providerResponse = urlopen(
-            providerRequest.format(media_type, id, apiKey))
-        r = json.loads(providerResponse.read())["results"]
+        #providerResponse = urlopen(providerRequest.format(media_type, id, apiKey))
+        providerSearch = None
+        if media_type == "movie":
+            providerSearch = tmdb.Movie(id)
+        else:
+            providerSearch = tmdb.TV(id)
+        #r = json.loads(providerResponse.read())["results"]
         purchaseOptions = r.get("US")
         if purchaseOptions is None:
             continue
