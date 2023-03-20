@@ -1,15 +1,10 @@
-{% extends 'base.html' %}
-
-{% block title %}results{% endblock %}
-
-{% block content %}
-
-<form action="{{url_for('results')}}" method="get">
+{% macro mainSearchBar(q, provider) -%}
+<form action="{{ url_for('search') }}" method="get">
     <div class="input-group my-3">
         <button class="btn btn-outline-secondary dropdown-toggle" type="button" data-bs-toggle="dropdown"
-            id="servicesLabel" aria-expanded="false">All Services</button>
-        <ul class="dropdown-menu" id="servicesMenu">
-            <li class="dropdown-item" data-form-val="all">All Services</a></li>
+            id="providersLabel" aria-expanded="false">All Providers</button>
+        <ul class="dropdown-menu" id="providersMenu">
+            <li class="dropdown-item" data-form-val="all">All Providers</a></li>
             <li class="dropdown-item" data-form-val="alt-balaji">Alt Balaji</li>
             <li class="dropdown-item" data-form-val="prime">Amazon Prime Video</li>
             <li class="dropdown-item" data-form-val="apple">Apple TV+</li>
@@ -24,48 +19,20 @@
             <li class="dropdown-item" data-form-val="youku">Youku</li>
             <li class="dropdown-item" data-form-val="yt">YouTube Premium</li>
         </ul>
-        <input type="hidden" name="service" value="all" id="servicesValue" />
+        <input type="hidden" name="provider" value="{{ 'all' if provider is none or provider == '' else provider }}" id="providersValue" />
 
-        <input name="q" type="text" class="form-control" placeholder="" aria-label="Example text with button addon"
-            aria-describedby="button-addon1">
+        <input name="q" type="text" class="form-control" placeholder="" value="{{ q }}"
+            aria-label="Example text with button addon" aria-describedby="button-addon1">
         <button class="btn btn-outline-secondary" type="submit" id="button-addon1">Search</button>
     </div>
 </form>
-
 <script>
     document.addEventListener('click', function (event) {
-        if (!event.target.matches('#servicesMenu .dropdown-item')) return;
-        document.getElementById("servicesLabel").innerText = event.target.innerText;
-        document.getElementById("servicesValue").value = event.target.dataset.formVal;
+        if (!event.target.matches('#providersMenu .dropdown-item')) return;
+        document.getElementById("providersLabel").innerText = event.target.innerText;
+        document.getElementById("providersValue").value = event.target.dataset.formVal;
     }, false);
+
+    document.querySelector("#providersMenu .dropdown-item[data-form-val='{{ 'all' if provider is none or provider == '' else provider }}']").click();
 </script>
-
-<body>
-	<h2>Search Results:</h2>
-	{% for r in results %}
-	<div>
-		<h4>{{r.title}}</h4>
-		<p>Avaiable to buy on:</p>
-		<ul>
-		{% for p in r.buy_providers %}
-		<li>{{p}}</li>
-		{% endfor %}
-		</ul>
-		<p>Avaiable to stream on subscription services:</p>
-		<ul>
-		{% for p in r.flatrate_providers %}
-		<li>{{p}}</li>
-		{% endfor %}
-		</ul>
-		<p>Avaiable to rent on:</p>
-		<ul>
-		{% for p in r.rent_providers %}
-		<li>{{p}}</li>
-		{% endfor %}
-		</ul>
-	</div>
-	{% endfor %}
-
-</body>
-
-{% endblock %}
+{%- endmacro %}

@@ -39,18 +39,20 @@ def home():
     return render_template('home.html')
 
 
-@app.route('/results', methods=['GET'])
-def results():
+@app.route('/search', methods=['GET'])
+def search():
     if request.method == 'GET':
         db.drop_all()
         db.create_all()
         q = request.args.get('q')
-        print("q is", request.args.get('service'))
+        if q is None or q == '':
+            return redirect(url_for('home'))
         q = q.strip()
+        provider = request.args.get('provider')
         getResults(q)
 
     results = mediaResult.query.all()
-    return render_template("results.html", results=results)
+    return render_template("search.html", q=q, provider=provider, results=results)
 
 
 def getResults(q):
