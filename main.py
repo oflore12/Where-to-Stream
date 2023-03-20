@@ -54,12 +54,10 @@ def results():
 
 
 def getResults(q):
-	# Not needed now using tmdbsimple
-    #uriQ = urllib.parse.quote(query)
+
     search = tmdb.Search()
     response = search.multi(query=q)
-    #response = urlopen(searchRequest.format(apiKey, "en-US", uriQ))
-    #results = json.loads(response.read())["results"]
+
     for result in search.results:
         if result["media_type"] == "person":
             continue
@@ -68,13 +66,24 @@ def getResults(q):
         media_type = result["media_type"]
         title = result["title"] if media_type == "movie" else result["name"]
 
-        #providerResponse = urlopen(providerRequest.format(media_type, id, apiKey))
-        providerSearch = None
-        if media_type == "movie":
-            providerSearch = tmdb.Movie(id)
-        else:
-            providerSearch = tmdb.TV(id)
-        #r = json.loads(providerResponse.read())["results"]
+        providerResponse = urlopen(providerRequest.format(media_type, id, apiKey))
+
+        #need to work on implementing tmdb simple below once we can figure
+        #out how to see providers and add to list with tmdbsimple
+
+        #providerSearch = None
+        #if media_type == "movie":
+            #providerSearch = tmdb.Movies(id)
+
+            
+
+        #else:
+       #     providerSearch = tmdb.TV(id)
+        
+        r = json.loads(providerResponse.read())["results"]
+
+        #r = providerSearch
+        #purchaseOptions = providerSearch.get("US")
         purchaseOptions = r.get("US")
         if purchaseOptions is None:
             continue
