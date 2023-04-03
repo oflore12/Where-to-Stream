@@ -7,24 +7,64 @@
 {{ search_bar.mainSearchBar(q, provider) }}
 
 {% for r in results %}
+
 <div>
 	<h4>{{r.title}}</h4>
+
 	<p>Avaiable to buy on:</p>
 	<ul>
-		{% for p in r.buy_providers %}
-		<li>{{p}}</li>
+		{% for b in r.buy_providers %}
+
+			{% set counter = loop.index0 %}
+
+			<li>			
+							
+			{% set imageUrl = "https://image.tmdb.org/t/p/w500/" + r.buy_provider_logo[counter]%}      
+				
+			<img src= "{{imageUrl}}" alt="streaming service logo" width="50" height="50" />
+			
+			{{b}}
+							
+			</li>
+
 		{% endfor %}
 	</ul>
+
 	<p>Avaiable to stream on subscription services:</p>
 	<ul>
-		{% for p in r.flatrate_providers %}
-		<li>{{p}}</li>
+		{% for f in r.flatrate_providers %}
+	
+			{% set counter = loop.index0 %}
+
+			<li>
+
+                        {% set imageUrl = "https://image.tmdb.org/t/p/w500/" + r.flatrate_provider_logo[counter]%} 
+
+			<img src= "{{imageUrl}}" alt="streaming service logo" width="50" height="50" />
+
+			{{f}}
+
+			</li>
+
 		{% endfor %}
 	</ul>
+
 	<p>Avaiable to rent on:</p>
 	<ul>
 		{% for p in r.rent_providers %}
-		<li>{{p}}</li>
+			
+			{% set counter = loop.index0 %}
+
+                        <li>
+
+                        {% set imageUrl = "https://image.tmdb.org/t/p/w500/" + r.rent_provider_logo[counter]%}
+
+                        <img src= "{{imageUrl}}" alt="streaming service logo" width="50" height="50" />
+
+			{{p}}
+
+			</li>
+
 		{% endfor %}
 	</ul>
 </div>
