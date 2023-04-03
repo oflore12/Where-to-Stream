@@ -26,9 +26,12 @@ class mediaResult(db.Model):
     id = db.Column(db.Integer, primary_key=True)
     title = db.Column(db.String(100))
     media_type = db.Column(db.String(5))
-    buy_providers = db.Column(db.ARRAY(db.String(30)))
-    flatrate_providers = db.Column(db.ARRAY(db.String(30)))
-    rent_providers = db.Column(db.ARRAY(db.String(30)))
+    buy_providers = db.Column(db.ARRAY(db.String(50)))
+    buy_provider_logo = db.Column(db.ARRAY(db.String(50)))
+    flatrate_providers = db.Column(db.ARRAY(db.String(50)))
+    flatrate_provider_logo = db.Column(db.ARRAY(db.String(50)))
+    rent_providers = db.Column(db.ARRAY(db.String(50)))
+    rent_provider_logo= db.Column(db.ARRAY(db.String(50)))
 
     def __repr__(self):
         return f'<Result: {self.title}>'
@@ -90,22 +93,29 @@ def getResults(q):
         if purchaseOptions is None:
             continue
         buy = []
+        buy_logo = []
         flatrate = []
+        flatrate_logo = []
         rent = []
+        rent_logo = []
 
         for option in purchaseOptions:
             if option == "buy":
                 for provider in purchaseOptions[option]:
                     buy.append(provider["provider_name"])
+                    buy_logo.append(provider["logo_path"])
             elif option == "flatrate":
                 for provider in purchaseOptions[option]:
-                    flatrate.append(provider["provider_name"])
+                   flatrate.append(provider["provider_name"])
+                   flatrate_logo.append(provider["logo_path"])
             elif option == "rent":
                 for provider in purchaseOptions[option]:
                     rent.append(provider["provider_name"])
+                    rent_logo.append(provider["logo_path"])
 
         newResult = mediaResult(id=id, title=title, media_type=media_type,
-                                buy_providers=buy, flatrate_providers=flatrate, rent_providers=rent)
+                                buy_providers=buy, buy_provider_logo = buy_logo, flatrate_providers=flatrate, 
+				flatrate_provider_logo = flatrate_logo , rent_providers=rent, rent_provider_logo = rent_logo) 
         db.session.add(newResult)
         db.session.commit()
     return
