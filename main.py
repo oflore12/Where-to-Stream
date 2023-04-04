@@ -11,10 +11,7 @@ apiKey = "523e00cfc7fcc6bed883c38162ea974d"
 searchRequest = "https://api.themoviedb.org/3/search/multi?api_key={}&language={}&query={}&include_adult=false"
 providerRequest = "https://api.themoviedb.org/3/{}/{}/watch/providers?api_key={}"
 
-username = "test"
-password = "447"
-database = "test_result"
-app.config["SQLALCHEMY_DATABASE_URI"] = "postgresql://test:447@localhost:5432/test_result"
+app.config["SQLALCHEMY_DATABASE_URI"] = "postgresql://wts:team3@localhost:5432/wts_db"
 db = SQLAlchemy(app)
 
 tmdb.API_KEY = apiKey
