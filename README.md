@@ -14,13 +14,11 @@ Start the PostgreSQL database:
 - `sudo passwd postgres` (1st time after install)
 - `sudo service postgresql start`
 
-The following is to initialize the `test_result` database, which should be moved to an *init_db.py* file.
+New way to create the PostgreSQL user and database:
 
-- `sudo -iu postgres psql`
-- `CREATE USER test WITH PASSWORD '447';`
-- `CREATE DATABASE test_result;`;
-- `GRANT ALL PRIVILEGES ON DATABASE test_result TO test;`
-- `\q` (to exit PostgreSQL)
+- `sudo -iu postgres createuser -P -e -s wts`
+- Enter password `team3` and confirm password
+- `python3 init_db.py`
 
 Make sure you're in the CMSC447Project directory and run:
 
