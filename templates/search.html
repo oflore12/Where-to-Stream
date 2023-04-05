@@ -14,6 +14,14 @@
 
 	<p>Avaiable to buy on:</p>
 	<ul>
+		
+		{%if not r.buy_providers %}
+
+                There are no providers to buy this from
+
+                {%endif%}
+
+
 		{% for b in r.buy_providers %}
 
 			{% set counter = loop.index0 %}
@@ -33,6 +41,13 @@
 
 	<p>Avaiable to stream on subscription services:</p>
 	<ul>
+
+		{%if not r.flatrate_providers %}
+
+                There are no providers to stream this from
+
+                {%endif%}
+
 		{% for f in r.flatrate_providers %}
 	
 			{% set counter = loop.index0 %}
@@ -52,6 +67,12 @@
 
 	<p>Avaiable to rent on:</p>
 	<ul>
+		{%if not r.rent_providers %}
+
+                There are no providers to rent this from
+
+                {%endif%}
+
 		{% for p in r.rent_providers %}
 			
 			{% set counter = loop.index0 %}
