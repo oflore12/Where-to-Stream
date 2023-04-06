@@ -40,6 +40,13 @@ To run Flask application
 
 In the VM, open a web browser and go to http://127.0.0.1:5000/. You should be able to see the web page.
 
+## Run Application After the initial installation and creatation of database
+- `sudo service postgresql start`
+- `python3 init_db.py`
+- `export FLASK_APP=main`
+- `export FLASK_ENV=development`
+- `flask run`
+
 ## Testing
 In the Python environment, simply run `pytest` to run a test session on all testing files. All testing files are located in the *tests/* directory.
 
