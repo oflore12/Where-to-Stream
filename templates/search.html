@@ -7,88 +7,77 @@
 {{ search_bar.mainSearchBar(q, provider) }}
 
 {% for r in results %}
-
-
-<div>
+<div style="margin-bottom: 50px">
 	<h4>{{r.title}}</h4>
 
+	{% if r.providers.buy %}
 	<p>Available to buy on:</p>
 	<ul>
-		
-		{%if not r.buy_providers %}
-
-                There are no providers to buy this from
-
-                {%endif%}
-
-
-		{% for b in r.buy_providers %}
-
-			{% set counter = loop.index0 %}
-
-			<li>			
-							
-			{% set imageUrl = "https://image.tmdb.org/t/p/w500/" + r.buy_provider_logo[counter]%}      
-				
-			<img src= "{{imageUrl}}" alt="streaming service logo" width="50" height="50" />
-			
-			{{b}}
-							
-			</li>
-
+		{% for b in r.providers.buy %}
+		<li>
+			{% set imageUrl = "https://image.tmdb.org/t/p/w500/" + b.logo_path %}
+			<img src="{{imageUrl}}" alt="streaming service logo" width="50" height="50" />
+			{{b.provider_name}}
+		</li>
 		{% endfor %}
 	</ul>
+	{% endif %}
 
+	{% if r.providers.flatrate %}
 	<p>Available to stream on subscription services:</p>
 	<ul>
-
-		{%if not r.flatrate %}
-
-                There are no providers to stream this from
-
-                {%endif%}
-
-		{% for f in r.flatrate %}
-	
-			{% set counter = loop.index0 %}
-
-			<li>
-
-                        {% set imageUrl = "https://image.tmdb.org/t/p/w500/" + r.flatrate_provider_logo[counter]%} 
-
-			<img src= "{{imageUrl}}" alt="streaming service logo" width="50" height="50" />
-
-			{{f}}
-
-			</li>
-
+		{% for f in r.providers.flatrate %}
+		<li>
+			{% set imageUrl = "https://image.tmdb.org/t/p/w500/" + f.logo_path %}
+			<img src="{{imageUrl}}" alt="streaming service logo" width="50" height="50" />
+			{{f.provider_name}}
+		</li>
 		{% endfor %}
 	</ul>
+	{% endif %}
 
+	{% if r.providers.rent %}
 	<p>Available to rent on:</p>
 	<ul>
-		{%if not r.rent_providers %}
-
-                There are no providers to rent this from
-
-                {%endif%}
-
-		{% for p in r.rent_providers %}
-			
-			{% set counter = loop.index0 %}
-
-                        <li>
-
-                        {% set imageUrl = "https://image.tmdb.org/t/p/w500/" + r.rent_provider_logo[counter]%}
-
-                        <img src= "{{imageUrl}}" alt="streaming service logo" width="50" height="50" />
-
-			{{p}}
-
-			</li>
-
+		{% for p in r.providers.rent %}
+		<li>
+			{% set imageUrl = "https://image.tmdb.org/t/p/w500/" + p.logo_path %}
+			<img src="{{imageUrl}}" alt="streaming service logo" width="50" height="50" />
+			{{p.provider_name}}
+		</li>
 		{% endfor %}
 	</ul>
+	{% endif %}
+
+	{% if r.providers.free %}
+	<p>Available for free on:</p>
+	<ul>
+		{% for f in r.providers.free %}
+		<li>
+			{% set imageUrl = "https://image.tmdb.org/t/p/w500/" + f.logo_path %}
+			<img src="{{imageUrl}}" alt="streaming service logo" width="50" height="50" />
+			{{f.provider_name}}
+		</li>
+		{% endfor %}
+	</ul>
+	{% endif %}
+
+	{% if r.providers.ads %}
+	<p>Available with ads on:</p>
+	<ul>
+		{% for a in r.providers.ads %}
+		<li>
+			{% set imageUrl = "https://image.tmdb.org/t/p/w500/" + a.logo_path %}
+			<img src="{{imageUrl}}" alt="streaming service logo" width="50" height="50" />
+			{{a.provider_name}}
+		</li>
+		{% endfor %}
+	</ul>
+	{% endif %}
+
+	{% if not r.providers %}
+	Not available from any streaming providers
+	{% endif %}
 </div>
 {% endfor %}
 {% endblock %}
