@@ -4,6 +4,7 @@ import json
 import tmdbsimple as tmdb
 from flask import Flask, render_template, request, url_for, redirect
 from flask_sqlalchemy import SQLAlchemy
+from sqlalchemy.dialects.postgresql import JSON as SQL_JSON
 
 app = Flask(__name__)
 
@@ -18,47 +19,60 @@ tmdb.API_KEY = apiKey
 # Recommended by the tmdbsimple devs, so if the site is down the code won't get stuck there
 tmdb.REQUESTS_TIMEOUT = 5
 
-class mediaResult(db.Model):
-    __tablename__ = 'results'
+
+class TVResult(db.Model):
+    __tablename__ = 'TVResults'
     id = db.Column(db.Integer, primary_key=True)
     title = db.Column(db.String(100))
-    media_type = db.Column(db.String(5))
-    buy_providers = db.Column(db.ARRAY(db.String(50)))
-    buy_provider_logo = db.Column(db.ARRAY(db.String(50)))
-    flatrate_providers = db.Column(db.ARRAY(db.String(50)))
-    flatrate_provider_logo = db.Column(db.ARRAY(db.String(50)))
-    rent_providers = db.Column(db.ARRAY(db.String(50)))
-    rent_provider_logo = db.Column(db.ARRAY(db.String(50)))
+    providers = db.Column(SQL_JSON)
+    last_updated = db.Column(db.DateTime(timezone=True),
+                             server_default=db.func.now())
 
     def __repr__(self):
-        return f'<Result: {self.title}>'
+        return f'<TVResult: {self.title}>'
+
+
+class MovieResult(db.Model):
+    __tablename__ = 'MovieResults'
+    id = db.Column(db.Integer, primary_key=True)
+    title = db.Column(db.String(100))
+    providers = db.Column(SQL_JSON)
+    last_updated = db.Column(db.DateTime(timezone=True),
+                             server_default=db.func.now())
+
+    def __repr__(self):
+        return f'<MovieResult: {self.title}>'
 
 
 @app.route('/')
 def home():
+    db.drop_all()  # dev trigger to dump database
     return render_template('home.html')
 
 
 @app.route('/search', methods=['GET'])
 def search():
     if request.method == 'GET':
-        db.drop_all()
         db.create_all()
+        """ results = TVResult.query.all()
+        for r in results:
+            print(r) """
+
         q = request.args.get('q')
         if q is None or q == '':
             return redirect(url_for('home'))
         q = q.strip()
         provider = request.args.get('provider')
-        getResults(q)
+        results = getResults(q)
+        return render_template("search.html", q=q, provider=provider, results=results)
 
-    results = mediaResult.query.all()
-    return render_template("search.html", q=q, provider=provider, results=results)
+    return redirect(url_for('home'))
 
 
 def getResults(q):
-
     search = tmdb.Search()
-    response = search.multi(query=q)
+    search.multi(query=q)
+    results = []
 
     for result in search.results:
         if result["media_type"] == "person":
@@ -68,38 +82,23 @@ def getResults(q):
         media_type = result["media_type"]
         title = result["title"] if media_type == "movie" else result["name"]
 
-        providerResponse = urlopen(providerRequest.format(media_type, id, apiKey))
+        providerResponse = urlopen(
+            providerRequest.format(media_type, id, apiKey))
+        providers = json.loads(providerResponse.read())["results"]
 
-        r = json.loads(providerResponse.read())["results"]
+        # Replace with filtering
+        providers = providers.get("US")
 
-        purchaseOptions = r.get("US")
-        if purchaseOptions is None:
-            continue
-        buy = []
-        buy_logo =[]
-        flatrate = []
-        flatrate_logo = []
-        rent = []
-        rent_logo = []
+        if media_type == "tv":
+            newResult = TVResult(id=id, title=title, providers=providers)
+        else:  # Movie
+            newResult = MovieResult(id=id, title=title, providers=providers)
 
-        for option in purchaseOptions:
-            if option == "buy":
-                for provider in purchaseOptions[option]:
-                    buy.append(provider["provider_name"])
-                    buy_logo.append(provider["logo_path"])
-            elif option == "flatrate":
-                for provider in purchaseOptions[option]:
-                    flatrate.append(provider["provider_name"])
-                    flatrate_logo.append(provider["logo_path"])
-            elif option == "rent":
-                for provider in purchaseOptions[option]:
-                    rent.append(provider["provider_name"])
-                    rent_logo.append(provider["logo_path"])
+        results.append(newResult)
+        if providers:
+            print(result["id"], newResult.title, media_type, type(providers), providers.keys())
 
-        newResult = mediaResult(id=id, title=title, media_type=media_type,
-                                buy_providers=buy, buy_provider_logo = buy_logo, flatrate_providers=flatrate,
-                                flatrate_provider_logo = flatrate_logo, rent_providers=rent,
-                                rent_provider_logo = rent_logo)
-        db.session.add(newResult)
-        db.session.commit()
-    return
+        #db.session.add(newResult)
+        #db.session.commit()
+
+    return results

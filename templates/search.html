@@ -12,7 +12,7 @@
 <div>
 	<h4>{{r.title}}</h4>
 
-	<p>Avaiable to buy on:</p>
+	<p>Available to buy on:</p>
 	<ul>
 		
 		{%if not r.buy_providers %}
@@ -39,16 +39,16 @@
 		{% endfor %}
 	</ul>
 
-	<p>Avaiable to stream on subscription services:</p>
+	<p>Available to stream on subscription services:</p>
 	<ul>
 
-		{%if not r.flatrate_providers %}
+		{%if not r.flatrate %}
 
                 There are no providers to stream this from
 
                 {%endif%}
 
-		{% for f in r.flatrate_providers %}
+		{% for f in r.flatrate %}
 	
 			{% set counter = loop.index0 %}
 
@@ -65,7 +65,7 @@
 		{% endfor %}
 	</ul>
 
-	<p>Avaiable to rent on:</p>
+	<p>Available to rent on:</p>
 	<ul>
 		{%if not r.rent_providers %}
 
