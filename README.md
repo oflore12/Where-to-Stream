@@ -38,7 +38,7 @@ To run Flask application
 - `export FLASK_ENV=development`
 - `flask run`
 
-In the VM, open a web browser and go to http://127.0.0.1:5000/. You should be able to see the web page.
+In the machine running flask, open a web browser and go to http://127.0.0.1:5000/. You should be able to see the web page.
 
 ## Run Application After the initial installation and creatation of database
 - `sudo service postgresql start`
