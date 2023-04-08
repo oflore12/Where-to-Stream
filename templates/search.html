@@ -11,16 +11,21 @@
 	<h4>{{r.title}}</h4>
 
 	{% if r.providers.get(country).buy %}
-	<p>Available to buy on:</p>
-	<ul>
+	<div class = "row">
+		<div class = "column vertical">BUY</div>
+		<div class = "column"> 
+	
 		{% for b in r.providers.get(country).buy %}
-		<li>
+		<div class = "iconContainer">
+		
 			{% set imageUrl = "https://image.tmdb.org/t/p/w500/" + b.logo_path %}
 			<img src="{{imageUrl}}" alt="streaming service logo" width="50" height="50" />
-			{{b.provider_name}}
-		</li>
+			<span>{{b.provider_name}}</span>
+		</div>
 		{% endfor %}
-	</ul>
+	</div>
+	</div>
+	</div>
 	{% endif %}
 
 	{% if r.providers.get(country).flatrate %}
