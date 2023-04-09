@@ -2,13 +2,15 @@
     cursor: pointer;
 }
 
-.row, .column{
+.provRow, .provColumn{
     display: flex;
     align-items: center;
     flex-direction: row;
+
+    margin: 10px 0;
   }
   
-  .column.vertical {
+  .provColumn.vertical {
     transform: scale(-1);
     writing-mode: vertical-lr;
   }
@@ -18,4 +20,8 @@
     flex-direction: column;
     align-items: center;
     margin: 0 10px;
+  }
+
+  .iconContainer img{
+    border-radius: 20%;
   }
