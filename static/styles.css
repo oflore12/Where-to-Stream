@@ -1,3 +1,27 @@
 #providersMenu > li {
     cursor: pointer;
 }
+
+.provRow, .provColumn{
+    display: flex;
+    align-items: center;
+    flex-direction: row;
+
+    margin: 10px 0;
+  }
+  
+  .provColumn.vertical {
+    transform: scale(-1);
+    writing-mode: vertical-lr;
+  }
+  
+  .iconContainer{
+    display: flex;
+    flex-direction: column;
+    align-items: center;
+    margin: 0 10px;
+  }
+
+  .iconContainer img{
+    border-radius: 20%;
+  }
