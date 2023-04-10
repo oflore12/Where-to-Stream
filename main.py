@@ -18,34 +18,32 @@ tmdb.REQUESTS_TIMEOUT = 5
 
 class TVResult(db.Model):
     __tablename__ = 'TVResults'
-    id = db.Column(db.Integer, primary_key=True)
+    id = db.Column(db.Integer, primary_key=True, nullable=False)
     title = db.Column(db.String(100))
     providers = db.Column(SQL_JSON)
     last_updated = db.Column(db.DateTime(timezone=True),
                              server_default=db.func.now(), onupdate=db.func.current_timestamp())
-    keyword = db.Column(db.ARRAY(db.String(200)))
 
     def __repr__(self):
-        return f'<TVResult: {self.title}>'
+        return f'<TVResult: {self.title} ({self.id})>'
 
 
 class MovieResult(db.Model):
     __tablename__ = 'MovieResults'
-    id = db.Column(db.Integer, primary_key=True)
+    id = db.Column(db.Integer, primary_key=True, nullable=False)
     title = db.Column(db.String(100))
     providers = db.Column(SQL_JSON)
     last_updated = db.Column(db.DateTime(timezone=True),
                              server_default=db.func.now(), onupdate=db.func.current_timestamp())
-    keyword = db.Column(db.ARRAY(db.String(200)))
 
     def __repr__(self):
-        return f'<MovieResult: {self.title}>'
+        return f'<MovieResult: {self.title} ({self.id})>'
 
 
 class Query(db.Model):
     __tablename__ = 'Queries'
-    id = db.Column(db.Integer, primary_key=True)
-    q = db.Column(db.String(100))
+    id = db.Column(db.Integer, primary_key=True, nullable=False)
+    q = db.Column(db.String(100), nullable=False)
 
     def __repr__(self):
         return f'<Query: {self.q}>'
@@ -53,15 +51,15 @@ class Query(db.Model):
 
 class QueryResultMapping(db.Model):
     __tablename__ = 'QueryResultMappings'
-    id = db.Column(db.Integer, primary_key=True)
-    tv_result = db.Column(db.Integer, db.ForeignKey(
-        'TVResults.id'), nullable=True)
-    movie_result = db.Column(db.Integer, db.ForeignKey(
-        'MovieResults.id'), nullable=True)
+    id = db.Column(db.Integer, primary_key=True, nullable=False)
     q = db.Column(db.Integer, db.ForeignKey('Queries.id'), nullable=False)
+    tv_result = db.Column(db.Integer, db.ForeignKey(
+        'TVResults.id'))
+    movie_result = db.Column(db.Integer, db.ForeignKey(
+        'MovieResults.id'))
 
     def __repr__(self):
-        return f'<QueryResultMapping: {self.tv_result}, {self.movie_result}, {self.q}>'
+        return f'<QueryResultMapping: {self.q}, {self.tv_result}, {self.movie_result}>'
 
 
 @app.route('/')
@@ -147,8 +145,7 @@ def getResults(q):
                 currentResult = db.session.query(TVResult).from_statement(text("""
                     SELECT
                         "TVResults".id AS "TVResults_id", "TVResults".title AS "TVResults_title",
-                        "TVResults".providers AS "TVResults_providers", "TVResults".last_updated AS "TVResults_last_updated",
-                        "TVResults".keyword AS "TVResults_keyword"
+                        "TVResults".providers AS "TVResults_providers", "TVResults".last_updated AS "TVResults_last_updated"
                     FROM "TVResults"
                     WHERE "TVResults".id = %(id_1)s
                         AND "TVResults".last_updated > CURRENT_TIMESTAMP - interval '1 day'
@@ -160,8 +157,7 @@ def getResults(q):
                     currentResult = db.session.query(TVResult).from_statement(text("""
                         SELECT
                             "TVResults".id AS "TVResults_id", "TVResults".title AS "TVResults_title",
-                            "TVResults".providers AS "TVResults_providers", "TVResults".last_updated AS "TVResults_last_updated",
-                            "TVResults".keyword AS "TVResults_keyword"
+                            "TVResults".providers AS "TVResults_providers", "TVResults".last_updated AS "TVResults_last_updated"
                         FROM "TVResults"
                         WHERE "TVResults".id = %(id_1)s
                         """ % {'id_1': cached_result_id.tv_result})).first()
@@ -172,8 +168,7 @@ def getResults(q):
                 currentResult = db.session.query(MovieResult).from_statement(text("""
                     SELECT
                         "MovieResults".id AS "MovieResults_id", "MovieResults".title AS "MovieResults_title",
-                        "MovieResults".providers AS "MovieResults_providers", "MovieResults".last_updated AS "MovieResults_last_updated",
-                        "MovieResults".keyword AS "MovieResults_keyword"
+                        "MovieResults".providers AS "MovieResults_providers", "MovieResults".last_updated AS "MovieResults_last_updated"
                     FROM "MovieResults"
                     WHERE "MovieResults".id = %(id_1)s
                         AND "MovieResults".last_updated > CURRENT_TIMESTAMP - interval '1 day'
@@ -185,8 +180,7 @@ def getResults(q):
                     currentResult = db.session.query(MovieResult).from_statement(text("""
                         SELECT
                             "MovieResults".id AS "MovieResults_id", "MovieResults".title AS "MovieResults_title",
-                            "MovieResults".providers AS "MovieResults_providers", "MovieResults".last_updated AS "MovieResults_last_updated",
-                            "MovieResults".keyword AS "MovieResults_keyword"
+                            "MovieResults".providers AS "MovieResults_providers", "MovieResults".last_updated AS "MovieResults_last_updated"
                         FROM "MovieResults"
                         WHERE "MovieResults".id = %(id_1)s
                         """ % {'id_1': cached_result_id.movie_result})).first()
