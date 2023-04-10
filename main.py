@@ -111,14 +111,17 @@ def getResults(q):
 
             tv_id = -1
             movie_id = -1
+            exists = None
             if media_type == "tv":  # TV
                 tv_id = id
+                exists = TVResult.query.filter_by(id=tv_id).first()
                 providerSearch = tmdb.TV(tv_id)
                 providerSearch.watch_providers()
                 newResult = TVResult(
                     id=tv_id, title=title, providers=providerSearch.results)
             else:  # Movie
                 movie_id = id
+                exists = MovieResult.query.filter_by(id=movie_id).first()
                 providerSearch = tmdb.Movies(movie_id)
                 providerSearch.watch_providers()
                 newResult = MovieResult(
@@ -126,8 +129,9 @@ def getResults(q):
 
             results.append(newResult)
 
-            db.session.add(newResult)
-            db.session.commit()
+            if (not exists):
+                db.session.add(newResult)
+                db.session.commit()
 
             newQueryResultMapping = QueryResultMapping(
                 tv_result=tv_id, movie_result=movie_id, q=newQuery.id)
