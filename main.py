@@ -3,18 +3,15 @@ import json
 import tmdbsimple as tmdb
 from flask import Flask, render_template, request, url_for, redirect
 from flask_sqlalchemy import SQLAlchemy
+from sqlalchemy import text
 from sqlalchemy.dialects.postgresql import JSON as SQL_JSON
 
 app = Flask(__name__)
 
-apiKey = "523e00cfc7fcc6bed883c38162ea974d"
-searchRequest = "https://api.themoviedb.org/3/search/multi?api_key={}&language={}&query={}&include_adult=false"
-providerRequest = "https://api.themoviedb.org/3/{}/{}/watch/providers?api_key={}"
-
 app.config["SQLALCHEMY_DATABASE_URI"] = "postgresql://wts:team3@localhost:5432/wts_db"
 db = SQLAlchemy(app)
 
-tmdb.API_KEY = apiKey
+tmdb.API_KEY = "523e00cfc7fcc6bed883c38162ea974d"
 # Recommended by the tmdbsimple devs, so if the site is down the code won't get stuck there
 tmdb.REQUESTS_TIMEOUT = 5
 
@@ -25,7 +22,7 @@ class TVResult(db.Model):
     title = db.Column(db.String(100))
     providers = db.Column(SQL_JSON)
     last_updated = db.Column(db.DateTime(timezone=True),
-                             server_default=db.func.now())
+                             server_default=db.func.now(), onupdate=db.func.current_timestamp())
     keyword = db.Column(db.ARRAY(db.String(200)))
 
     def __repr__(self):
@@ -38,7 +35,7 @@ class MovieResult(db.Model):
     title = db.Column(db.String(100))
     providers = db.Column(SQL_JSON)
     last_updated = db.Column(db.DateTime(timezone=True),
-                             server_default=db.func.now())
+                             server_default=db.func.now(), onupdate=db.func.current_timestamp())
     keyword = db.Column(db.ARRAY(db.String(200)))
 
     def __repr__(self):
@@ -114,20 +111,20 @@ def getResults(q):
             media_type = result["media_type"]
             title = result["title"] if media_type == "movie" else result["name"]
 
-            providerResponse = urlopen(
-                providerRequest.format(media_type, id, apiKey))
-            providers = json.loads(providerResponse.read())["results"]
-
             tv_id = -1
             movie_id = -1
             if media_type == "tv":  # TV
                 tv_id = id
+                providerSearch = tmdb.TV(tv_id)
+                providerSearch.watch_providers()
                 newResult = TVResult(
-                    id=tv_id, title=title, providers=providers)
+                    id=tv_id, title=title, providers=providerSearch.results)
             else:  # Movie
                 movie_id = id
+                providerSearch = tmdb.Movies(movie_id)
+                providerSearch.watch_providers()
                 newResult = MovieResult(
-                    id=movie_id, title=title, providers=providers)
+                    id=movie_id, title=title, providers=providerSearch.results)
 
             results.append(newResult)
 
@@ -147,12 +144,57 @@ def getResults(q):
             currentResult = None
 
             if cached_result_id.tv_result != -1:  # TV
-                currentResult = TVResult.query.filter_by(
-                    id=cached_result_id.tv_result).first()
-            else:  # Movie
-                currentResult = MovieResult.query.filter_by(
-                    id=cached_result_id.movie_result).first()
+                currentResult = db.session.query(TVResult).from_statement(text("""
+                    SELECT
+                        "TVResults".id AS "TVResults_id", "TVResults".title AS "TVResults_title",
+                        "TVResults".providers AS "TVResults_providers", "TVResults".last_updated AS "TVResults_last_updated",
+                        "TVResults".keyword AS "TVResults_keyword"
+                    FROM "TVResults"
+                    WHERE "TVResults".id = %(id_1)s
+                        AND "TVResults".last_updated > CURRENT_TIMESTAMP - interval '1 day'
+                    """ % {'id_1': cached_result_id.tv_result})).first()
 
-            results.append(currentResult)
+                if (not currentResult):
+                    recacheSearch = tmdb.TV(cached_result_id.tv_result)
+                    recacheSearch.watch_providers()
+                    currentResult = db.session.query(TVResult).from_statement(text("""
+                        SELECT
+                            "TVResults".id AS "TVResults_id", "TVResults".title AS "TVResults_title",
+                            "TVResults".providers AS "TVResults_providers", "TVResults".last_updated AS "TVResults_last_updated",
+                            "TVResults".keyword AS "TVResults_keyword"
+                        FROM "TVResults"
+                        WHERE "TVResults".id = %(id_1)s
+                        """ % {'id_1': cached_result_id.tv_result})).first()
+                    currentResult.providers = recacheSearch.results
+                    currentResult.last_updated = db.func.current_timestamp()
+                    db.session.commit()
+            else:  # Movie
+                currentResult = db.session.query(MovieResult).from_statement(text("""
+                    SELECT
+                        "MovieResults".id AS "MovieResults_id", "MovieResults".title AS "MovieResults_title",
+                        "MovieResults".providers AS "MovieResults_providers", "MovieResults".last_updated AS "MovieResults_last_updated",
+                        "MovieResults".keyword AS "MovieResults_keyword"
+                    FROM "MovieResults"
+                    WHERE "MovieResults".id = %(id_1)s
+                        AND "MovieResults".last_updated > CURRENT_TIMESTAMP - interval '1 day'
+                    """ % {'id_1': cached_result_id.movie_result})).first()
+
+                if (not currentResult):
+                    recacheSearch = tmdb.Movies(cached_result_id.movie_result)
+                    recacheSearch.watch_providers()
+                    currentResult = db.session.query(MovieResult).from_statement(text("""
+                        SELECT
+                            "MovieResults".id AS "MovieResults_id", "MovieResults".title AS "MovieResults_title",
+                            "MovieResults".providers AS "MovieResults_providers", "MovieResults".last_updated AS "MovieResults_last_updated",
+                            "MovieResults".keyword AS "MovieResults_keyword"
+                        FROM "MovieResults"
+                        WHERE "MovieResults".id = %(id_1)s
+                        """ % {'id_1': cached_result_id.movie_result})).first()
+                    currentResult.providers = recacheSearch.results
+                    currentResult.last_updated = db.func.current_timestamp()
+                    db.session.commit()
+
+            if (currentResult):
+                results.append(currentResult)
 
     return results
