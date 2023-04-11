@@ -2,83 +2,99 @@
 
 {% block title %}Filter Search{% endblock %}
 
-{% block content %}
+<div class="flex-shrink-0 p-1" style="width: 200px;">
+<p>
+<a class="btn btn-toggle align-items-center rounded border-1" data-bs-toggle="collapse" href="#filterOptions" role="button" aria-expanded="false">
+Filter
+</a>
+</p>
 
-    <div class="flex-shrink-0 p-1" style="width: 200px;">
-      <p>
-        <a class="btn btn-toggle align-items-center rounded border-1" data-bs-toggle="collapse" href="#filterOptions" role="button" aria-expanded="false">
-          Filter
-        </a>
-      </p>
-
-      <div class="collapse" id="filterOptions">
-        <ul class="list-unstyled p-0">
-          <li class="mb-1">
-            <button class="btn btn-toggle d-inline-flex align-items-center border-0" data-bs-toggle="collapse" data-bs-target="#genre-collapse" aria-expanded="false">Genre</button>
-            <div class="collapse" id="genre-collapse">
-              <ul class="list-unstyled small ps-3">
-                <li><a href="#" class="link-dark d-inline-flex text-decoration-none rounded">All</a></li>
-                <li><a href="#" class="link-dark d-inline-flex text-decoration-none rounded">Action</a></li>
-                <li><a href="#" class="link-dark d-inline-flex text-decoration-none rounded">Adventure</a></li>
-                <li><a href="#" class="link-dark d-inline-flex text-decoration-none rounded">Animation</a></li>
-                <li><a href="#" class="link-dark d-inline-flex text-decoration-none rounded">Comedy</a></li>
-                <li><a href="#" class="link-dark d-inline-flex text-decoration-none rounded">Crime</a></li>
-                <li><a href="#" class="link-dark d-inline-flex text-decoration-none rounded">Documentary</a></li>
-                <li><a href="#" class="link-dark d-inline-flex text-decoration-none rounded">Drama</a></li>
-                <li><a href="#" class="link-dark d-inline-flex text-decoration-none rounded">Family</a></li>
-                <li><a href="#" class="link-dark d-inline-flex text-decoration-none rounded">Fantasy</a></li>
-                <li><a href="#" class="link-dark d-inline-flex text-decoration-none rounded">History</a></li>
-                <li><a href="#" class="link-dark d-inline-flex text-decoration-none rounded">Horror</a></li>
-                <li><a href="#" class="link-dark d-inline-flex text-decoration-none rounded">Mystery</a></li>
-                <li><a href="#" class="link-dark d-inline-flex text-decoration-none rounded">Romance</a></li>
-                <li><a href="#" class="link-dark d-inline-flex text-decoration-none rounded">Science Fiction</a></li>
-                <li><a href="#" class="link-dark d-inline-flex text-decoration-none rounded">TV Movie</a></li>
-                <li><a href="#" class="link-dark d-inline-flex text-decoration-none rounded">Thriller</a></li>
-                <li><a href="#" class="link-dark d-inline-flex text-decoration-none rounded">War</a></li>
-                <li><a href="#" class="link-dark d-inline-flex text-decoration-none rounded">Western</a></li>
-              </ul>
-            </div>
-          </li>
-
-
-          <li class="mb-1">
-            <button class="btn btn-toggle d-inline-flex align-items-center border-0" data-bs-toggle="collapse" data-bs-target="#paying-collapse" aria-expanded="false">Paying Option</button>
-            <div class="collapse" id="paying-collapse">
-              <ul class="list-unstyled small ps-3">
-                <li><a href="#" class="link-dark d-inline-flex text-decoration-none rounded">All</a></li>
-                <li><a href="#" class="link-dark d-inline-flex text-decoration-none rounded">Flatrate</a></li>
-                <li><a href="#" class="link-dark d-inline-flex text-decoration-none rounded">Free</a></li>
-                <li><a href="#" class="link-dark d-inline-flex text-decoration-none rounded">Ads</a></li>
-                <li><a href="#" class="link-dark d-inline-flex text-decoration-none rounded">Rent</a></li>
-                <li><a href="#" class="link-dark d-inline-flex text-decoration-none rounded">Buy</a></li>
-              </ul>
-            </div>
-          </li>
-
-          <li class="mb-1">
-            <button class="btn btn-toggle d-inline-flex align-items-center rounded border-0 collapsed" data-bs-toggle="collapse" data-bs-target="#country-collapse" aria-expanded="false">
-              Country
-            </button>
-            <div class="collapse" id="country-collapse">
-              <ul class="btn-toggle-nav list-unstyled fw-normal small ps-3">
-                <li><a href="#" class="link-dark d-inline-flex text-decoration-none rounded">All</a></li>
-                <li><a href="#" class="link-dark d-inline-flex text-decoration-none rounded">USA</a></li>
-                <li><a href="#" class="link-dark d-inline-flex text-decoration-none rounded">Canada</a></li>
-                <li><a href="#" class="link-dark d-inline-flex text-decoration-none rounded">Mexico</a></li>
-                <li><a href="#" class="link-dark d-inline-flex text-decoration-none rounded">England</a></li>
-              </ul>
-            </div>
-          </li>
-
-          <li class="mb-1">
-            <button class="btn btn-toggle d-inline-flex align-items-center rounded border-0 collapsed" data-bs-toggle="collapse" data-bs-target="#year-collapse" aria-expanded="false">
-              Release Year
-            </button>
-            <div class="collapse" id="year-collapse">
-              <input type="range" class="form-range" min="1900" max="2023" id="customYear">
-            </div>
-          </li>
-        </ul>
-      </div>
+  <div class="collapse" id="filterOptions">
+  <ul class="list-unstyled p-0">
+    
+      
+      
+    <li class="mb-1">
+    <button class="btn btn-toggle d-inline-flex align-items-center border-0" data-bs-toggle="collapse" data-bs-target="#genre-collapse" aria-expanded="false">Genre</button>
+    <div class="collapse" id="genre-collapse">
+    <button class="btn btn-outline-secondary dropdown-toggle border-0 btn-sm" type="button" data-bs-toggle="dropdown" id="genreLabel" aria-expanded="false">All Genres</button>
+    <ul class="dropdown-menu" id="genreMenu">
+      <li class="dropdown-item">Action</li>
+      <li class="dropdown-item">Adventure</li>
+      <li class="dropdown-item">Animation</li>
+      <li class="dropdown-item">Comedy</li>
+      <li class="dropdown-item">Crime</li>
+      <li class="dropdown-item">Documentary</li>
+      <li class="dropdown-item">Drama</li>
+      <li class="dropdown-item">Family</li>
+      <li class="dropdown-item">Fantasy</li>
+      <li class="dropdown-item">History</li>
+      <li class="dropdown-item">Horror</li>
+      <li class="dropdown-item">Music</li>
+      <li class="dropdown-item">Mystery</li>
+      <li class="dropdown-item">Romance</li>
+      <li class="dropdown-item">Science Fiction</li>
+      <li class="dropdown-item">TV Movie</li>
+      <li class="dropdown-item">Thriller</li>
+      <li class="dropdown-item">War</li>
+      <li class="dropdown-item">Western</li>
+    </ul>
     </div>
-{% endblock %}
+    </li>
+      
+      
+      
+      
+      
+    <li class="mb-1">
+    <button class="btn btn-toggle d-inline-flex align-items-center border-0" data-bs-toggle="collapse" data-bs-target="#paying-collapse" aria-expanded="false">Paying Option</button>
+    <div class="collapse" id="paying-collapse">
+    <button class="btn btn-outline-secondary dropdown-toggle border-0 btn-sm" type="button" data-bs-toggle="dropdown" id="payingLabel" aria-expanded="false">All Paying Options</button>
+    <ul class="dropdown-menu" id="payingMenu">
+      <li class="dropdown-item">Flatrate</li>
+      <li class="dropdown-item">Free</li>
+      <li class="dropdown-item">Ads</li>
+      <li class="dropdown-item">Rent</li>
+      <li class="dropdown-item">Buy</li>
+    </ul>
+    </div>
+    </li>
+      
+      
+      
+      
+      
+      
+    <li class="mb-1">
+    <button class="btn btn-toggle d-inline-flex align-items-center border-0" data-bs-toggle="collapse" data-bs-target="#country-collapse" aria-expanded="false">Country</button>
+    <div class="collapse" id="country-collapse">
+    <button class="btn btn-outline-secondary dropdown-toggle border-0 btn-sm" type="button" data-bs-toggle="dropdown" id="countryLabel" aria-expanded="false">All Countries</button>
+    <ul class="dropdown-menu" id="countryMenu">
+      <li class="dropdown-item">USA</li>
+      <li class="dropdown-item">Canada</li>
+      <li class="dropdown-item">Mexico</li>
+      <li class="dropdown-item">England</li>
+      <li class="dropdown-item">Another Country</li>
+    </ul>
+    </div>
+    </li>
+          
+          
+          
+          
+          
+          
+          
+          
+  <li class="mb-1">
+  <button class="btn btn-toggle d-inline-flex align-items-center rounded border-0 collapsed" data-bs-toggle="collapse" data-bs-target="#year-collapse" aria-expanded="false">Release Year</button>
+  <div class="collapse" id="year-collapse">
+    <input type="range" class="form-range" min="1900" max="2023" id="customYear">
+  </div>
+  </li>
+          
+      
+      
+</ul>
+</div>
+</div>
