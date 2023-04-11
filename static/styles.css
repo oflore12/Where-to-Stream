@@ -71,7 +71,7 @@
 }
 
 .custom-tooltip {
-  --bs-tooltip-opacity: 0.75;
+  --bs-tooltip-opacity: 0.85;
 }
 
 @keyframes fade-in-up {
