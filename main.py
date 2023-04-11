@@ -152,6 +152,11 @@ def getResults(q):
             else:  # Movie
                 currentResult = MovieResult.query.filter_by(
                     id=cached_result_id.movie_result).first()
+            
+            
+            				
+            
+            	
 
             results.append(currentResult)
 
