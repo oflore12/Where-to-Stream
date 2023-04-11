@@ -1,3 +1,87 @@
-#providersMenu > li {
-    cursor: pointer;
+#providersMenu>li {
+  cursor: pointer;
+}
+
+.searchResults {
+  margin-top: 50px;
+  margin-bottom: 55px;
+  animation-name: fade-in-up;
+  animation-duration: 0.75s;
+  animation-fill-mode: backwards;
+}
+
+.provTray {
+  border-radius: 4px;
+  box-shadow: 0 1px 3px 0 rgb(0 0 0 / 0.1), 0 1px 2px -1px rgb(0 0 0 / 0.1);
+  background: rgb(248, 249, 250);
+  margin-top: 15px;
+  overflow-x: auto;
+}
+
+.provRow,
+.provColumn {
+  display: flex;
+  align-items: stretch;
+  flex-direction: row;
+}
+
+.provColumn.vertical {
+  transform: scale(-1);
+  writing-mode: vertical-lr;
+  display: flex;
+  justify-content: center;
+  align-items: center;
+  background: black;
+  color: white;
+  padding-left: 2px;
+  font-weight: 600;
+}
+
+.icons {
+  padding-left: 10px;
+}
+
+.iconContainer {
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+  margin: 17px 10px;
+}
+
+.iconContainer img {
+  border-radius: 12px;
+  box-shadow: 0 4px 6px -1px rgb(0 0 0 / 0.1), 0 2px 4px -2px rgb(0 0 0 / 0.1);
+  opacity: 0;
+  transition: opacity 0.75s, box-shadow 0.15s;
+}
+
+.iconContainer img:hover {
+  box-shadow: 0 10px 15px -3px rgb(0 0 0 / 0.1), 0 4px 6px -4px rgb(0 0 0 / 0.1);
+}
+
+.iconContainer img.loadedImg {
+  opacity: 1;
+}
+
+.notAvailableMsg {
+  font-style: italic;
+  color: rgba(0, 0, 0, 0.4);
+  margin-top: -10px;
+  margin-bottom: -5px;
+}
+
+.custom-tooltip {
+  --bs-tooltip-opacity: 0.85;
+}
+
+@keyframes fade-in-up {
+  from {
+    opacity: 0;
+    transform: translateY(12px);
+  }
+
+  to {
+    opacity: 1;
+    transform: translateY(0);
+  }
 }
