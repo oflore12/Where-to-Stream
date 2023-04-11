@@ -1,0 +1,84 @@
+{% extends 'base.html' %}
+
+{% block title %}Filter Search{% endblock %}
+
+{% block content %}
+
+    <div class="flex-shrink-0 p-1" style="width: 200px;">
+      <p>
+        <a class="btn btn-toggle align-items-center rounded border-1" data-bs-toggle="collapse" href="#filterOptions" role="button" aria-expanded="false">
+          Filter
+        </a>
+      </p>
+
+      <div class="collapse" id="filterOptions">
+        <ul class="list-unstyled p-0">
+          <li class="mb-1">
+            <button class="btn btn-toggle d-inline-flex align-items-center border-0" data-bs-toggle="collapse" data-bs-target="#genre-collapse" aria-expanded="false">Genre</button>
+            <div class="collapse" id="genre-collapse">
+              <ul class="list-unstyled small ps-3">
+                <li><a href="#" class="link-dark d-inline-flex text-decoration-none rounded">All</a></li>
+                <li><a href="#" class="link-dark d-inline-flex text-decoration-none rounded">Action</a></li>
+                <li><a href="#" class="link-dark d-inline-flex text-decoration-none rounded">Adventure</a></li>
+                <li><a href="#" class="link-dark d-inline-flex text-decoration-none rounded">Animation</a></li>
+                <li><a href="#" class="link-dark d-inline-flex text-decoration-none rounded">Comedy</a></li>
+                <li><a href="#" class="link-dark d-inline-flex text-decoration-none rounded">Crime</a></li>
+                <li><a href="#" class="link-dark d-inline-flex text-decoration-none rounded">Documentary</a></li>
+                <li><a href="#" class="link-dark d-inline-flex text-decoration-none rounded">Drama</a></li>
+                <li><a href="#" class="link-dark d-inline-flex text-decoration-none rounded">Family</a></li>
+                <li><a href="#" class="link-dark d-inline-flex text-decoration-none rounded">Fantasy</a></li>
+                <li><a href="#" class="link-dark d-inline-flex text-decoration-none rounded">History</a></li>
+                <li><a href="#" class="link-dark d-inline-flex text-decoration-none rounded">Horror</a></li>
+                <li><a href="#" class="link-dark d-inline-flex text-decoration-none rounded">Mystery</a></li>
+                <li><a href="#" class="link-dark d-inline-flex text-decoration-none rounded">Romance</a></li>
+                <li><a href="#" class="link-dark d-inline-flex text-decoration-none rounded">Science Fiction</a></li>
+                <li><a href="#" class="link-dark d-inline-flex text-decoration-none rounded">TV Movie</a></li>
+                <li><a href="#" class="link-dark d-inline-flex text-decoration-none rounded">Thriller</a></li>
+                <li><a href="#" class="link-dark d-inline-flex text-decoration-none rounded">War</a></li>
+                <li><a href="#" class="link-dark d-inline-flex text-decoration-none rounded">Western</a></li>
+              </ul>
+            </div>
+          </li>
+
+
+          <li class="mb-1">
+            <button class="btn btn-toggle d-inline-flex align-items-center border-0" data-bs-toggle="collapse" data-bs-target="#paying-collapse" aria-expanded="false">Paying Option</button>
+            <div class="collapse" id="paying-collapse">
+              <ul class="list-unstyled small ps-3">
+                <li><a href="#" class="link-dark d-inline-flex text-decoration-none rounded">All</a></li>
+                <li><a href="#" class="link-dark d-inline-flex text-decoration-none rounded">Flatrate</a></li>
+                <li><a href="#" class="link-dark d-inline-flex text-decoration-none rounded">Free</a></li>
+                <li><a href="#" class="link-dark d-inline-flex text-decoration-none rounded">Ads</a></li>
+                <li><a href="#" class="link-dark d-inline-flex text-decoration-none rounded">Rent</a></li>
+                <li><a href="#" class="link-dark d-inline-flex text-decoration-none rounded">Buy</a></li>
+              </ul>
+            </div>
+          </li>
+
+          <li class="mb-1">
+            <button class="btn btn-toggle d-inline-flex align-items-center rounded border-0 collapsed" data-bs-toggle="collapse" data-bs-target="#country-collapse" aria-expanded="false">
+              Country
+            </button>
+            <div class="collapse" id="country-collapse">
+              <ul class="btn-toggle-nav list-unstyled fw-normal small ps-3">
+                <li><a href="#" class="link-dark d-inline-flex text-decoration-none rounded">All</a></li>
+                <li><a href="#" class="link-dark d-inline-flex text-decoration-none rounded">USA</a></li>
+                <li><a href="#" class="link-dark d-inline-flex text-decoration-none rounded">Canada</a></li>
+                <li><a href="#" class="link-dark d-inline-flex text-decoration-none rounded">Mexico</a></li>
+                <li><a href="#" class="link-dark d-inline-flex text-decoration-none rounded">England</a></li>
+              </ul>
+            </div>
+          </li>
+
+          <li class="mb-1">
+            <button class="btn btn-toggle d-inline-flex align-items-center rounded border-0 collapsed" data-bs-toggle="collapse" data-bs-target="#year-collapse" aria-expanded="false">
+              Release Year
+            </button>
+            <div class="collapse" id="year-collapse">
+              <input type="range" class="form-range" min="1900" max="2023" id="customYear">
+            </div>
+          </li>
+        </ul>
+      </div>
+    </div>
+{% endblock %}
