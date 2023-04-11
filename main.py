@@ -1,13 +1,13 @@
 import tmdbsimple as tmdb
 from flask import Flask, render_template, request, url_for, redirect
-from flask_sqlalchemy import SQLAlchemy
 from sqlalchemy import text
-from sqlalchemy.dialects.postgresql import JSON as SQL_JSON
+from CMSC447Project.rescources.sharedDB.sharedDB import db
+from CMSC447Project.rescources.models.models import *
 
 app = Flask(__name__)
 
 app.config["SQLALCHEMY_DATABASE_URI"] = "postgresql://wts:team3@localhost:5432/wts_db"
-db = SQLAlchemy(app)
+db.init_app(app)
 
 tmdb.API_KEY = "523e00cfc7fcc6bed883c38162ea974d"
 # As recommended by the tmdbsimple developers, this timeout ensures the code won't get stuck if TMDb is down
@@ -15,53 +15,6 @@ tmdb.REQUESTS_TIMEOUT = 5
 
 # Defines the expiration time for cached API results
 CACHE_CLOCK = "1 minute"
-
-
-class TVResult(db.Model):
-    __tablename__ = 'TVResults'
-    id = db.Column(db.Integer, primary_key=True, nullable=False)
-    title = db.Column(db.String(500))
-    providers = db.Column(SQL_JSON)
-    last_updated = db.Column(db.DateTime(timezone=True),
-                             server_default=db.func.now(), onupdate=db.func.current_timestamp())
-
-    def __repr__(self):
-        return f'<TVResult: {self.title} ({self.id})>'
-
-
-class MovieResult(db.Model):
-    __tablename__ = 'MovieResults'
-    id = db.Column(db.Integer, primary_key=True, nullable=False)
-    title = db.Column(db.String(500))
-    providers = db.Column(SQL_JSON)
-    last_updated = db.Column(db.DateTime(timezone=True),
-                             server_default=db.func.now(), onupdate=db.func.current_timestamp())
-
-    def __repr__(self):
-        return f'<MovieResult: {self.title} ({self.id})>'
-
-
-class Query(db.Model):
-    __tablename__ = 'Queries'
-    id = db.Column(db.Integer, primary_key=True, nullable=False)
-    q = db.Column(db.String(500), nullable=False)
-
-    def __repr__(self):
-        return f'<Query: {self.q}>'
-
-
-class QueryResultMapping(db.Model):
-    __tablename__ = 'QueryResultMappings'
-    id = db.Column(db.Integer, primary_key=True, nullable=False)
-    q = db.Column(db.Integer, db.ForeignKey('Queries.id'), nullable=False)
-    tv_result = db.Column(db.Integer, db.ForeignKey(
-        'TVResults.id'))
-    movie_result = db.Column(db.Integer, db.ForeignKey(
-        'MovieResults.id'))
-
-    def __repr__(self):
-        return f'<QueryResultMapping: {self.q}, {self.tv_result}, {self.movie_result}>'
-
 
 @app.route('/')
 def home():
@@ -88,16 +41,15 @@ def search():
         q = q.strip()
 
         provider = request.args.get('provider')
-
-        results = getResults(q)
+        results = getResults(q, provider)
 
         return render_template("search.html", q=q, provider=provider, results=results, country="US")
 
     return redirect(url_for('home'))
 
 
-# The function takes a search query and returns a list of results
-def getResults(q):
+# The function takes a search query (and provider to filter by) and returns a list of results
+def getResults(q, providerFilter):
     search = tmdb.Search()
     # Check if the query is already cached in the 'Query' table
     cached_q = Query.query.filter_by(q=q).first()
@@ -149,8 +101,6 @@ def getResults(q):
                 else:
                     newResult = MovieCache(id)
 
-            results.append(newResult)
-
             # If new result not cached, add to the database and commit change
             if not exists:
                 db.session.add(newResult)
@@ -164,6 +114,12 @@ def getResults(q):
 
             db.session.add(newQueryResultMapping)
             db.session.commit()
+            
+            if providerFilter != "All":
+            	if providerCheck(newResult, providerFilter):
+            		results.append(newResult)
+            else:
+            	results.append(newResult)
     # If query is cached
     else:
         # Retrieve cached result IDs from the 'QueryResultMapping' table
@@ -179,8 +135,15 @@ def getResults(q):
             else:
                 currentResult = MovieCache(cached_result_id.movie_result)
 
-
-            results.append(currentResult)
+			# If there is no provider filter chosen, default will be "All"
+            if providerFilter != "all":
+            	# Check if the current movie or TV show is available on the specified streaming service
+            	if providerCheck(currentResult, providerFilter):
+            		# Add to results if it is
+            		results.append(currentResult)
+            # If no filter is chosen, always add current TV show or movie to results
+            else:
+            	results.append(currentResult)
 
     return results
 
@@ -229,3 +192,21 @@ def MovieCache(id):
         db.session.commit()
 
     return currentResult
+
+# Checks if a result (TV show or movie) is available on a service
+def providerCheck(result, providerFilter):
+	# First check if the media is available in the specified country (currently only US)
+	if 'US' in result.providers:
+		# Check each purchase option
+		for purchaseOpt, providers in result.providers["US"].items():
+			# Skip over the provided link
+			if purchaseOpt == "link":
+				continue
+			else:
+				# Return True if any of the providers match the filter
+				for provider in providers:
+					if provider["provider_name"].lower() == providerFilter:
+						return True
+	# Return False if the media is not available in chosen country or not on the specified provider
+	return False
+	

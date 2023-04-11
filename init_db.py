@@ -1,4 +1,5 @@
 import psycopg2
+from resources.database.database import db
 
 # Before running this, make sure to create the 'wts' postgresql user
 
