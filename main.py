@@ -228,3 +228,7 @@ def MovieCache(id):
         db.session.commit()
 
     return currentResult
+
+@app.route('/filter')
+def filter():
+    return render_template('filter.html')
