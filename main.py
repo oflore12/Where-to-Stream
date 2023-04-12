@@ -103,14 +103,7 @@ def getResults(q, providerFilter):
                 # If cached, perform movie caching procedure
                 else:
                     newResult = MovieCache(id)
-                    
-            # If there is no provider filter, add the current result to results
-            if providerFilter == "all":
-            	results.append(newResult)
-            # If there is a filter other than all, check if the result is on the specified provider
-            elif providerCheck(newResult, providerFilter):
-            	# If it is, add to results
-            	results.append(newResult)
+            
 
             # If new result not cached, add to the database and commit change
             if not exists:
@@ -125,6 +118,15 @@ def getResults(q, providerFilter):
 
             db.session.add(newQueryResultMapping)
             db.session.commit()
+            
+            # If there is no provider filter, add the current result to results
+            if providerFilter == "all":
+                results.append(newResult)
+
+            else: 
+            	# Only do filtering AFTER commiting the unchanged version to the database
+                providerCheck(newResult, providerFilter)
+                results.append(newResult)
     # If query is cached
     else:
         # Retrieve cached result IDs from the 'QueryResultMapping' table
@@ -142,11 +144,11 @@ def getResults(q, providerFilter):
 
             # If there is no provider filter, add the current result to results
             if providerFilter == "all":
-            	results.append(currentResult)
-            # If there is a filter other than all, check if the result is on the specified provider
-            elif providerCheck(currentResult, providerFilter):
-            	# If it is, add to results
-            	results.append(currentResult)
+                results.append(currentResult)
+
+            else:
+                providerCheck(currentResult, providerFilter)
+                results.append(currentResult)
 
     return results
 
@@ -196,20 +198,26 @@ def MovieCache(id):
 
     return currentResult
 
-# Function to check if a result (TV show or movie) is on a specified provider. 
-# Returns true if it is, false if it is not   
-# NEEDS CHANGES, THE FILTERS FROM THE DROPDOWN DO NOT MATCH THE TMDB provider_name (except netflix)
+#function to check if result is on a specified provider
 def providerCheck(result, providerFilter):
-	# If there are no providers in the specified country (currently only US), return False
-	if 'US' in result.providers:
-		for purchaseType, providers in result.providers['US'].items():
-			# Skip over the provided link
-			if(purchaseType == 'link'):
-				continue
-			else:
-				# For each provider, check if the name matches the filter and return true if it does
-				for provider in providers:
-					if provider['provider_name'].lower() == providerFilter:
-						return True
-	# If after looping through all providers on all purchaseTypes and no match, return false
-	return False
+
+         #checking for if providers are available in specified country
+         if 'US' in result.providers:
+              for purchaseType, providers in result.providers['US'].items():
+                       #skip over provided link
+                       if(purchaseType == 'link'):
+                            continue
+                       #checking each provider if it contains a key string
+                       #from the providerFilter in the provider name and
+                       #deleting it if it does not
+                       else:
+                              numOfLoops = len(providers)
+                              countIndex = 0
+                              indexToCheck = 0
+                              while countIndex < numOfLoops:
+                                    if providerFilter not in providers[indexToCheck]['provider_name'].lower():
+                                         del providers[indexToCheck]
+                                         countIndex += 1
+                                    else:
+                                         countIndex += 1
+                                         indexToCheck += 1
