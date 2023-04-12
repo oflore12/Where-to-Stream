@@ -19,18 +19,28 @@
             <li class="dropdown-item" data-form-val="youku">Youku</li>
             <li class="dropdown-item" data-form-val="yt">YouTube Premium</li>
         </ul>
-        <input type="hidden" name="provider" value="{{ 'all' if provider is none or provider == '' else provider }}" id="providersValue" />
+        <input type="hidden" name="provider" value="{{ 'all' if provider is none or provider == '' else provider }}"
+            id="providersValue" />
 
         <input name="q" type="text" class="form-control" placeholder="" value="{{ q }}"
             aria-label="Example text with button addon" aria-describedby="button-addon1">
         <button class="btn btn-outline-secondary" type="submit" id="button-addon1">Search</button>
     </div>
 </form>
+
+<div class="loaderWrapper">
+    <span class="loader">
+</div>
+
 <script>
     document.addEventListener('click', function (event) {
-        if (!event.target.matches('#providersMenu .dropdown-item')) return;
-        document.getElementById("providersLabel").innerText = event.target.innerText;
-        document.getElementById("providersValue").value = event.target.dataset.formVal;
+        if (event.target.matches('#providersMenu .dropdown-item')) {
+            document.getElementById("providersLabel").innerText = event.target.innerText;
+            document.getElementById("providersValue").value = event.target.dataset.formVal;
+        }
+
+        if (event.target.matches("#button-addon1"))
+            document.querySelector(".loaderWrapper").classList.add("loading");
     }, false);
 
     document.querySelector("#providersMenu .dropdown-item[data-form-val='{{ 'all' if provider is none or provider == '' else provider }}']").click();
