@@ -5,18 +5,16 @@
             id="providersLabel" aria-expanded="false">All Providers</button>
         <ul class="dropdown-menu" id="providersMenu">
             <li class="dropdown-item" data-form-val="all">All Providers</a></li>
-            <li class="dropdown-item" data-form-val="alt-balaji">Alt Balaji</li>
-            <li class="dropdown-item" data-form-val="prime">Amazon Prime Video</li>
+            <li class="dropdown-item" data-form-val="amazon">Amazon Prime Video</li>
             <li class="dropdown-item" data-form-val="apple">Apple TV+</li>
-            <li class="dropdown-item" data-form-val="disney-espn">Disney+ & ESPN+</li>
-            <li class="dropdown-item" data-form-val="hbo-disc">HBO Max and Discovery+</li>
+            <li class="dropdown-item" data-form-val="disney">Disney+</li>
+            <li class="dropdown-item" data-form-val="discovery">Discovery+</li>
+            <li class="dropdown-item" data-form-val="hbo">HBO</li>
             <li class="dropdown-item" data-form-val="hulu">Hulu</li>
-            <li class="dropdown-item" data-form-val="iqiyi">iQIYI</li>
             <li class="dropdown-item" data-form-val="netflix">Netflix</li>
-            <li class="dropdown-item" data-form-val="para-show">Paramount+ & Showtime</li>
-            <li class="dropdown-item" data-form-val="tencent">Tencent Video</li>
-            <li class="dropdown-item" data-form-val="viu">Viu</li>
-            <li class="dropdown-item" data-form-val="youku">Youku</li>
+            <li class="dropdown-item" data-form-val="paramount">Paramount+</li>
+            <li class="dropdown-item" data-form-val="peacock">Peacock</li>
+            <li class="dropdown-item" data-form-val="showtime">Showtime</li>
             <li class="dropdown-item" data-form-val="yt">YouTube Premium</li>
         </ul>
         <input type="hidden" name="provider" value="{{ 'all' if provider is none or provider == '' else provider }}"
