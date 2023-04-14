@@ -4,10 +4,10 @@ import sqlalchemy
 from CMSC447Project.rescources.sharedDB.sharedDB import db
 from CMSC447Project.rescources.models.models import *
 
-
 app = Flask(__name__)
 
 app.config["SQLALCHEMY_DATABASE_URI"] = "postgresql://wts:team3@localhost:5432/wts_db"
+
 db.init_app(app)
 
 tmdb.API_KEY = "523e00cfc7fcc6bed883c38162ea974d"
@@ -17,6 +17,7 @@ tmdb.REQUESTS_TIMEOUT = 5
 
 # Defines the expiration time for cached API results
 CACHE_CLOCK = "1 minute"
+
 
 @app.route('/')
 def home():
@@ -43,11 +44,13 @@ def search():
         q = q.strip()
 
         provider = request.args.get('provider')
+
         results = getResults(q, provider)
 
         return render_template("search.html", q=q, provider=provider, results=results, country="US")
 
     return redirect(url_for('home'))
+
 
 
 # The function takes a search query (and provider to filter by) and returns a list of results
@@ -103,6 +106,7 @@ def getResults(q, providerFilter):
                 else:
                     newResult = MovieCache(id)
 
+
             # If new result not cached, add to the database and commit change
             if not exists:
                 db.session.add(newResult)
@@ -117,11 +121,17 @@ def getResults(q, providerFilter):
             db.session.add(newQueryResultMapping)
             db.session.commit()
             
-            if providerFilter != "All":
-            	if providerCheck(newResult, providerFilter):
-            		results.append(newResult)
-            else:
-            	results.append(newResult)
+
+            # If there is no provider filter, add the current result to results
+            if providerFilter == "all":
+                results.append(newResult)
+
+            else: 
+            	# Only do filtering AFTER commiting the unchanged version to the database
+                providerCheck(newResult, providerFilter)
+                if 'US' in newResult.providers.keys() and len(newResult.providers['US']) != 0:
+                	results.append(newResult)
+
     # If query is cached
     else:
         # Retrieve cached result IDs from the 'QueryResultMapping' table
@@ -137,15 +147,15 @@ def getResults(q, providerFilter):
             else:
                 currentResult = MovieCache(cached_result_id.movie_result)
 
-			# If there is no provider filter chosen, default will be "All"
-            if providerFilter != "all":
-            	# Check if the current movie or TV show is available on the specified streaming service
-            	if providerCheck(currentResult, providerFilter):
-            		# Add to results if it is
-            		results.append(currentResult)
-            # If no filter is chosen, always add current TV show or movie to results
+
+            # If there is no provider filter, add the current result to results
+            if providerFilter == "all":
+                results.append(currentResult)
+
             else:
-            	results.append(currentResult)
+                providerCheck(currentResult, providerFilter)
+                if 'US' in currentResult.providers.keys() and len(currentResult.providers['US']) != 0:
+                	results.append(currentResult)
 
     return results
 
@@ -195,20 +205,30 @@ def MovieCache(id):
 
     return currentResult
 
-# Checks if a result (TV show or movie) is available on a service
+
+# Function to check if result is on a specified provider, deletes providers 
+# that do not match the filter
 def providerCheck(result, providerFilter):
-	# First check if the media is available in the specified country (currently only US)
-	if 'US' in result.providers:
-		# Check each purchase option
-		for purchaseOpt, providers in result.providers["US"].items():
-			# Skip over the provided link
-			if purchaseOpt == "link":
-				continue
+	# Checking for if providers are available in specified country (just US for now)
+	if 'US' in result.providers.keys():
+		# List of keys in the country dict to delete (since they are empty or the link)
+		itemsToDelete = []
+		for purchaseType, providers in result.providers['US'].items():
+			# Always mark the link for deletion, we don't use it
+			if(purchaseType == 'link'):
+				itemsToDelete.append(purchaseType);
+			# Checking each provider if it contains a key string from the providerFilter 
+			# in the provider name and adding to the list to delete it if it does not
 			else:
-				# Return True if any of the providers match the filter
-				for provider in providers:
-					if provider["provider_name"].lower() == providerFilter:
-						return True
-	# Return False if the media is not available in chosen country or not on the specified provider
-	return False
-	
+				# Iterating over a sliced copy of the list so removals can occur in iteration
+				for provider in providers[:]:
+					# If the provider name does not contain the filter key string, remove it
+					if providerFilter not in provider["provider_name"].lower():
+						providers.remove(provider)
+				# If all of the providers have been removed from a purchaseType, mark it for deletion
+				if len(providers) == 0:
+					itemsToDelete.append(purchaseType)
+		# Delete all the purchaseTypes marked for deletion from the providers dict
+		for item in itemsToDelete:
+			del result.providers['US'][item]
+
