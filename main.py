@@ -1,8 +1,8 @@
 import tmdbsimple as tmdb
 from flask import Flask, render_template, request, url_for, redirect
 import sqlalchemy
-from CMSC447Project.rescources.sharedDB.sharedDB import db
-from CMSC447Project.rescources.models.models import *
+from CMSC447Project.resources.sharedDB.sharedDB import db
+from CMSC447Project.resources.models.models import *
 
 app = Flask(__name__)
 
