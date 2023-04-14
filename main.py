@@ -1,14 +1,9 @@
 import tmdbsimple as tmdb
 from flask import Flask, render_template, request, url_for, redirect
-<<<<<<< HEAD
-from sqlalchemy import text
+import sqlalchemy
 from CMSC447Project.rescources.sharedDB.sharedDB import db
 from CMSC447Project.rescources.models.models import *
-=======
-from flask_sqlalchemy import SQLAlchemy
-import sqlalchemy
-from sqlalchemy.dialects.postgresql import JSON as SQL_JSON
->>>>>>> e57eabe5ef42acf6cc63f0b7c6e819213db3ffdf
+
 
 app = Flask(__name__)
 
