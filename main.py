@@ -52,7 +52,6 @@ def search():
     return redirect(url_for('home'))
 
 
-
 # The function takes a search query (and provider to filter by) and returns a list of results
 def getResults(q, providerFilter):
     search = tmdb.Search()
@@ -106,7 +105,6 @@ def getResults(q, providerFilter):
                 else:
                     newResult = MovieCache(id)
 
-
             # If new result not cached, add to the database and commit change
             if not exists:
                 db.session.add(newResult)
@@ -120,17 +118,16 @@ def getResults(q, providerFilter):
 
             db.session.add(newQueryResultMapping)
             db.session.commit()
-            
 
             # If there is no provider filter, add the current result to results
             if providerFilter == "all":
                 results.append(newResult)
 
-            else: 
-            	# Only do filtering AFTER commiting the unchanged version to the database
+            else:
+                # Only do filtering AFTER commiting the unchanged version to the database
                 providerCheck(newResult, providerFilter)
                 if 'US' in newResult.providers.keys() and len(newResult.providers['US']) != 0:
-                	results.append(newResult)
+                    results.append(newResult)
 
     # If query is cached
     else:
@@ -147,7 +144,6 @@ def getResults(q, providerFilter):
             else:
                 currentResult = MovieCache(cached_result_id.movie_result)
 
-
             # If there is no provider filter, add the current result to results
             if providerFilter == "all":
                 results.append(currentResult)
@@ -155,7 +151,7 @@ def getResults(q, providerFilter):
             else:
                 providerCheck(currentResult, providerFilter)
                 if 'US' in currentResult.providers.keys() and len(currentResult.providers['US']) != 0:
-                	results.append(currentResult)
+                    results.append(currentResult)
 
     return results
 
@@ -206,29 +202,28 @@ def MovieCache(id):
     return currentResult
 
 
-# Function to check if result is on a specified provider, deletes providers 
+# Function to check if result is on a specified provider, deletes providers
 # that do not match the filter
 def providerCheck(result, providerFilter):
-	# Checking for if providers are available in specified country (just US for now)
-	if 'US' in result.providers.keys():
-		# List of keys in the country dict to delete (since they are empty or the link)
-		itemsToDelete = []
-		for purchaseType, providers in result.providers['US'].items():
-			# Always mark the link for deletion, we don't use it
-			if(purchaseType == 'link'):
-				itemsToDelete.append(purchaseType);
-			# Checking each provider if it contains a key string from the providerFilter 
-			# in the provider name and adding to the list to delete it if it does not
-			else:
-				# Iterating over a sliced copy of the list so removals can occur in iteration
-				for provider in providers[:]:
-					# If the provider name does not contain the filter key string, remove it
-					if providerFilter not in provider["provider_name"].lower():
-						providers.remove(provider)
-				# If all of the providers have been removed from a purchaseType, mark it for deletion
-				if len(providers) == 0:
-					itemsToDelete.append(purchaseType)
-		# Delete all the purchaseTypes marked for deletion from the providers dict
-		for item in itemsToDelete:
-			del result.providers['US'][item]
-
+    # Checking for if providers are available in specified country (just US for now)
+    if 'US' in result.providers.keys():
+        # List of keys in the country dict to delete (since they are empty or the link)
+        itemsToDelete = []
+        for purchaseType, providers in result.providers['US'].items():
+            # Always mark the link for deletion, we don't use it
+            if (purchaseType == 'link'):
+                itemsToDelete.append(purchaseType)
+            # Checking each provider if it contains a key string from the providerFilter
+            # in the provider name and adding to the list to delete it if it does not
+            else:
+                # Iterating over a sliced copy of the list so removals can occur in iteration
+                for provider in providers[:]:
+                    # If the provider name does not contain the filter key string, remove it
+                    if providerFilter not in provider["provider_name"].lower():
+                        providers.remove(provider)
+                # If all of the providers have been removed from a purchaseType, mark it for deletion
+                if len(providers) == 0:
+                    itemsToDelete.append(purchaseType)
+        # Delete all the purchaseTypes marked for deletion from the providers dict
+        for item in itemsToDelete:
+            del result.providers['US'][item]
