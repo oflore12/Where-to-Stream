@@ -1,8 +1,14 @@
 import tmdbsimple as tmdb
 from flask import Flask, render_template, request, url_for, redirect
+<<<<<<< HEAD
 from sqlalchemy import text
 from CMSC447Project.rescources.sharedDB.sharedDB import db
 from CMSC447Project.rescources.models.models import *
+=======
+from flask_sqlalchemy import SQLAlchemy
+import sqlalchemy
+from sqlalchemy.dialects.postgresql import JSON as SQL_JSON
+>>>>>>> e57eabe5ef42acf6cc63f0b7c6e819213db3ffdf
 
 app = Flask(__name__)
 
@@ -11,6 +17,7 @@ db.init_app(app)
 
 tmdb.API_KEY = "523e00cfc7fcc6bed883c38162ea974d"
 # As recommended by the tmdbsimple developers, this timeout ensures the code won't get stuck if TMDb is down
+# TODO: add pretty error message when this happens...
 tmdb.REQUESTS_TIMEOUT = 5
 
 # Defines the expiration time for cached API results
@@ -18,13 +25,13 @@ CACHE_CLOCK = "1 minute"
 
 @app.route('/')
 def home():
-    # Put in init_db
-    db.drop_all()
     db.create_all()
-    db.session.add(TVResult(id=-1))
-    db.session.add(MovieResult(id=-1))
-    db.session.commit()
-    # --------------
+    if not TVResult.query.filter_by(id=-1).first():
+        db.session.add(TVResult(id=-1))
+        db.session.commit()
+    if not MovieResult.query.filter_by(id=-1).first():
+        db.session.add(MovieResult(id=-1))
+        db.session.commit()
 
     return render_template('home.html')
 
@@ -150,7 +157,7 @@ def getResults(q, providerFilter):
 
 def TVCache(id):
     # Check if there is a cached result in the database that is not "stale"
-    currentResult = db.session.query(TVResult).from_statement(text("""
+    currentResult = db.session.query(TVResult).from_statement(sqlalchemy.text("""
         SELECT
             "TVResults".id AS "TVResults_id", "TVResults".title AS "TVResults_title",
             "TVResults".providers AS "TVResults_providers", "TVResults".last_updated AS "TVResults_last_updated"
@@ -173,7 +180,7 @@ def TVCache(id):
 
 def MovieCache(id):
     # Check if there is a cached result in the database that is not "stale"
-    currentResult = db.session.query(MovieResult).from_statement(text("""
+    currentResult = db.session.query(MovieResult).from_statement(sqlalchemy.text("""
         SELECT
             "MovieResults".id AS "MovieResults_id", "MovieResults".title AS "MovieResults_title",
             "MovieResults".providers AS "MovieResults_providers", "MovieResults".last_updated AS "MovieResults_last_updated"
