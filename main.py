@@ -1,7 +1,7 @@
 import tmdbsimple as tmdb
 from flask import Flask, render_template, request, url_for, redirect
 from flask_sqlalchemy import SQLAlchemy
-from sqlalchemy import text
+import sqlalchemy
 from sqlalchemy.dialects.postgresql import JSON as SQL_JSON
 
 app = Flask(__name__)
@@ -66,13 +66,13 @@ class QueryResultMapping(db.Model):
 
 @app.route('/')
 def home():
-    # Put in init_db
-    db.drop_all()
     db.create_all()
-    db.session.add(TVResult(id=-1))
-    db.session.add(MovieResult(id=-1))
-    db.session.commit()
-    # --------------
+    if not TVResult.query.filter_by(id=-1).first():
+        db.session.add(TVResult(id=-1))
+        db.session.commit()
+    if not MovieResult.query.filter_by(id=-1).first():
+        db.session.add(MovieResult(id=-1))
+        db.session.commit()
 
     return render_template('home.html')
 
@@ -187,7 +187,7 @@ def getResults(q):
 
 def TVCache(id):
     # Check if there is a cached result in the database that is not "stale"
-    currentResult = db.session.query(TVResult).from_statement(text("""
+    currentResult = db.session.query(TVResult).from_statement(sqlalchemy.text("""
         SELECT
             "TVResults".id AS "TVResults_id", "TVResults".title AS "TVResults_title",
             "TVResults".providers AS "TVResults_providers", "TVResults".last_updated AS "TVResults_last_updated"
@@ -210,7 +210,7 @@ def TVCache(id):
 
 def MovieCache(id):
     # Check if there is a cached result in the database that is not "stale"
-    currentResult = db.session.query(MovieResult).from_statement(text("""
+    currentResult = db.session.query(MovieResult).from_statement(sqlalchemy.text("""
         SELECT
             "MovieResults".id AS "MovieResults_id", "MovieResults".title AS "MovieResults_title",
             "MovieResults".providers AS "MovieResults_providers", "MovieResults".last_updated AS "MovieResults_last_updated"
