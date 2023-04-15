@@ -1,3 +1,7 @@
+body {
+  overflow-y: scroll;
+}
+
 #providersMenu>li {
   cursor: pointer;
 }
