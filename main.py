@@ -45,7 +45,10 @@ def search():
 
         provider = request.args.get('provider')
 
-        results = getResults(q, provider)
+        try:
+            results = getResults(q, provider)
+        except:
+            results = []
 
         return render_template("search.html", q=q, provider=provider, results=results, country="US")
 
