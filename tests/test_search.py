@@ -11,7 +11,7 @@ import pytest
     ],
 )
 def test1_search_all_b(client, name):
-    getResponse = client.get('/results', query_string={
+    getResponse = client.get('/search', query_string={
         'service': 'all',
         'q': name,
     })
@@ -24,7 +24,12 @@ def test2_search_all_w(client):
 
 
 def test3_search_filter_b(client):
-    pass
+    getResponse = client.get('/search', query_string={
+        'service': 'netflix',
+        'q': 'The Simpsons',
+    })
+    # Check that query was returned as a search result
+    assert bytes('No results found', encoding='utf-8') in getResponse.data
 
 
 def test4_search_filter_w(client):
