@@ -204,7 +204,6 @@ def MovieCache(id):
 
     return currentResult
 
-
 # Function to check if result is on a specified provider, deletes providers
 # that do not match the filter
 def providerCheck(result, providerFilter):
@@ -230,3 +229,4 @@ def providerCheck(result, providerFilter):
         # Delete all the purchaseTypes marked for deletion from the providers dict
         for item in itemsToDelete:
             del result.providers['US'][item]
+
