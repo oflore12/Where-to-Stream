@@ -96,11 +96,11 @@ const IMG_URL = 'https://image.tmdb.org/t/p/w500';
 
 
 //genre option filter
-const genres = ["Action", "Adventure", "Animation", "Comedy", "Crime", "Documentary", "Drama", "Family", "Fantasy", "History", "Horror", "Music", "Mystery", "Romance", "Science Fiction", "TV Movie", "Thriller", "War", "Western"];
+const genres = [{"id":28,"name":"Action"},{"id":12,"name":"Adventure"},{"id":16,"name":"Animation"},{"id":35,"name":"Comedy"},{"id":80,"name":"Crime"},{"id":99,"name":"Documentary"},{"id":18,"name":"Drama"},{"id":10751,"name":"Family"},{"id":14,"name":"Fantasy"},{"id":36,"name":"History"},{"id":27,"name":"Horror"},{"id":10402,"name":"Music"},{"id":9648,"name":"Mystery"},{"id":10749,"name":"Romance"},{"id":878,"name":"Science Fiction"},{"id":10770,"name":"TV Movie"},{"id":53,"name":"Thriller"},{"id":10752,"name":"War"},{"id":37,"name":"Western"}];
 let genreslist = `<select class="form-select-sm border-0" id="genreSelected" onChange="getGenre()">`;
 genreslist += `<option value="All_G" selected>All Genres</option>`;
 for (const x of genres) {
-  genreslist += `<option value="${x}">${x}</option>`;
+  genreslist += `<option value="${x.id}">${x.name}</option>`;
 }
 genreslist += `</select>`;
 document.getElementById("genreList").innerHTML = genreslist;
@@ -118,7 +118,8 @@ payList += `</select>`;
 document.getElementById("payingList").innerHTML = payList;
 
 //Country/Region Filter
-const listOfCountries = [{
+const listOfCountries = [
+  {
     "iso_3166_1": "AD",
     "english_name": "Andorra",
     "native_name": "Andorra"
@@ -1384,15 +1385,14 @@ document.getElementById("countryList").innerHTML = countrylist;
 
 function getGenre() {
   genreFilter = document.getElementById('genreSelected');
-  if (genreFilter.value != "" || genreFilter.value != "All_G") {
+  if (genreFilter.value != "") {
     getMovies("https://api.themoviedb.org/3/discover/movie?api_key=523e00cfc7fcc6bed883c38162ea974d&language=en-US&sort_by=popularity.desc&include_adult=false&include_video=false&page=1&with_genres=" + genreFilter.value);
   }
-  genreFilter = "";
 }
 
 function getPayingOption() {
   payingFilter = document.getElementById('paySelected');
-  if (payingFilter.value != "" || payingFilter.value != "All_PO") {
+  if (payingFilter.value != "") {
     getMovies("https://api.themoviedb.org/3/discover/movie?api_key=523e00cfc7fcc6bed883c38162ea974d&language=en-US&sort_by=popularity.desc&include_adult=false&include_video=false&page=1&with_watch_monetization_types=" + payingFilter.value);
   }
 }
