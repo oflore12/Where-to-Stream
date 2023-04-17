@@ -54,6 +54,9 @@ def search():
 
     return redirect(url_for('home'))
 
+@app.route('/filter')
+def filter():
+    return render_template('filter.html')
 
 # The function takes a search query (and provider to filter by) and returns a list of results
 def getResults(q, providerFilter):
