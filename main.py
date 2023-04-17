@@ -231,12 +231,4 @@ def MovieCache(id):
 
 @app.route('/filter')
 def filter():
-    def filter():
-    results = []
-    genre="Adventure"
-    api_key = "523e00cfc7fcc6bed883c38162ea974d"
-    response =  request.get("https://api.themoviedb.org/3/discover/movie?api_key="
-    + api_key + "&language=en-US&sort_by=popularity.desc&include_adult=false&include_video=false&page=1&with_genres=" + genre)
-    total_pages = response.json()['total_pages']
-    results.append(response.json()['results'])
     return render_template('filter.html')
