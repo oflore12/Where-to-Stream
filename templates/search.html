@@ -7,6 +7,19 @@
 {{ search_bar.mainSearchBar(q, provider) }}
 
 <section style="margin-top: 55px">
+	{% if not results %}
+	<div class="searchResults" style="display: flex; flex-direction: column; align-items: center; margin-top: 100px">
+		<svg xmlns="http://www.w3.org/2000/svg" width="16" height="16" fill="#0d6efd" class="bi bi-search"
+			viewBox="0 0 16 16" style="display: block; width: 150px; height: 150px; margin-bottom: 20px; opacity: 0.4">
+			<path
+				d="M11.742 10.344a6.5 6.5 0 1 0-1.397 1.398h-.001c.03.04.062.078.098.115l3.85 3.85a1 1 0 0 0 1.415-1.414l-3.85-3.85a1.007 1.007 0 0 0-.115-.1zM12 6.5a5.5 5.5 0 1 1-11 0 5.5 5.5 0 0 1 11 0z" />
+		</svg>
+		<p style="display: block; text-align: center; font-size: 1.8rem; opacity: 0.9; font-weight: 600;">Bummer! No
+			results found.
+		</p>
+	</div>
+	{% endif %}
+
 	{% for r in results %}
 	<div class="searchResults">
 		<h4 style="margin-top: 25px; font-weight: 600;">{{r.title}}</h4>
