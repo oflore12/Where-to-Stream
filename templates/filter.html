@@ -1400,8 +1400,11 @@ function getPayingOption() {
 function getCountry() {
   countryFilter = document.getElementById('countrySelected');
   console.log(countryFilter.value);
+  if (payingFilter.value != "") {
+    getMovies("https://api.themoviedb.org/3/discover/movie?api_key=523e00cfc7fcc6bed883c38162ea974d&language=en-US&sort_by=popularity.desc&include_adult=false&include_video=false&page=1&watch_region="+countryFilter.value);
+  }
 }
-
+  
 function getYear() {
   yearFilter = document.getElementById("yearFilter");
   var year = document.getElementById("yearValue");
@@ -1458,9 +1461,6 @@ else  if (rate == 9) {
 function getMovies(url) {
   let listOfMovies = [];
   let itemsOfMovies = "";
-
-
-
   fetch(url).then(res => res.json()).then(data => {
     listOfMovies = data.results;
     for (const x of listOfMovies) {
