@@ -2,7 +2,7 @@
 <form action="{{ url_for('search') }}" method="get" id="searchBar" class="my-3">
     <div class="input-group">
         <button class="btn btn-outline-secondary dropdown-toggle" type="button" data-bs-toggle="dropdown"
-            id="providersLabel" aria-expanded="false">All Providers</button>
+            id="providersLabel" aria-expanded="false"><span style="margin-right: 5px;">All Providers</span></button>
         <ul class="dropdown-menu" id="providersMenu">
             <li class="dropdown-item" data-form-val="all">All Providers</a></li>
             <li class="dropdown-item" data-form-val="amazon">Amazon Prime Video</li>
@@ -22,7 +22,15 @@
 
         <input name="q" type="text" class="form-control shadow-none" placeholder="" value="{{ q }}"
             aria-label="Example text with button addon" aria-describedby="button-addon1" autocomplete="off">
-        <button class="btn btn-outline-secondary" type="submit" id="button-addon1">Search</button>
+        <button class="btn btn-outline-secondary" type="submit" id="button-addon1"
+            style="display: flex; align-items: center; justify-content: center;">
+            <svg xmlns="http://www.w3.org/2000/svg" width="16" height="16" fill="currentColor" class="bi bi-search"
+                viewBox="0 0 16 16" style="margin-right: 10px;">
+                <path
+                    d="M11.742 10.344a6.5 6.5 0 1 0-1.397 1.398h-.001c.03.04.062.078.098.115l3.85 3.85a1 1 0 0 0 1.415-1.414l-3.85-3.85a1.007 1.007 0 0 0-.115-.1zM12 6.5a5.5 5.5 0 1 1-11 0 5.5 5.5 0 0 1 11 0z" />
+            </svg>
+            <span>Search</span>
+        </button>
     </div>
 
     <div id="searchSuggestions">
@@ -39,8 +47,8 @@
 <script>
     document.addEventListener('click', function (event) {
         if (event.target.matches('#providersMenu .dropdown-item')) {
-            document.getElementById("providersLabel").innerText = event.target.innerText;
-            document.getElementById("providersValue").value = event.target.dataset.formVal;
+            document.querySelector("#providersLabel span").innerText = event.target.innerText;
+            document.querySelector("#providersValue").value = event.target.dataset.formVal;
             sizeSuggestionsBar();
         }
 

@@ -259,7 +259,3 @@ def useDBModels():
     if not MovieResult.query.filter_by(id=-1).first():
         db.session.add(MovieResult(id=-1))
         db.session.commit()
-
-
-if __name__ == "__main__":
-    app.run()

@@ -34,6 +34,7 @@ Once you see (env) prior to your username in the terminal, run:
 
 To run Flask application
 	
+- `export FLASK_DEBUG=1`
 - `flask run`
 
 In the machine running flask, open a web browser and go to http://127.0.0.1:5000/. You should be able to see the web page.
@@ -41,6 +42,7 @@ In the machine running flask, open a web browser and go to http://127.0.0.1:5000
 ## Run Application After the initial installation and creation of database
 - `sudo service postgresql start`
 - `python3 init_db.py`
+- `export FLASK_DEBUG=1`
 - `flask run`
 
 ## Testing

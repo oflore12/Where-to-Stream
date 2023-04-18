@@ -1,15 +1,14 @@
 import psycopg2
-from resources.sharedDB.sharedDB import db
 
 # Before running this, make sure to create the 'wts' postgresql user
 
 # New user and password, less of a placeholder
 conn = psycopg2.connect(
-   database="postgres",
-   user='wts',
-   password='team3',
-   host='127.0.0.1',
-   port= '5432'
+    database="postgres",
+    user='wts',
+    password='team3',
+    host='127.0.0.1',
+    port='5432'
 )
 
 # So each line does not need a commit and an execute
@@ -22,5 +21,5 @@ cursor.execute('CREATE DATABASE wts_db')
 
 print("Where To Stream database sucessfully initialized.")
 
-#Closing the connection
+# Closing the connection
 conn.close()
