@@ -21,19 +21,13 @@ CACHE_CLOCK = "1 minute"
 
 @app.route('/')
 def home():
-    db.create_all()
-    if not TVResult.query.filter_by(id=-1).first():
-        db.session.add(TVResult(id=-1))
-        db.session.commit()
-    if not MovieResult.query.filter_by(id=-1).first():
-        db.session.add(MovieResult(id=-1))
-        db.session.commit()
-
     return render_template('home.html')
 
 
 @app.route('/search', methods=['GET'])
 def search():
+    useDBModels()
+
     if request.method == 'GET':
         q = request.args.get('q')
         # If 'q' is empty or not provided, redirect to home page
@@ -255,6 +249,16 @@ def providerCheck(result, providerFilter):
         # Delete all the purchaseTypes marked for deletion from the providers dict
         for item in itemsToDelete:
             del result.providers['US'][item]
+
+
+def useDBModels():
+    db.create_all()
+    if not TVResult.query.filter_by(id=-1).first():
+        db.session.add(TVResult(id=-1))
+        db.session.commit()
+    if not MovieResult.query.filter_by(id=-1).first():
+        db.session.add(MovieResult(id=-1))
+        db.session.commit()
 
 
 if __name__ == "__main__":
