@@ -1,8 +1,8 @@
 import tmdbsimple as tmdb
 from flask import Flask, render_template, request, url_for, redirect
 import sqlalchemy
-from CMSC447Project.resources.sharedDB.sharedDB import db
-from CMSC447Project.resources.models.models import *
+from resources.sharedDB.sharedDB import db
+from resources.models.models import *
 
 app = Flask(__name__)
 
@@ -255,3 +255,7 @@ def providerCheck(result, providerFilter):
         # Delete all the purchaseTypes marked for deletion from the providers dict
         for item in itemsToDelete:
             del result.providers['US'][item]
+
+
+if __name__ == "__main__":
+    app.run()

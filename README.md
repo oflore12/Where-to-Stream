@@ -34,18 +34,14 @@ Once you see (env) prior to your username in the terminal, run:
 
 To run Flask application
 	
-- `export FLASK_APP=main`
-- `export FLASK_ENV=development`
-- `flask run`
+- `python3 main.py` or `gunicorn --bind=127.0.0.1 --timeout 600 main:app`
 
-In the machine running flask, open a web browser and go to http://127.0.0.1:5000/. You should be able to see the web page.
+In the machine running flask, open a web browser and go to http://127.0.0.1:8000/. You should be able to see the web page.
 
-## Run Application After the initial installation and creatation of database
+## Run Application After the initial installation and creation of database
 - `sudo service postgresql start`
 - `python3 init_db.py`
-- `export FLASK_APP=main`
-- `export FLASK_ENV=development`
-- `flask run`
+- `python3 main.py` or `gunicorn --bind=127.0.0.1 --timeout 600 main:app`
 
 ## Testing
 In the Python environment, simply run `pytest` to run a test session on all testing files. All testing files are located in the *tests/* directory.
