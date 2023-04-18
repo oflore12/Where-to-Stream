@@ -50,7 +50,7 @@
             sizeSuggestionsBar();
         }
 
-        if (event.target.matches("#button-addon1") || event.target.matches("#searchSuggestions>a"))
+        if (event.target.matches("#button-addon1") || event.target.matches("#button-addon1 *") || event.target.matches("#searchSuggestions>a"))
             document.querySelector(".loaderWrapper").classList.add("loading")
 
         if (!event.target.matches("#searchSuggestions") && !event.target.matches("input[name=q]")) {
