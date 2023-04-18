@@ -1,6 +1,6 @@
 {% macro mainSearchBar(q, provider) -%}
-<form action="{{ url_for('search') }}" method="get" id="searchBar">
-    <div class="input-group my-3">
+<form action="{{ url_for('search') }}" method="get" id="searchBar" class="my-3">
+    <div class="input-group">
         <button class="btn btn-outline-secondary dropdown-toggle" type="button" data-bs-toggle="dropdown"
             id="providersLabel" aria-expanded="false">All Providers</button>
         <ul class="dropdown-menu" id="providersMenu">
@@ -31,7 +31,9 @@
 </form>
 
 <div class="loaderWrapper">
-    <span class="loader">
+    <div class="loaderInner">
+        <span class="loader">
+    </div>
 </div>
 
 <script>
@@ -39,10 +41,11 @@
         if (event.target.matches('#providersMenu .dropdown-item')) {
             document.getElementById("providersLabel").innerText = event.target.innerText;
             document.getElementById("providersValue").value = event.target.dataset.formVal;
+            sizeSuggestionsBar();
         }
 
         if (event.target.matches("#button-addon1") || event.target.matches("#searchSuggestions>a"))
-            document.querySelector(".loaderWrapper").classList.add("loading");
+            document.querySelector(".loaderWrapper").classList.add("loading")
 
         if (!event.target.matches("#searchSuggestions") && !event.target.matches("input[name=q]")) {
             document.querySelector("#searchSuggestions").style.display = 'none';
@@ -88,13 +91,20 @@
         return myJson.slice(0, 10);
     }
 
+    const sizeSuggestionsBar = () => {
+        document.querySelector('#searchSuggestions').style.width = document.querySelector('input[name=q]').clientWidth + 'px';
+        document.querySelector('#searchSuggestions').style.left = document.querySelector('#providersLabel').clientWidth + 2 + 'px';
+    }
+
     onResize = () => {
-        const fn = () => {
-            document.querySelector('#searchSuggestions').style.width = document.querySelector('input[name=q]').clientWidth + 'px';
-            document.querySelector('#searchSuggestions').style.left = document.querySelector('#providersLabel').clientWidth + 2 + 'px';
+        sizeSuggestionsBar()
+        window.addEventListener('resize', sizeSuggestionsBar)
+
+        const docHeight = () => {
+            document.documentElement.style.setProperty('--doc-height', window.innerHeight)
         }
-        fn()
-        window.addEventListener('resize', fn)
+        docHeight()
+        window.addEventListener('resize', docHeight)
     }
     onResize();
 

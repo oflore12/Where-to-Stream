@@ -6,9 +6,10 @@
 {% block content %}
 {{ search_bar.mainSearchBar(q, provider) }}
 
-<section style="margin-top: 55px">
+<section class="searchSection" style="flex-grow: 1">
 	{% if not results %}
-	<div class="searchResults" style="display: flex; flex-direction: column; align-items: center; margin-top: 100px">
+	<div class="searchResults noSearchResults"
+		style="display: flex; flex-direction: column; align-items: center; padding: 50px 0; margin-top: 0; margin-bottom: 0">
 		<svg xmlns="http://www.w3.org/2000/svg" width="16" height="16" fill="#aaa" class="bi bi-search"
 			viewBox="0 0 16 16" style="display: block; width: 150px; height: 150px; margin-bottom: 20px; opacity: 0.4">
 			<path
@@ -121,6 +122,27 @@
 <script>
 	const tooltipTriggerList = document.querySelectorAll('[data-bs-toggle="tooltip"]')
 	const tooltipList = [...tooltipTriggerList].map(tooltipTriggerEl => new bootstrap.Tooltip(tooltipTriggerEl))
-	console.log(tooltipTriggerList)
+
+	const outerHeight = (el) => {
+		var height = el.offsetHeight;
+		var style = window.getComputedStyle(el);
+		height += parseInt(style.marginTop) + parseInt(style.marginBottom);
+		return height;
+	};
+
+	const spaceNoResults = () => {
+		let searchSection = document.querySelector('.searchSection')
+		let noResults = document.querySelector('.searchResults.noSearchResults')
+		if (noResults) {
+			const inner = function () {
+				let space = (outerHeight(searchSection) - noResults.clientHeight) / 2
+				noResults.style.marginTop = space + 'px'
+			}
+			searchSection.addEventListener("animationstart", inner)
+			window.addEventListener('resize', inner)
+		}
+	}
+
+	spaceNoResults();
 </script>
 {% endblock %}
