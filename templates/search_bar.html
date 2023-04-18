@@ -72,7 +72,7 @@
             suggestionsMenu.innerHTML = ''
 
             for (i in suggestions) {
-                let q = suggestions[i]['name']
+                let q = suggestions[i]
                 suggestionsMenu.innerHTML += '<a href="/search?q=' + q + '&provider=all">' + q.replace(searchBar.value, '<b>' + searchBar.value + '</b>') + '</a>'
             }
 
@@ -88,7 +88,7 @@
             q: elm.value,
         }));
         const myJson = await response.json();
-        return myJson.slice(0, 10);
+        return myJson;
     }
 
     const sizeSuggestionsBar = () => {

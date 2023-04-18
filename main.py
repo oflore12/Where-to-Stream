@@ -65,8 +65,17 @@ def suggestions():
     # Custom API for suggested search keywords
     search = tmdb.Search()
     q = request.args.get('q')
-    search.keyword(query=q)
-    return search.results
+    search.multi(query=q)
+    suggestions = []
+    counter = 0
+    for result in search.results:
+        if result["media_type"] == "tv" and counter < 10 and result['name'].lower() not in suggestions:
+            suggestions.append(result['name'].lower())
+            counter += 1
+        elif result["media_type"] == "movie" and counter < 10 and result['title'].lower() not in suggestions:
+            suggestions.append(result['title'].lower())
+            counter += 1
+    return suggestions
 
 # The function takes a search query (and provider to filter by) and returns a list of results
 
