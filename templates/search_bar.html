@@ -33,9 +33,7 @@
         </button>
     </div>
 
-    <div id="searchSuggestions">
-
-    </div>
+    <div id="searchSuggestions"></div>
 </form>
 
 <div class="loaderWrapper">
@@ -100,8 +98,8 @@
     }
 
     const sizeSuggestionsBar = () => {
-        document.querySelector('#searchSuggestions').style.width = document.querySelector('input[name=q]').clientWidth + 'px';
-        document.querySelector('#searchSuggestions').style.left = document.querySelector('#providersLabel').clientWidth + 2 + 'px';
+        document.querySelector('#searchSuggestions').style.width = document.querySelector('input[name=q]').clientWidth + 1 + 'px';
+        document.querySelector('#searchSuggestions').style.left = document.querySelector('#providersLabel').clientWidth + 1 + 'px';
     }
 
     onResize = () => {
