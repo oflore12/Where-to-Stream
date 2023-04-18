@@ -149,7 +149,7 @@ form#searchBar {
   bottom: 0;
   left: 0;
   transform: translateY(100%);
-  z-index: 9999;
+  z-index: 99;
   background: white;
   width: 100%;
   border-radius: 0 0 12px 12px;
@@ -158,6 +158,9 @@ form#searchBar {
   display: none;
 }
 
-#searchSuggestions > div {
+#searchSuggestions>a {
+  display: block;
   padding: 5px 0;
+  color: inherit;
+  text-decoration: none;
 }

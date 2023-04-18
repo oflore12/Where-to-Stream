@@ -41,10 +41,10 @@
             document.getElementById("providersValue").value = event.target.dataset.formVal;
         }
 
-        if (event.target.matches("#button-addon1"))
+        if (event.target.matches("#button-addon1") || event.target.matches("#searchSuggestions>a"))
             document.querySelector(".loaderWrapper").classList.add("loading");
 
-        if (!event.target.matches("#searchSuggestions") && !event.target.matches("input[name=q]"))
+        if (!event.target.matches("#searchSuggestions") && !event.target.matches("input[name=q]") && !event.target.matches("#searchSuggestions>a"))
             document.querySelector("#searchSuggestions").style.display = 'none';
         else
             handleSuggestions();
@@ -59,6 +59,7 @@
         let suggestionsMenu = document.querySelector('#searchSuggestions')
 
         if (searchBar.value.length < 2) {
+            suggestionsMenu.innerHTML = ''
             suggestionsMenu.style.display = 'none'
             return
         }
@@ -68,7 +69,8 @@
             suggestionsMenu.style.display = 'block'
 
             for (i in suggestions) {
-                suggestionsMenu.innerHTML += '<div>' + suggestions[i]['name'] + '</div>'
+                let q = suggestions[i]['name']
+                suggestionsMenu.innerHTML += '<a href="/search?q=' + q + '&provider=all">' + q + '</a>'
             }
         })
     }
