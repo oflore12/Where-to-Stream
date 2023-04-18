@@ -44,9 +44,10 @@
         if (event.target.matches("#button-addon1") || event.target.matches("#searchSuggestions>a"))
             document.querySelector(".loaderWrapper").classList.add("loading");
 
-        if (!event.target.matches("#searchSuggestions") && !event.target.matches("input[name=q]") && !event.target.matches("#searchSuggestions>a"))
+        if (!event.target.matches("#searchSuggestions") && !event.target.matches("input[name=q]")) {
             document.querySelector("#searchSuggestions").style.display = 'none';
-        else
+            document.querySelector("#searchSuggestions").innerHTML = ''
+        } else
             handleSuggestions();
     }, false);
 
@@ -59,19 +60,23 @@
         let suggestionsMenu = document.querySelector('#searchSuggestions')
 
         if (searchBar.value.length < 2) {
-            suggestionsMenu.innerHTML = ''
             suggestionsMenu.style.display = 'none'
+            suggestionsMenu.innerHTML = ''
             return
         }
 
         userAction(searchBar).then((suggestions) => {
             suggestionsMenu.innerHTML = ''
-            suggestionsMenu.style.display = 'block'
 
             for (i in suggestions) {
                 let q = suggestions[i]['name']
-                suggestionsMenu.innerHTML += '<a href="/search?q=' + q + '&provider=all">' + q + '</a>'
+                suggestionsMenu.innerHTML += '<a href="/search?q=' + q + '&provider=all">' + q.replace(searchBar.value, '<b>' + searchBar.value + '</b>') + '</a>'
             }
+
+            if (suggestions.length > 0)
+                suggestionsMenu.style.display = 'block'
+            else
+                suggestionsMenu.style.display = 'none'
         })
     }
 
