@@ -54,11 +54,23 @@ def search():
 
     return redirect(url_for('home'))
 
+
 @app.route('/filter')
 def filter():
     return render_template('filter.html')
 
+
+@app.route('/suggestions')
+def suggestions():
+    # Custom API for suggested search keywords
+    search = tmdb.Search()
+    q = request.args.get('q')
+    search.keyword(query=q)
+    return search.results
+
 # The function takes a search query (and provider to filter by) and returns a list of results
+
+
 def getResults(q, providerFilter):
     search = tmdb.Search()
     # Check if the query is already cached in the 'Query' table
@@ -209,6 +221,8 @@ def MovieCache(id):
 
 # Function to check if result is on a specified provider, deletes providers
 # that do not match the filter
+
+
 def providerCheck(result, providerFilter):
     # Checking for if providers are available in specified country (just US for now)
     if 'US' in result.providers.keys():
@@ -232,4 +246,3 @@ def providerCheck(result, providerFilter):
         # Delete all the purchaseTypes marked for deletion from the providers dict
         for item in itemsToDelete:
             del result.providers['US'][item]
-

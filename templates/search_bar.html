@@ -1,5 +1,5 @@
 {% macro mainSearchBar(q, provider) -%}
-<form action="{{ url_for('search') }}" method="get">
+<form action="{{ url_for('search') }}" method="get" id="searchBar">
     <div class="input-group my-3">
         <button class="btn btn-outline-secondary dropdown-toggle" type="button" data-bs-toggle="dropdown"
             id="providersLabel" aria-expanded="false">All Providers</button>
@@ -20,9 +20,13 @@
         <input type="hidden" name="provider" value="{{ 'all' if provider is none or provider == '' else provider }}"
             id="providersValue" />
 
-        <input name="q" type="text" class="form-control" placeholder="" value="{{ q }}"
-            aria-label="Example text with button addon" aria-describedby="button-addon1">
+        <input name="q" type="text" class="form-control shadow-none" placeholder="" value="{{ q }}"
+            aria-label="Example text with button addon" aria-describedby="button-addon1" autocomplete="off">
         <button class="btn btn-outline-secondary" type="submit" id="button-addon1">Search</button>
+    </div>
+
+    <div id="searchSuggestions">
+
     </div>
 </form>
 
@@ -39,7 +43,53 @@
 
         if (event.target.matches("#button-addon1"))
             document.querySelector(".loaderWrapper").classList.add("loading");
+
+        if (!event.target.matches("#searchSuggestions") && !event.target.matches("input[name=q]"))
+            document.querySelector("#searchSuggestions").style.display = 'none';
+        else
+            handleSuggestions();
     }, false);
+
+    document.querySelector('input[name=q]').addEventListener('input', function (event) {
+        handleSuggestions();
+    });
+
+    const handleSuggestions = () => {
+        let searchBar = document.querySelector('input[name=q]');
+        let suggestionsMenu = document.querySelector('#searchSuggestions')
+
+        if (searchBar.value.length < 2) {
+            suggestionsMenu.style.display = 'none'
+            return
+        }
+
+        userAction(searchBar).then((suggestions) => {
+            suggestionsMenu.innerHTML = ''
+            suggestionsMenu.style.display = 'block'
+
+            for (i in suggestions) {
+                suggestionsMenu.innerHTML += '<div>' + suggestions[i]['name'] + '</div>'
+            }
+        })
+    }
+
+    const userAction = async (elm) => {
+        const response = await fetch('/suggestions?' + new URLSearchParams({
+            q: elm.value,
+        }));
+        const myJson = await response.json();
+        return myJson.slice(0, 10);
+    }
+
+    onResize = () => {
+        const fn = () => {
+            document.querySelector('#searchSuggestions').style.width = document.querySelector('input[name=q]').clientWidth + 'px';
+            document.querySelector('#searchSuggestions').style.left = document.querySelector('#providersLabel').clientWidth + 2 + 'px';
+        }
+        fn()
+        window.addEventListener('resize', fn)
+    }
+    onResize();
 
     document.querySelector("#providersMenu .dropdown-item[data-form-val='{{ 'all' if provider is none or provider == '' else provider }}']").click();
 </script>

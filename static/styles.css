@@ -96,7 +96,7 @@ body {
   top: 50%;
   left: 50%;
   transform: translate(-50%, -50%);
-  z-index: 9999;
+  z-index: 999;
 }
 
 .loaderWrapper.loading {
@@ -138,4 +138,26 @@ body {
   100% {
     transform: rotate(360deg) scale(1.2);
   }
+}
+
+form#searchBar {
+  position: relative;
+}
+
+#searchSuggestions {
+  position: absolute;
+  bottom: 0;
+  left: 0;
+  transform: translateY(100%);
+  z-index: 9999;
+  background: white;
+  width: 100%;
+  border-radius: 0 0 12px 12px;
+  box-shadow: 0 1px 3px 0 rgb(0 0 0 / 0.1), 0 1px 2px -1px rgb(0 0 0 / 0.1);
+  padding: .375rem .75rem;
+  display: none;
+}
+
+#searchSuggestions > div {
+  padding: 5px 0;
 }
