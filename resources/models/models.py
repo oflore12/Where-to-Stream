@@ -1,4 +1,4 @@
-from resources.sharedDB.sharedDB import db
+from CMSC447Project.resources.sharedDB.sharedDB import db
 from sqlalchemy.dialects.postgresql import JSON as SQL_JSON
 
 class TVResult(db.Model):

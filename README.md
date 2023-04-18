@@ -34,14 +34,14 @@ Once you see (env) prior to your username in the terminal, run:
 
 To run Flask application
 	
-- `python3 main.py` or `gunicorn --bind=127.0.0.1:5000 --timeout 600 main:app`
+- `flask run`
 
 In the machine running flask, open a web browser and go to http://127.0.0.1:5000/. You should be able to see the web page.
 
 ## Run Application After the initial installation and creation of database
 - `sudo service postgresql start`
 - `python3 init_db.py`
-- `python3 main.py` or `gunicorn --bind=127.0.0.1:5000 --timeout 600 main:app`
+- `flask run`
 
 ## Testing
 In the Python environment, simply run `pytest` to run a test session on all testing files. All testing files are located in the *tests/* directory.
