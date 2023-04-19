@@ -2,7 +2,9 @@
 <form action="{{ url_for('search') }}" method="get" id="searchBar" class="my-3">
     <div class="input-group">
         <button class="btn btn-outline-secondary dropdown-toggle" type="button" data-bs-toggle="dropdown"
-            id="providersLabel" aria-expanded="false"><span style="margin-right: 5px;">All Providers</span></button>
+            id="providersLabel" aria-expanded="false" style="border-right: none">
+            <span>All Providers</span>
+        </button>
         <ul class="dropdown-menu" id="providersMenu">
             <li class="dropdown-item" data-form-val="all">All Providers</a></li>
             <li class="dropdown-item" data-form-val="amazon">Amazon Prime Video</li>
@@ -24,7 +26,7 @@
             aria-label="Example text with button addon" aria-describedby="button-addon1" autocomplete="off"
             spellcheck="false">
         <button class="btn btn-outline-secondary" type="submit" id="button-addon1"
-            style="display: flex; align-items: center; justify-content: center;">
+            style="display: flex; align-items: center; justify-content: center; border-left: none;">
             <svg xmlns="http://www.w3.org/2000/svg" width="16" height="16" fill="currentColor" class="bi bi-search"
                 viewBox="0 0 16 16" style="margin-right: 10px;">
                 <path
