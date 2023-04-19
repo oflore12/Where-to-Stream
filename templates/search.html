@@ -24,9 +24,12 @@
 	{% for r in results %}
 	<div class="searchResults">
 		{% if r.poster %}
-		<img src="https://image.tmdb.org/t/p/w500{{ r.poster }}" alt="{{ r.title }}" />
+		<img src="https://image.tmdb.org/t/p/w500{{ r.poster }}" alt="{{ r.title }}"
+			onload="this.classList.add('loadedImg')" />
+		{% else %}
+		<div class="noPoster"></div>
 		{% endif %}
-		
+
 		<div>
 			<h4 style="margin-top: 25px; font-weight: 600; font-size: 1.55rem;">{{r.title}}
 				{% if r.year %}
