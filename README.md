@@ -1,13 +1,22 @@
-# CMSC447Project
+# Where To Stream (CMSC447Project)
 This is the repository for CMSC447 Project.
 
-## Usage
+## Installation
 To install packages needed for Python and Flask, run these commands:
 
-- `sudo apt install -y python3-pip`
-- `sudo apt install -y build-essential libssl-dev libffi-dev python3-dev`
-- `sudo apt install -y python3-venv`
-- `sudo apt install -y postgresql postgresql-contrib`
+- `sudo apt install -y python3-pip build-essential libssl-dev libffi-dev python3-dev python3-venv postgresql postgresql-contrib`
+
+Make sure you're in the CMSC447Project directory and create a new virtual environment:
+
+- `python3 -m venv env`
+
+To activate environment, make sure you're in the CMSC447Project directory and run:
+
+- `source env/bin/activate`
+	
+Once you see (env) prior to your username in the terminal, run:
+
+- `pip install -r requirements.txt`
 
 Start the PostgreSQL database:
 
@@ -20,18 +29,6 @@ New way to create the PostgreSQL user and database:
 - Enter password `team3` and confirm password
 - `python3 init_db.py`
 
-Make sure you're in the CMSC447Project directory and run:
-
-- `python3 -m venv env`
-
-To activate environment, make sure you're in the CMSC447Project directory and run:
-
-- `source env/bin/activate`
-	
-Once you see (env) prior to your username in the terminal, run:
-
-- `pip install -r requirements.txt`
-
 To run Flask application
 	
 - `export FLASK_DEBUG=1`
@@ -39,7 +36,7 @@ To run Flask application
 
 In the machine running flask, open a web browser and go to http://127.0.0.1:5000/. You should be able to see the web page.
 
-## Run Application After the initial installation and creation of database
+## Usage
 - `sudo service postgresql start`
 - `python3 init_db.py`
 - `export FLASK_DEBUG=1`
