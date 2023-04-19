@@ -2,9 +2,8 @@ import tmdbsimple as tmdb
 from flask import Flask, render_template, request, url_for, redirect
 import sqlalchemy
 from sqlalchemy.orm.session import make_transient
-from CMSC447Project.resources.sharedDB.sharedDB import db
-from CMSC447Project.resources.models.models import *
-from datetime import datetime
+from .resources.sharedDB.sharedDB import db
+from .resources.models.models import *
 
 app = Flask(__name__)
 
@@ -14,7 +13,6 @@ db.init_app(app)
 
 tmdb.API_KEY = "523e00cfc7fcc6bed883c38162ea974d"
 # As recommended by the tmdbsimple developers, this timeout ensures the code won't get stuck if TMDb is down
-# TODO: add pretty error message when this happens...
 tmdb.REQUESTS_TIMEOUT = 5
 
 # Defines the expiration time for cached API results
