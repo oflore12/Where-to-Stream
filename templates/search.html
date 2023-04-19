@@ -26,10 +26,14 @@
 		<h4 style="margin-top: 25px; font-weight: 600; font-size: 1.55rem;">{{r.title}}
 			{% if r.year %}
 			<span style="font-size: 1.225rem; font-weight: 400; padding-left: 3px; opacity: 0.8">
-				({{r.year}})
+				({{ r.year }})
 			</span>
 			{% endif %}
 		</h4>
+
+		{% if r.poster %}
+		<img src="https://image.tmdb.org/t/p/w500{{ r.poster }}" />
+		{% endif %}
 
 		<div class="provTray">
 			{% if r.providers.get(country).flatrate %}

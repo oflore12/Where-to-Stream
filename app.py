@@ -95,6 +95,7 @@ def getResults(q, providerFilter):
             id = int(result["id"])
             media_type = result["media_type"]
             title = result["title"] if media_type == "movie" else result["name"]
+            poster = result["poster_path"]
 
             # If media type is TV
             if media_type == "tv":
@@ -111,7 +112,7 @@ def getResults(q, providerFilter):
                     providerSearch = tmdb.TV(id)
                     providerSearch.watch_providers()
                     newResult = TVResult(
-                        id=id, title=title, year=year, providers=providerSearch.results)
+                        id=id, title=title, year=year, poster=poster, providers=providerSearch.results)
                 # If cached, perform TV caching procedure
                 else:
                     newResult = TVCache(id)
@@ -130,7 +131,7 @@ def getResults(q, providerFilter):
                     providerSearch = tmdb.Movies(id)
                     providerSearch.watch_providers()
                     newResult = MovieResult(
-                        id=id, title=title, year=year, providers=providerSearch.results)
+                        id=id, title=title, year=year, poster=poster, providers=providerSearch.results)
                 # If cached, perform movie caching procedure
                 else:
                     newResult = MovieCache(id)
@@ -192,7 +193,7 @@ def TVCache(id):
     # Check if there is a cached result in the database that is not "stale"
     currentResult = db.session.query(TVResult).from_statement(sqlalchemy.text("""
         SELECT
-            "TVResults".id AS "TVResults_id", "TVResults".title AS "TVResults_title", "TVResults".year AS "TVResults_year",
+            "TVResults".id AS "TVResults_id", "TVResults".title AS "TVResults_title", "TVResults".year AS "TVResults_year", "TVResults".poster AS "TVResults_poster",
             "TVResults".providers AS "TVResults_providers", "TVResults".last_updated AS "TVResults_last_updated"
         FROM "TVResults"
         WHERE "TVResults".id = %(id_1)s
@@ -215,7 +216,7 @@ def MovieCache(id):
     # Check if there is a cached result in the database that is not "stale"
     currentResult = db.session.query(MovieResult).from_statement(sqlalchemy.text("""
         SELECT
-            "MovieResults".id AS "MovieResults_id", "MovieResults".title AS "MovieResults_title", "MovieResults".year AS "MovieResults_year",
+            "MovieResults".id AS "MovieResults_id", "MovieResults".title AS "MovieResults_title", "MovieResults".year AS "MovieResults_year", "MovieResults".poster AS "MovieResults_poster",
             "MovieResults".providers AS "MovieResults_providers", "MovieResults".last_updated AS "MovieResults_last_updated"
         FROM "MovieResults"
         WHERE "MovieResults".id = %(id_1)s

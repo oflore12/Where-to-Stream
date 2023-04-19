@@ -6,6 +6,7 @@ class TVResult(db.Model):
     id = db.Column(db.Integer, primary_key=True, nullable=False)
     title = db.Column(db.String(500))
     year = db.Column(db.String(10))
+    poster = db.Column(db.String(500))
     providers = db.Column(SQL_JSON)
     last_updated = db.Column(db.DateTime(timezone=True),
                              server_default=db.func.now(), onupdate=db.func.current_timestamp())
@@ -19,6 +20,7 @@ class MovieResult(db.Model):
     id = db.Column(db.Integer, primary_key=True, nullable=False)
     title = db.Column(db.String(500))
     year = db.Column(db.String(10))
+    poster = db.Column(db.String(500))
     providers = db.Column(SQL_JSON)
     last_updated = db.Column(db.DateTime(timezone=True),
                              server_default=db.func.now(), onupdate=db.func.current_timestamp())
