@@ -37,6 +37,7 @@ To run Flask application
 In the machine running flask, open a web browser and go to http://127.0.0.1:5000/. You should be able to see the web page.
 
 ## Usage
+- `source env/bin/activate`
 - `sudo service postgresql start`
 - `python3 init_db.py`
 - `export FLASK_DEBUG=1`
