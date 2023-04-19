@@ -1,6 +1,7 @@
 import tmdbsimple as tmdb
 from flask import Flask, render_template, request, url_for, redirect
 import sqlalchemy
+from sqlalchemy.orm.session import make_transient
 from CMSC447Project.resources.sharedDB.sharedDB import db
 from CMSC447Project.resources.models.models import *
 
@@ -33,7 +34,6 @@ def search():
         # If 'q' is empty or not provided, redirect to home page
         if not q:
             return redirect(url_for('home'))
-
         # Remove whitespace from 'q'
         q = q.strip()
 
@@ -71,10 +71,9 @@ def suggestions():
             counter += 1
     return suggestions
 
-# The function takes a search query (and provider to filter by) and returns a list of results
-
 
 def getResults(q, providerFilter):
+    # The function takes a search query (and provider to filter by) and returns a list of results
     search = tmdb.Search()
     # Check if the query is already cached in the 'Query' table
     cached_q = Query.query.filter_by(q=q).first()
@@ -143,11 +142,12 @@ def getResults(q, providerFilter):
             # If there is no provider filter, add the current result to results
             if providerFilter == "all":
                 results.append(newResult)
-
             else:
                 # Only do filtering AFTER commiting the unchanged version to the database
                 providerCheck(newResult, providerFilter)
                 if 'US' in newResult.providers.keys() and len(newResult.providers['US']) != 0:
+                    db.session.expunge(newResult)
+                    make_transient(newResult)
                     results.append(newResult)
 
     # If query is cached
@@ -168,10 +168,11 @@ def getResults(q, providerFilter):
             # If there is no provider filter, add the current result to results
             if providerFilter == "all":
                 results.append(currentResult)
-
             else:
                 providerCheck(currentResult, providerFilter)
                 if 'US' in currentResult.providers.keys() and len(currentResult.providers['US']) != 0:
+                    db.session.expunge(currentResult)
+                    make_transient(currentResult)
                     results.append(currentResult)
 
     return results
@@ -222,11 +223,11 @@ def MovieCache(id):
 
     return currentResult
 
-# Function to check if result is on a specified provider, deletes providers
-# that do not match the filter
-
 
 def providerCheck(result, providerFilter):
+    # Function to check if result is on a specified provider, deletes providers
+    # that do not match the filter
+
     # Checking for if providers are available in specified country (just US for now)
     if 'US' in result.providers.keys():
         # List of keys in the country dict to delete (since they are empty or the link)
