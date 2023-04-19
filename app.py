@@ -4,6 +4,7 @@ import sqlalchemy
 from sqlalchemy.orm.session import make_transient
 from CMSC447Project.resources.sharedDB.sharedDB import db
 from CMSC447Project.resources.models.models import *
+from datetime import datetime
 
 app = Flask(__name__)
 
@@ -41,7 +42,8 @@ def search():
 
         try:
             results = getResults(q, provider)
-        except:
+        except Exception as e:
+            print(e)
             results = []
 
         return render_template("search.html", q=q, provider=provider, results=results, country="US")
@@ -102,16 +104,26 @@ def getResults(q, providerFilter):
                 exists = TVResult.query.filter_by(id=id).first()
                 # If not cached
                 if not exists:
+                    try:
+                        year = result["first_air_date"].split('-')[0]
+                    except:
+                        year = ''
+
                     # Retrieve watch providers and create new 'TVResult' instance
                     providerSearch = tmdb.TV(id)
                     providerSearch.watch_providers()
                     newResult = TVResult(
-                        id=id, title=title, providers=providerSearch.results)
+                        id=id, title=title, year=year, providers=providerSearch.results)
                 # If cached, perform TV caching procedure
                 else:
                     newResult = TVCache(id)
             # If media type is movie
             else:
+                try:
+                    year = result["release_date"].split('-')[0]
+                except:
+                    year = ''
+
                 # Check if the movie result is already cached
                 exists = MovieResult.query.filter_by(id=id).first()
                 # If not cached
@@ -120,7 +132,7 @@ def getResults(q, providerFilter):
                     providerSearch = tmdb.Movies(id)
                     providerSearch.watch_providers()
                     newResult = MovieResult(
-                        id=id, title=title, providers=providerSearch.results)
+                        id=id, title=title, year=year, providers=providerSearch.results)
                 # If cached, perform movie caching procedure
                 else:
                     newResult = MovieCache(id)
@@ -182,7 +194,7 @@ def TVCache(id):
     # Check if there is a cached result in the database that is not "stale"
     currentResult = db.session.query(TVResult).from_statement(sqlalchemy.text("""
         SELECT
-            "TVResults".id AS "TVResults_id", "TVResults".title AS "TVResults_title",
+            "TVResults".id AS "TVResults_id", "TVResults".title AS "TVResults_title", "TVResults".year AS "TVResults_year",
             "TVResults".providers AS "TVResults_providers", "TVResults".last_updated AS "TVResults_last_updated"
         FROM "TVResults"
         WHERE "TVResults".id = %(id_1)s
@@ -205,7 +217,7 @@ def MovieCache(id):
     # Check if there is a cached result in the database that is not "stale"
     currentResult = db.session.query(MovieResult).from_statement(sqlalchemy.text("""
         SELECT
-            "MovieResults".id AS "MovieResults_id", "MovieResults".title AS "MovieResults_title",
+            "MovieResults".id AS "MovieResults_id", "MovieResults".title AS "MovieResults_title", "MovieResults".year AS "MovieResults_year",
             "MovieResults".providers AS "MovieResults_providers", "MovieResults".last_updated AS "MovieResults_last_updated"
         FROM "MovieResults"
         WHERE "MovieResults".id = %(id_1)s
