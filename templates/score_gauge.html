@@ -28,7 +28,7 @@
             <path id="color" fill='none' class="color" d="M30,90 A40,40 0 1,1 80,90"
                 stroke-dashoffset="{{199 if score == 0 else 199-(score*1.99)}}" />
             <path id="white" fill='none' class="white" d="M30,90 A40,40 0 1,1 80,90"
-                stroke-dashoffset="{{199 if score <= 1}} {{2 if score == 100}} {{199-(score*1.99) if score > 1 and score < 100}}" />
+                stroke-dashoffset="{{199 if score <= 1}} {{4 if score == 100}} {{199-(score*1.99) if score > 1 and score < 100}}" />
         </g>
     </svg>
     <p style="display: flex; flex-direction: column; margin: 0 0 0 10px;">
