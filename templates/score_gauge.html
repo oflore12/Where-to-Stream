@@ -1,11 +1,14 @@
 {% macro scoreGauge(score, scoreCount) -%}
 <div>
     <svg viewbox="0 0 110 110" class="score" style="opacity: {{'0.4' if scoreCount == 0 else '1'}}">
-        <g>
+        <g
+            class="{{'one' if score < 20}} {{'two' if score >= 20 and score < 40}} {{'three' if score >= 40 and score < 60}} {{'four' if score >= 60 and score < 80}} {{'five' if score >= 80}}">
             <path class="grey" d="M30,90 A40,40 0 1,1 80,90" fill='none' />
-            <path id="color" fill='none'
-                class="color {{'one' if score < 20}} {{'two' if score >= 20 and score < 40}} {{'three' if score >= 40 and score < 60}} {{'four' if score >= 60 and score < 80}} {{'five' if score >= 80}}"
-                d="M30,90 A40,40 0 1,1 80,90" stroke-dashoffset="{{198 if score == 0 else 198-(score*1.98)}}" />
+            <path id="color" fill='none' class="color" d="M30,90 A40,40 0 1,1 80,90"
+                stroke-dashoffset="{{198 if score == 0 else 198-(score*1.98)}}" />
+            <path id="white" fill='none' class="white" d="M30,90 A40,40 0 1,1 80,90"
+                stroke-dashoffset="{{198 if score == 0}} {{2 if score == 100}} {{199-(score*1.99) if score > 0 and score < 100}}"
+                style="opacity: {{'0' if scoreCount == 0 else '1'}}" />
             <text x="50%" y="55%" dominant-baseline="middle" text-anchor="middle" font-size="18.5px"
                 font-weight="700">{{score if scoreCount > 0 else "--.-"}}%</text>
         </g>
@@ -19,11 +22,13 @@
 <div
     style="display: flex; align-items: center; margin-left: 50px; margin-bottom: -3px; opacity: {{'0.6' if scoreCount == 0 else '1'}}">
     <svg viewbox="0 0 110 110" class="score small" style="margin-bottom: -1px;">
-        <g>
+        <g
+            class="{{'one' if score < 20}} {{'two' if score >= 20 and score < 40}} {{'three' if score >= 40 and score < 60}} {{'four' if score >= 60 and score < 80}} {{'five' if score >= 80}}">
             <path class="grey" d="M30,90 A40,40 0 1,1 80,90" fill='none' />
-            <path id="color" fill='none'
-                class="color {{'one' if score < 20}} {{'two' if score >= 20 and score < 40}} {{'three' if score >= 40 and score < 60}} {{'four' if score >= 60 and score < 80}} {{'five' if score >= 80}}"
-                d="M30,90 A40,40 0 1,1 80,90" stroke-dashoffset="{{198 if score == 0 else 198-(score*1.98)}}" />
+            <path id="color" fill='none' class="color" d="M30,90 A40,40 0 1,1 80,90"
+                stroke-dashoffset="{{199 if score == 0 else 199-(score*1.99)}}" />
+            <path id="white" fill='none' class="white" d="M30,90 A40,40 0 1,1 80,90"
+                stroke-dashoffset="{{199 if score <= 1}} {{2 if score == 100}} {{199-(score*1.99) if score > 1 and score < 100}}" />
         </g>
     </svg>
     <p style="display: flex; flex-direction: column; margin: 0 0 0 10px;">

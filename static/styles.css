@@ -28,7 +28,7 @@ body {
 
 .searchResults {
   margin-top: 50px;
-  margin-bottom: 70px;
+  margin-bottom: 80px;
   display: flex;
   align-items: flex-start;
 }
@@ -61,7 +61,6 @@ body {
   background-repeat: no-repeat;
   background-position: center center;
   background-size: 60%;
-  border: 1px solid rgb(235, 235, 235);
 }
 
 .searchResults>img.loadedImg.notAvail,
@@ -288,23 +287,51 @@ svg.score path.color {
   animation: dash 2s ease-in-out backwards;
 }
 
-svg.score path.color.one {
+svg.score g.one path.color {
   stroke: #ef4444;
 }
 
-svg.score path.color.two {
+svg.score g.two path.color {
   stroke: #f97316;
 }
 
-svg.score path.color.three {
+svg.score g.three path.color {
   stroke: #facc15;
 }
 
-svg.score path.color.four {
+svg.score g.four path.color {
   stroke: #84cc16;
 }
 
-svg.score path.color.five {
+svg.score g.five path.color {
+  stroke: #22c55e;
+}
+
+svg.score path.white {
+  stroke: #ffffff;
+  stroke-dasharray: 0px, 198px;
+  stroke-width: 14;
+  animation: dash 2s ease-in-out backwards;
+  filter: drop-shadow(0 1px 1px rgb(0 0 0 / 0.1)) drop-shadow(0 1px 2px rgb(0 0 0 / 0.1));
+}
+
+svg.score g.one path.white {
+  stroke: #dc2626;
+}
+
+svg.score g.two path.white {
+  stroke: #ea580c;
+}
+
+svg.score g.three path.white {
+  stroke: #eab308;
+}
+
+svg.score g.four path.white {
+  stroke: #65a30d;
+}
+
+svg.score g.five path.white {
   stroke: #16a34a;
 }
 
@@ -324,5 +351,10 @@ svg.score.small path {
 }
 
 svg.score.small path.color {
+  animation: dash 1s 0.5s ease-in-out backwards;
+}
+
+svg.score.small path.white {
+  stroke-width: 27;
   animation: dash 1s 0.5s ease-in-out backwards;
 }
