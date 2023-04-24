@@ -27,8 +27,50 @@ body {
 }
 
 .searchResults {
-  margin-top: 50px;
-  margin-bottom: 55px;
+  margin-top: 45px;
+  margin-bottom: 65px;
+  display: flex;
+  align-items: flex-start;
+}
+
+.searchResults>img,
+.searchResults>.noPoster {
+  width: 250px;
+  height: auto;
+  min-height: 375px;
+  border-radius: 12px;
+  box-shadow: 0 1px 3px 0 rgb(0 0 0 / 0.1), 0 1px 2px -1px rgb(0 0 0 / 0.1);
+  background: rgb(248, 249, 250);
+  margin-top: 32px;
+  margin-right: 40px;
+}
+
+.searchResults>img {
+  opacity: 0;
+  transition: opacity 1.5s, box-shadow 0.15s;
+}
+
+.searchResults>img.loadedImg {
+  opacity: 1;
+}
+
+.searchResults>.noPoster {
+  width: 250px;
+  height: 375px;
+  background-image: url(https://www.themoviedb.org/assets/2/v4/glyphicons/basic/glyphicons-basic-38-picture-grey-c2ebdbb057f2a7614185931650f8cee23fa137b93812ccb132b9df511df1cfac.svg);
+  background-repeat: no-repeat;
+  background-position: center center;
+  background-size: 60%;
+  border: 1px solid rgb(235, 235, 235);
+}
+
+.searchResults>img.loadedImg.notAvail,
+.searchResults>.noPoster.notAvail {
+  opacity: 0.4;
+}
+
+.searchResults>div:last-of-type {
+  flex-grow: 1;
 }
 
 .provTray {

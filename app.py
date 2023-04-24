@@ -97,6 +97,7 @@ def getResults(q, providerFilter):
             title = result["title"] if media_type == "movie" else result["name"]
             score = round(result["vote_average"] * 10, 1)
             score_count = result["vote_count"]
+            poster = result["poster_path"]
 
             # If media type is TV
             if media_type == "tv":
@@ -113,7 +114,7 @@ def getResults(q, providerFilter):
                     providerSearch = tmdb.TV(id)
                     providerSearch.watch_providers()
                     newResult = TVResult(
-                        id=id, title=title, year=year, score=score, score_count=score_count, providers=providerSearch.results)
+                        id=id, title=title, year=year, score=score, score_count=score_count, poster=poster, providers=providerSearch.results)
                 # If cached, perform TV caching procedure
                 else:
                     newResult = TVCache(id)
@@ -132,7 +133,7 @@ def getResults(q, providerFilter):
                     providerSearch = tmdb.Movies(id)
                     providerSearch.watch_providers()
                     newResult = MovieResult(
-                        id=id, title=title, year=year, score=score, score_count=score_count, providers=providerSearch.results)
+                        id=id, title=title, year=year, score=score, score_count=score_count, poster=poster, providers=providerSearch.results)
                 # If cached, perform movie caching procedure
                 else:
                     newResult = MovieCache(id)
@@ -195,7 +196,8 @@ def TVCache(id):
     currentResult = db.session.query(TVResult).from_statement(sqlalchemy.text("""
         SELECT
             "TVResults".id AS "TVResults_id", "TVResults".title AS "TVResults_title", "TVResults".year AS "TVResults_year", "TVResults".score AS "TVResults_score",
-             "TVResults".score_count AS "TVResults_score_count", "TVResults".providers AS "TVResults_providers", "TVResults".last_updated AS "TVResults_last_updated"
+            "TVResults".score_count AS "TVResults_score_count", "TVResults".poster AS "TVResults_poster", "TVResults".providers AS "TVResults_providers",
+            "TVResults".last_updated AS "TVResults_last_updated"
         FROM "TVResults"
         WHERE "TVResults".id = %(id_1)s
             AND "TVResults".last_updated > CURRENT_TIMESTAMP - interval '%(cacheClock_1)s'
@@ -218,7 +220,8 @@ def MovieCache(id):
     currentResult = db.session.query(MovieResult).from_statement(sqlalchemy.text("""
         SELECT
             "MovieResults".id AS "MovieResults_id", "MovieResults".title AS "MovieResults_title", "MovieResults".year AS "MovieResults_year", "MovieResults".score AS "MovieResults_score",
-            "MovieResults".score_count AS "MovieResults_score_count", "MovieResults".providers AS "MovieResults_providers", "MovieResults".last_updated AS "MovieResults_last_updated"
+            "MovieResults".score_count AS "MovieResults_score_count", "MovieResults".poster AS "MovieResults_poster", "MovieResults".providers AS "MovieResults_providers",
+            "MovieResults".last_updated AS "MovieResults_last_updated"
         FROM "MovieResults"
         WHERE "MovieResults".id = %(id_1)s
             AND "MovieResults".last_updated > CURRENT_TIMESTAMP - interval '%(cacheClock_1)s'

@@ -8,6 +8,7 @@ class TVResult(db.Model):
     year = db.Column(db.String(10))
     score = db.Column(db.Float)
     score_count = db.Column(db.Integer)
+    poster = db.Column(db.String(500))
     providers = db.Column(SQL_JSON)
     last_updated = db.Column(db.DateTime(timezone=True),
                              server_default=db.func.now(), onupdate=db.func.current_timestamp())
@@ -23,6 +24,7 @@ class MovieResult(db.Model):
     year = db.Column(db.String(10))
     score = db.Column(db.Float)
     score_count = db.Column(db.Integer)
+    poster = db.Column(db.String(500))
     providers = db.Column(SQL_JSON)
     last_updated = db.Column(db.DateTime(timezone=True),
                              server_default=db.func.now(), onupdate=db.func.current_timestamp())
