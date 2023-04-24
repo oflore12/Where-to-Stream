@@ -24,16 +24,16 @@
 	{% for r in results %}
 	<div class="searchResults">
 		{% if r.poster %}
-		<img src="https://image.tmdb.org/t/p/w500{{ r.poster }}" alt="{{ r.title }}"
+		<img src="https://image.tmdb.org/t/p/w500{{ r.poster }}" alt="{{ r.title }}" class="{{'notAvail' if not r.providers.get(country)}}"
 			onload="this.classList.add('loadedImg')" />
 		{% else %}
-		<div class="noPoster"></div>
+		<div class="noPoster {{'notAvail' if not r.providers.get(country)}}"></div>
 		{% endif %}
 
 		<div>
-			<h4 style="margin-top: 25px; font-weight: 600; font-size: 1.55rem;">{{r.title}}
+			<h4 style="margin-top: 25px; font-weight: 600; font-size: 28px;">{{r.title}}
 				{% if r.year %}
-				<span style="font-size: 1.225rem; font-weight: 400; padding-left: 3px; opacity: 0.8">
+				<span style="font-size: 20px; font-weight: 400; padding-left: 3px; opacity: 0.8">
 					({{ r.year }})
 				</span>
 				{% endif %}
