@@ -82,7 +82,7 @@
 
             for (i in suggestions) {
                 let q = suggestions[i]
-                suggestionsMenu.innerHTML += '<a href="/search?q=' + q + '&provider=all">' + q.replace(searchBar.value, '<b>' + searchBar.value + '</b>') + '</a>'
+                suggestionsMenu.innerHTML += '<a href="/search?q=' + q + '&provider=all">' + q.replace(searchBar.value.toLowerCase(), '<b>' + searchBar.value.toLowerCase() + '</b>') + '</a>'
             }
 
             if (suggestions.length > 0)
