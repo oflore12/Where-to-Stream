@@ -1,6 +1,12 @@
 # Where To Stream (CMSC447Project)
 This is the repository for CMSC447 Project.
 
+Install and run the project, the *run.sh* bash script should work with sudo privileges:
+
+- `sudo bash run.sh`
+
+The bash script follows the below installation and usage instructions.
+
 ## Installation
 To install packages needed for Python and Flask, run these commands:
 
