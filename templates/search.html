@@ -25,20 +25,25 @@
 	{% for r in results %}
 	<div class="searchResults">
 		{% if r.poster %}
-		<img src="https://image.tmdb.org/t/p/w500{{ r.poster }}" alt="{{ r.title }}" class="{{'notAvail' if not r.providers.get(country)}}"
-			onload="this.classList.add('loadedImg')" />
+		<img src="https://image.tmdb.org/t/p/w500{{ r.poster }}" alt="{{ r.title }}"
+			class="{{'notAvail' if not r.providers.get(country)}}" onload="this.classList.add('loadedImg')" />
 		{% else %}
 		<div class="noPoster {{'notAvail' if not r.providers.get(country)}}"></div>
 		{% endif %}
 
-		<div>
-			<h4 style="margin-top: 25px; font-weight: 600; font-size: 28px; padding-bottom: 2px;">{{r.title}}
-				{% if r.year %}
-				<span style="font-size: 20px; font-weight: 400; padding-left: 3px; opacity: 0.8">
-					({{ r.year }})
-				</span>
-				{% endif %}
-			</h4>
+		<div style="min-width: 0">
+			<div
+				style="display: flex; justify-content: space-between; align-items: flex-end; margin-top: 14px; margin-bottom: 20px;">
+				<h4 style="font-weight: 600; font-size: 28px; margin: 14px 0 0; line-height: 1;">{{r.title}}
+					{% if r.year %}
+					<span style="font-size: 20px; font-weight: 400; padding-left: 3px; opacity: 0.8">
+						({{ r.year }})
+					</span>
+					{% endif %}
+				</h4>
+
+				{{ score_gauge.scoreGaugeSmall(r.score, r.score_count) }}
+			</div>
 
 			<div class="provTray">
 				{% if r.providers.get(country).flatrate %}
@@ -51,7 +56,6 @@
 							<img src="{{imageUrl}}" alt="{{f.provider_name}}" width="75" height="75"
 								onload="this.classList.add('loadedImg')" data-bs-toggle="tooltip"
 								data-bs-title="{{f.provider_name}}" data-bs-custom-class="custom-tooltip" />
-							<!--<<span>{{f.provider_name}}</span>-->
 						</div>
 						{% endfor %}
 					</div>
@@ -68,7 +72,6 @@
 							<img src="{{imageUrl}}" alt="{{b.provider_name}}" width="75" height="75"
 								onload="this.classList.add('loadedImg')" data-bs-toggle="tooltip"
 								data-bs-title="{{b.provider_name}}" data-bs-custom-class="custom-tooltip" />
-							<!--<span>{{b.provider_name}}</span>-->
 						</div>
 						{% endfor %}
 					</div>
@@ -85,7 +88,6 @@
 							<img src="{{imageUrl}}" alt="{{p.provider_name}}" width="75" height="75"
 								onload="this.classList.add('loadedImg')" data-bs-toggle="tooltip"
 								data-bs-title="{{p.provider_name}}" data-bs-custom-class="custom-tooltip" />
-							<!--<<span>{{p.provider_name}}</span>-->
 						</div>
 						{% endfor %}
 					</div>
@@ -102,7 +104,6 @@
 							<img src="{{imageUrl}}" alt="{{a.provider_name}}" width="75" height="75"
 								onload="this.classList.add('loadedImg')" data-bs-toggle="tooltip"
 								data-bs-title="{{a.provider_name}}" data-bs-custom-class="custom-tooltip" />
-							<!--<<span>{{a.provider_name}}</span>-->
 						</div>
 						{% endfor %}
 					</div>
@@ -119,7 +120,6 @@
 							<img src="{{imageUrl}}" alt="{{f.provider_name}}" width="75" height="75"
 								onload="this.classList.add('loadedImg')" data-bs-toggle="tooltip"
 								data-bs-title="{{f.provider_name}}" data-bs-custom-class="custom-tooltip" />
-							<!--<<span>{{f.provider_name}}</span>-->
 						</div>
 						{% endfor %}
 					</div>
@@ -133,7 +133,7 @@
 		</div>
 	</div>
 
-	{{ score_gauge.scoreGauge(r.score, r.score_count) }}
+	<!-- {{ score_gauge.scoreGauge(r.score, r.score_count) }} -->
 	{% endfor %}
 </section>
 

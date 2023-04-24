@@ -27,8 +27,8 @@ body {
 }
 
 .searchResults {
-  margin-top: 45px;
-  margin-bottom: 65px;
+  margin-top: 50px;
+  margin-bottom: 70px;
   display: flex;
   align-items: flex-start;
 }
@@ -74,7 +74,7 @@ body {
 }
 
 .provTray {
-  border-radius: 4px;
+  border-radius: 12px;
   box-shadow: 0 1px 3px 0 rgb(0 0 0 / 0.1), 0 1px 2px -1px rgb(0 0 0 / 0.1);
   background: rgb(248, 249, 250);
   margin-top: 15px;
@@ -313,4 +313,12 @@ svg.score path.color.five {
     stroke-dashoffset: 198;
     stroke: #e7e7e8;
   }
+}
+
+svg.score.small {
+  height: 40px;
+}
+
+svg.score.small path {
+  stroke-width: 21;
 }

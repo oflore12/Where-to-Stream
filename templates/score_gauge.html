@@ -1,13 +1,36 @@
 {% macro scoreGauge(score, scoreCount) -%}
-<svg viewbox="0 0 110 110" class="score" style="opacity: {{'0.4' if scoreCount == 0 else '1'}}">
-    <g>
-        <path class="grey" d="M30,90 A40,40 0 1,1 80,90" fill='none' />
-        <path id="color" fill='none'
-            class="color {{'one' if score < 20}} {{'two' if score >= 20 and score < 40}} {{'three' if score >= 40 and score < 60}} {{'four' if score >= 60 and score < 80}} {{'five' if score >= 80}}"
-            d="M30,90 A40,40 0 1,1 80,90" stroke-dashoffset="{{198 if score == 0 else 198-(score*1.98)}}" />
-        <text x="50%" y="55%" dominant-baseline="middle" text-anchor="middle" font-size="18.5px"
-            font-weight="700">{{score if scoreCount > 0 else "--.-"}}%</text>
-    </g>
-</svg>
-<p style="text-align: center; margin: -13px 0 0; font-size: 14px; opacity: 0.75;">{{scoreCount}} review{{'s' if scoreCount != 1}}</p>
+<div>
+    <svg viewbox="0 0 110 110" class="score" style="opacity: {{'0.4' if scoreCount == 0 else '1'}}">
+        <g>
+            <path class="grey" d="M30,90 A40,40 0 1,1 80,90" fill='none' />
+            <path id="color" fill='none'
+                class="color {{'one' if score < 20}} {{'two' if score >= 20 and score < 40}} {{'three' if score >= 40 and score < 60}} {{'four' if score >= 60 and score < 80}} {{'five' if score >= 80}}"
+                d="M30,90 A40,40 0 1,1 80,90" stroke-dashoffset="{{198 if score == 0 else 198-(score*1.98)}}" />
+            <text x="50%" y="55%" dominant-baseline="middle" text-anchor="middle" font-size="18.5px"
+                font-weight="700">{{score if scoreCount > 0 else "--.-"}}%</text>
+        </g>
+    </svg>
+    <p style="text-align: center; margin: -13px 0 0; font-size: 14px; opacity: 0.75;">{{scoreCount}} review{{'s' if
+        scoreCount != 1}}</p>
+</div>
+{%- endmacro %}
+
+{% macro scoreGaugeSmall(score, scoreCount) -%}
+<div
+    style="display: flex; align-items: center; margin-left: 50px; margin-bottom: -3px; opacity: {{'0.6' if scoreCount == 0 else '1'}}">
+    <svg viewbox="0 0 110 110" class="score small" style="margin-bottom: -1px;">
+        <g>
+            <path class="grey" d="M30,90 A40,40 0 1,1 80,90" fill='none' />
+            <path id="color" fill='none'
+                class="color {{'one' if score < 20}} {{'two' if score >= 20 and score < 40}} {{'three' if score >= 40 and score < 60}} {{'four' if score >= 60 and score < 80}} {{'five' if score >= 80}}"
+                d="M30,90 A40,40 0 1,1 80,90" stroke-dashoffset="{{198 if score == 0 else 198-(score*1.98)}}" />
+        </g>
+    </svg>
+    <p style="display: flex; flex-direction: column; margin: 0 0 0 10px;">
+        <span style="font-weight: 600; margin-bottom: -4px; font-size: 16px;">{{score if scoreCount > 0 else
+            "--.-"}}%</span>
+        <span style="font-size: 13px; opacity: 0.75; white-space: nowrap;">({{scoreCount}} review{{'s' if scoreCount !=
+            1}})</span>
+    </p>
+</div>
 {%- endmacro %}
