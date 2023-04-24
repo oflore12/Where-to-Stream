@@ -322,3 +322,7 @@ svg.score.small {
 svg.score.small path {
   stroke-width: 21;
 }
+
+svg.score.small path.color {
+  animation: dash 1s 0.5s ease-in-out backwards;
+}
