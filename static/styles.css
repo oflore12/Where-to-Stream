@@ -279,7 +279,7 @@ svg.score path {
 }
 
 svg.score path.grey {
-  stroke: #e7e7e8;
+  stroke: #00000015;
 }
 
 svg.score path.color {
@@ -338,7 +338,7 @@ svg.score g.five path.white {
 @keyframes dash {
   from {
     stroke-dashoffset: 198;
-    stroke: #e7e7e8;
+    stroke: #00000015;
   }
 }
 
@@ -369,4 +369,31 @@ svg.score.small path.white {
 
 .modal-content {
   box-shadow: 0 20px 25px -5px rgb(0 0 0 / 0.1), 0 8px 10px -6px rgb(0 0 0 / 0.1);
+}
+
+.score-modal {
+  border-radius: 12px;
+  padding-top: 8px;
+  padding-bottom: 20px;
+  box-shadow: 0 1px 3px 0 rgb(0 0 0 / 0.1), 0 1px 2px -1px rgb(0 0 0 / 0.1);
+}
+
+.score-modal.one {
+  background-color: #fef2f2;
+}
+
+.score-modal.two {
+  background-color: #fff7ed;
+}
+
+.score-modal.three {
+  background-color: #fefce8;
+}
+
+.score-modal.four {
+  background-color: #f7fee7;
+}
+
+.score-modal.five {
+  background-color: #f0fdf4;
 }

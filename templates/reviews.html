@@ -6,10 +6,10 @@
     <div class="modal-dialog modal-dialog-centered modal-dialog-scrollable">
         <div class="modal-content">
             <div class="modal-header">
-                <h1 class="modal-title fs-5">
+                <h1 class="modal-title fs-5" style="font-weight: 400; font-size: 24px !important;">
                     Reviews for <span style="font-weight: 700;">{{r.title}}</span>
                     {% if r.year %}
-                    <span style="font-size: 14.5px; font-weight: 400; opacity: 0.8">
+                    <span style="font-size: 17px; font-weight: 400; opacity: 0.8">
                         ({{ r.year }})
                     </span>
                     {% endif %}
@@ -17,7 +17,11 @@
                 <button type="button" class="btn-close" data-bs-dismiss="modal" aria-label="Close"></button>
             </div>
             <div class="modal-body">
-                {{ score_gauge.scoreGauge(r.score, r.score_count) }}
+                {{ score_gauge.scoreGaugeModal(r.score, r.score_count) }}
+
+                <div style="margin-top: 40px;">
+                    <p style="font-size: 22px; margin: 0; font-weight: 600;">Commentary Reviews</p>
+                </div>
             </div>
         </div>
     </div>
