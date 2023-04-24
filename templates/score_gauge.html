@@ -19,7 +19,7 @@
 {%- endmacro %}
 
 {% macro scoreGaugeSmall(score, scoreCount) -%}
-<div style="display: flex; align-items: center; margin-left: 50px; margin-bottom: -3px; cursor: default; opacity: {{'0.6' if scoreCount == 0 else '1'}};"
+<div style="display: flex; align-items: center; margin-left: 50px; margin-bottom: -3px; opacity: {{'0.6' if scoreCount == 0 else '1'}};"
     data-bs-toggle="tooltip" data-bs-title="TMDb Review Score" data-bs-custom-class="custom-tooltip">
     <svg viewbox="0 0 110 110" class="score small" style="margin-bottom: -1px;">
         <g

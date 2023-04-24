@@ -270,7 +270,7 @@ footer {
 svg.score {
   height: 125px;
   display: block;
-  margin: auto;
+  margin: -10px auto 0;
 }
 
 svg.score path {
@@ -284,7 +284,7 @@ svg.score path.grey {
 
 svg.score path.color {
   stroke-dasharray: 198;
-  animation: dash 2s ease-in-out backwards;
+  animation: dash 1s ease-in-out backwards;
 }
 
 svg.score g.one path.color {
@@ -311,7 +311,7 @@ svg.score path.white {
   stroke: #ffffff;
   stroke-dasharray: 0px, 198px;
   stroke-width: 14;
-  animation: dash 2s ease-in-out backwards;
+  animation: dash 1s ease-in-out backwards;
   filter: drop-shadow(0 1px 1px rgb(0 0 0 / 0.1)) drop-shadow(0 1px 2px rgb(0 0 0 / 0.1));
 }
 
@@ -357,4 +357,16 @@ svg.score.small path.color {
 svg.score.small path.white {
   stroke-width: 27;
   animation: dash 1s 0.5s ease-in-out backwards;
+}
+
+.modal-backdrop {
+  background-color: white;
+}
+
+.modal-dialog {
+  max-width: 1000px;
+}
+
+.modal-content {
+  box-shadow: 0 20px 25px -5px rgb(0 0 0 / 0.1), 0 8px 10px -6px rgb(0 0 0 / 0.1);
 }

@@ -1,6 +1,7 @@
 {% extends 'base.html' %}
 {% import 'search_bar.html' as search_bar %}
 {% import 'score_gauge.html' as score_gauge %}
+{% import 'reviews.html' as reviews %}
 
 {% block title %}Search{% endblock %}
 
@@ -31,6 +32,8 @@
 		<div class="noPoster {{'notAvail' if not r.providers.get(country)}}"></div>
 		{% endif %}
 
+		{{reviews.reviewsModal(r)}}
+
 		<div style="min-width: 0">
 			<div
 				style="display: flex; justify-content: space-between; align-items: flex-end; margin-top: 13px; margin-bottom: 22px;">
@@ -42,7 +45,15 @@
 					{% endif %}
 				</h4>
 
-				{{ score_gauge.scoreGaugeSmall(r.score, r.score_count) }}
+				{% if r.score_count == 0 %}
+				<div style="cursor: default;">
+					{{ score_gauge.scoreGaugeSmall(r.score, r.score_count) }}
+				</div>
+				{% else %}
+				<div data-bs-toggle="modal" data-bs-target="#reviews-{{r.id}}" style="cursor: pointer;">
+					{{ score_gauge.scoreGaugeSmall(r.score, r.score_count) }}
+				</div>
+				{% endif %}
 			</div>
 
 			<div class="provTray">

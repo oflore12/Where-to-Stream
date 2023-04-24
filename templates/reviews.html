@@ -1,0 +1,29 @@
+{% import 'score_gauge.html' as score_gauge %}
+
+{% macro reviewsModal(r) -%}
+<!-- <button type="button" class="btn btn-primary" data-bs-toggle="modal" data-bs-target="#reviews-{{r.id}}">
+    Vertically centered scrollable modal
+</button> -->
+
+<div class="modal fade" id="reviews-{{r.id}}" tabindex="-1" aria-labelledby="reviews-{{r.id}}" style="display: none;"
+    aria-hidden="true">
+    <div class="modal-dialog modal-dialog-centered modal-dialog-scrollable">
+        <div class="modal-content">
+            <div class="modal-header">
+                <h1 class="modal-title fs-5" id="reviews-{{r.id}}">
+                    Reviews for <span style="font-weight: 700;">{{r.title}}</span>
+                    {% if r.year %}
+                    <span style="font-size: 14.5px; font-weight: 400; opacity: 0.8">
+                        ({{ r.year }})
+                    </span>
+                    {% endif %}
+                </h1>
+                <button type="button" class="btn-close" data-bs-dismiss="modal" aria-label="Close"></button>
+            </div>
+            <div class="modal-body">
+                {{ score_gauge.scoreGauge(r.score, r.score_count) }}
+            </div>
+        </div>
+    </div>
+</div>
+{%- endmacro %}
