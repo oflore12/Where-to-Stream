@@ -1,0 +1,12 @@
+{% macro scoreGauge(score, scoreCount) -%}
+<svg viewbox="0 0 110 110" class="score" style="opacity: {{'0.4' if scoreCount == 0 else '1'}}">
+    <g>
+        <path class="grey" d="M30,90 A40,40 0 1,1 80,90" fill='none' />
+        <path id="color" fill='none'
+            class="color {{'one' if score < 20}} {{'two' if score >= 20 and score < 40}} {{'three' if score >= 40 and score < 60}} {{'four' if score >= 60 and score < 80}} {{'five' if score >= 80}}"
+            d="M30,90 A40,40 0 1,1 80,90" stroke-dashoffset="{{198 if score == 0 else 198-(score*1.98)}}" />
+        <text x="50%" y="55%" dominant-baseline="middle" text-anchor="middle" font-size="18.5px"
+            font-weight="700">{{score if scoreCount > 0 else "--.-"}}%</text>
+    </g>
+</svg>
+{%- endmacro %}

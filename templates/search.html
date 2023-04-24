@@ -1,5 +1,6 @@
 {% extends 'base.html' %}
 {% import 'search_bar.html' as search_bar %}
+{% import 'score_gauge.html' as score_gauge %}
 
 {% block title %}Search{% endblock %}
 
@@ -120,6 +121,8 @@
 		{% if not r.providers.get(country) %}
 		<p class="notAvailableMsg">Not available from any streaming providers</p>
 		{% endif %}
+
+		{{ score_gauge.scoreGauge(r.score, r.score_count) }}
 	</div>
 	{% endfor %}
 </section>

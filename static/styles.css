@@ -225,3 +225,49 @@ footer {
   font-size: 0.8rem;
   color: rgba(0, 0, 0, 0.55);
 }
+
+svg.score {
+  height: 125px;
+  display: block;
+}
+
+svg.score path {
+  stroke-linecap: round;
+  stroke-width: 9;
+}
+
+svg.score path.grey {
+  stroke: #e7e7e8;
+}
+
+svg.score path.color {
+  stroke-dasharray: 198;
+  animation: dash 2s ease-in-out backwards;
+}
+
+svg.score path.color.one {
+  stroke: #ef4444;
+}
+
+svg.score path.color.two {
+  stroke: #f97316;
+}
+
+svg.score path.color.three {
+  stroke: #facc15;
+}
+
+svg.score path.color.four {
+  stroke: #84cc16;
+}
+
+svg.score path.color.five {
+  stroke: #16a34a;
+}
+
+@keyframes dash {
+  from {
+    stroke-dashoffset: 198;
+    stroke: #e7e7e8;
+  }
+}

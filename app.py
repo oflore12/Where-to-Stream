@@ -95,7 +95,7 @@ def getResults(q, providerFilter):
             id = int(result["id"])
             media_type = result["media_type"]
             title = result["title"] if media_type == "movie" else result["name"]
-            score = result["vote_average"]
+            score = round(result["vote_average"] * 10, 1)
             score_count = result["vote_count"]
 
             # If media type is TV
