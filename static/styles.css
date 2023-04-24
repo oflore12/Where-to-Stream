@@ -270,7 +270,7 @@ footer {
 svg.score {
   height: 125px;
   display: block;
-  margin: -10px auto 0;
+  margin: auto;
 }
 
 svg.score path {

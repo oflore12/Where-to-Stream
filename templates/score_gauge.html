@@ -1,6 +1,6 @@
 {% macro scoreGauge(score, scoreCount) -%}
 <div>
-    <svg viewbox="0 0 110 110" class="score" style="opacity: {{'0.4' if scoreCount == 0 else '1'}}">
+    <svg viewbox="0 0 110 110" class="score" style="margin-top: -10px; opacity: {{'0.4' if scoreCount == 0 else '1'}}">
         <g
             class="{{'one' if score < 20}} {{'two' if score >= 20 and score < 40}} {{'three' if score >= 40 and score < 60}} {{'four' if score >= 60 and score < 80}} {{'five' if score >= 80}}">
             <path class="grey" d="M30,90 A40,40 0 1,1 80,90" fill='none' />
