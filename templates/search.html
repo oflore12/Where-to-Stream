@@ -50,8 +50,10 @@
 					{{ score_gauge.scoreGaugeSmall(r.score, r.score_count) }}
 				</div>
 				{% else %}
-				<div data-bs-toggle="modal" data-bs-target="#reviews-{{r.id}}" style="cursor: pointer;">
-					{{ score_gauge.scoreGaugeSmall(r.score, r.score_count) }}
+				<div style="margin-left: 50px; margin-bottom: -3px;">
+					<div data-bs-toggle="modal" data-bs-target="#reviews-{{r.id}}" style="cursor: pointer;">
+						{{ score_gauge.scoreGaugeSmall(r.score, r.score_count) }}
+					</div>
 				</div>
 				{% endif %}
 			</div>
