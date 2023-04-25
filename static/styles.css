@@ -410,6 +410,7 @@ svg.score.small path.white {
   box-shadow: 0 1px 3px 0 rgb(0 0 0 / 0.1), 0 1px 2px -1px rgb(0 0 0 / 0.1);
   margin: 20px 0;
   padding: 20px;
+  display: flex;
 }
 
 .modal .reviewBlock:first-of-type {
@@ -420,8 +421,52 @@ svg.score.small path.white {
   margin-bottom: 1px;
 }
 
+.reviewMain {
+  margin-top: -2px;
+  flex-grow: 1;
+}
+
+.reviewTop {
+  display: flex;
+  justify-content: space-between;
+  align-items: flex-start;
+  margin-bottom: 6px;
+}
+
+.reviewTop p {
+  display: inline-block;
+  margin-bottom: 0;
+  line-height: 1;
+}
+
 .reviewAvatar img {
-  border-radius: 12px;
+  border-radius: 50%;
   box-shadow: 0 4px 6px -1px rgb(0 0 0 / 0.1), 0 2px 4px -2px rgb(0 0 0 / 0.1);
   background: white;
+  width: 48px;
+  margin-right: 15px;
+}
+
+.badge.none {
+  background: rgba(108, 117, 125, 0.8) !important;
+}
+
+.badge.one {
+  background: #dc2626 !important;
+}
+
+.badge.two {
+  background: #ea580c !important;
+}
+
+.badge.three {
+  background: #eab308 !important;
+}
+
+.badge.four {
+  background: #65a30d !important;
+}
+
+.badge.five {
+  background: #16a34a !important;
 }

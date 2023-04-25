@@ -4,8 +4,10 @@ import sqlalchemy
 from sqlalchemy.orm.session import make_transient
 from .resources.sharedDB.sharedDB import db
 from .resources.models.models import *
+from flask_markdown import markdown
 
 app = Flask(__name__)
+markdown(app)
 
 app.config["SQLALCHEMY_DATABASE_URI"] = "postgresql://wts:team3@localhost:5432/wts_db"
 

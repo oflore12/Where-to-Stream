@@ -26,7 +26,8 @@
                     {% for c in r.reviews %}
                     <div class="reviewBlock">
                         <div class="reviewAvatar">
-                            {% if c.author_details.avatar_path and 'secure.gravatar' in c.author_details.avatar_path %}
+                            {% if c.author_details.avatar_path and 'secure.gravatar' in c.author_details.avatar_path
+                            %}
                             <img src="{{c.author_details.avatar_path[1:]}}" alt="{{c.author_details.username}}" />
                             {% elif c.author_details.avatar_path %}
                             <img src="https://secure.gravatar.com/avatar{{c.author_details.avatar_path}}"
@@ -35,12 +36,39 @@
                             <img src="https://secure.gravatar.com/avatar" alt="{{c.author_details.username}}" />
                             {% endif %}
                         </div>
+                        <div class="reviewMain">
+                            <div class="reviewTop">
+                                <div class="display: flex; flex-direction: column;">
+                                    <div class="display: flex; margin-bottom: -4px;">
+                                        {% if c.author_details.name %}
+                                        <p style="font-weight: 700; margin-right: 2px;">{{c.author_details.name}}</p>
+                                        {% endif %}
+                                        <p style="opacity: 0.7; margin-right: 2px;">@{{c.author_details.username}}</p>
+                                        <span style="opacity: 0.7;">·</span>
+                                        <p style=" opacity: 0.7;">
+                                            <script
+                                                type="text/javascript">document.write(moment(new Date("{{c.updated_at}}")).fromNow());</script>
+                                        </p>
+                                    </div>
+                                </div>
+                                <div>
+                                    {% if c.author_details.rating %}
+                                    <p class="badge bg-secondary {{'one' if c.author_details.rating < 2}} {{'two' if c.author_details.rating >= 2 and c.author_details.rating < 4}} {{'three' if c.author_details.rating >= 4 and c.author_details.rating < 6}} {{'four' if c.author_details.rating >= 6 and c.author_details.rating < 8}} {{'five' if c.author_details.rating >= 8}}"
+                                        style="font-size: 14px"><span
+                                            style="font-weight: 700;">{{c.author_details.rating|int}}</span><span
+                                            style="opacity: 0.75; font-weight: 400;">/10</span></p>
+                                    {% else %}
+                                    <p class="badge none" style="font-size: 14px"><span
+                                            style="font-weight: 700;">-</span><span
+                                            style="opacity: 0.75; font-weight: 400;">/10</span></p>
+                                    {% endif %}
+                                </div>
+                            </div>
 
-                        <p>{{c.author_details.name}}</p>
-                        <p>{{c.author_details.username}}</p>
-                        <p>{{c.author_details.rating}}</p>
-                        <p>{{c.updated_at}}</p>
-                        {{c.content}}
+                            {% markdown %}
+                            {{c.content|safe}}
+                            {% endmarkdown %}
+                        </div>
                     </div>
                     {% endfor %}
 
