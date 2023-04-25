@@ -6,7 +6,8 @@
     <div class="modal-dialog modal-dialog-centered modal-dialog-scrollable">
         <div class="modal-content">
             <div class="modal-header">
-                <h1 class="modal-title fs-5" style="font-weight: 400; font-size: 24px !important; margin-right: 50px; line-height: 1;">
+                <h1 class="modal-title fs-5"
+                    style="font-weight: 400; font-size: 24px !important; margin-right: 50px; line-height: 1;">
                     Reviews for <span style="font-weight: 700;">{{r.title}}</span>
                     {% if r.year %}
                     <span style="font-size: 17px; font-weight: 400; opacity: 0.8">
@@ -21,6 +22,31 @@
 
                 <div style="margin-top: 40px;">
                     <p style="font-size: 22px; margin: 0; font-weight: 600;">Commentary Reviews</p>
+
+                    {% for c in r.reviews %}
+                    <div class="reviewBlock">
+                        <div class="reviewAvatar">
+                            {% if c.author_details.avatar_path and 'secure.gravatar' in c.author_details.avatar_path %}
+                            <img src="{{c.author_details.avatar_path[1:]}}" alt="{{c.author_details.username}}" />
+                            {% elif c.author_details.avatar_path %}
+                            <img src="https://secure.gravatar.com/avatar{{c.author_details.avatar_path}}"
+                                alt="{{c.author_details.username}}" />
+                            {% else %}
+                            <img src="https://secure.gravatar.com/avatar" alt="{{c.author_details.username}}" />
+                            {% endif %}
+                        </div>
+
+                        <p>{{c.author_details.name}}</p>
+                        <p>{{c.author_details.username}}</p>
+                        <p>{{c.author_details.rating}}</p>
+                        <p>{{c.updated_at}}</p>
+                        {{c.content}}
+                    </div>
+                    {% endfor %}
+
+                    {% if not r.reviews %}
+                    <p class="notAvailableMsg" style="margin: 0 0 6px;">None currently available.</p>
+                    {% endif %}
                 </div>
             </div>
         </div>

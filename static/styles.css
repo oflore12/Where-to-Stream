@@ -368,6 +368,10 @@ svg.score.small path.white {
   padding: 0 10px;
 }
 
+.modal-header {
+  padding: 18px 16px;
+}
+
 .modal-content {
   box-shadow: 0 20px 25px -5px rgb(0 0 0 / 0.1), 0 8px 10px -6px rgb(0 0 0 / 0.1);
 }
@@ -376,6 +380,7 @@ svg.score.small path.white {
   border-radius: 12px;
   padding-top: 8px;
   padding-bottom: 20px;
+  margin-bottom: 50px;
   box-shadow: 0 1px 3px 0 rgb(0 0 0 / 0.1), 0 1px 2px -1px rgb(0 0 0 / 0.1);
 }
 
@@ -397,4 +402,24 @@ svg.score.small path.white {
 
 .score-modal.five {
   background-color: #f0fdf4;
+}
+
+.reviewBlock {
+  background: rgb(248, 249, 250);
+  border-radius: 12px;
+  box-shadow: 0 1px 3px 0 rgb(0 0 0 / 0.1), 0 1px 2px -1px rgb(0 0 0 / 0.1);
+  margin: 20px 0;
+  padding: 20px;
+}
+
+.modal .reviewBlock:first-of-type {
+  margin-top: 8px;
+}
+
+.modal .reviewBlock:last-of-type {
+  margin-bottom: 1px;
+}
+
+.reviewAvatar img {
+  border-radius: 12px;
 }

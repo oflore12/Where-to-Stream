@@ -1,6 +1,7 @@
 from ..sharedDB.sharedDB import db
 from sqlalchemy.dialects.postgresql import JSON as SQL_JSON
 
+
 class TVResult(db.Model):
     __tablename__ = 'TVResults'
     id = db.Column(db.Integer, primary_key=True, nullable=False)
@@ -10,6 +11,7 @@ class TVResult(db.Model):
     score_count = db.Column(db.Integer)
     poster = db.Column(db.String(500))
     providers = db.Column(SQL_JSON)
+    reviews = db.Column(SQL_JSON)
     last_updated = db.Column(db.DateTime(timezone=True),
                              server_default=db.func.now(), onupdate=db.func.current_timestamp())
 
@@ -26,6 +28,7 @@ class MovieResult(db.Model):
     score_count = db.Column(db.Integer)
     poster = db.Column(db.String(500))
     providers = db.Column(SQL_JSON)
+    reviews = db.Column(SQL_JSON)
     last_updated = db.Column(db.DateTime(timezone=True),
                              server_default=db.func.now(), onupdate=db.func.current_timestamp())
 

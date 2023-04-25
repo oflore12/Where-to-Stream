@@ -110,30 +110,42 @@ def getResults(q, providerFilter):
                     except:
                         year = ''
 
+                    tvSearch = tmdb.TV(id)
+
                     # Retrieve watch providers and create new 'TVResult' instance
-                    providerSearch = tmdb.TV(id)
-                    providerSearch.watch_providers()
+                    tvSearch.watch_providers()
+                    providerResults = tvSearch.results
+
+                    tvSearch.reviews()
+                    reviewResults = tvSearch.results
+
                     newResult = TVResult(
-                        id=id, title=title, year=year, score=score, score_count=score_count, poster=poster, providers=providerSearch.results)
+                        id=id, title=title, year=year, score=score, score_count=score_count, poster=poster, providers=providerResults, reviews=reviewResults)
                 # If cached, perform TV caching procedure
                 else:
                     newResult = TVCache(id)
             # If media type is movie
             else:
-                try:
-                    year = result["release_date"].split('-')[0]
-                except:
-                    year = ''
-
                 # Check if the movie result is already cached
                 exists = MovieResult.query.filter_by(id=id).first()
                 # If not cached
                 if not exists:
+                    try:
+                        year = result["release_date"].split('-')[0]
+                    except:
+                        year = ''
+
+                    movieSearch = tmdb.Movies(id)
+
                     # Retrieve watch providers and create new 'MovieResult' instance
-                    providerSearch = tmdb.Movies(id)
-                    providerSearch.watch_providers()
+                    movieSearch.watch_providers()
+                    providerResults = movieSearch.results
+
+                    movieSearch.reviews()
+                    reviewResults = movieSearch.results
+
                     newResult = MovieResult(
-                        id=id, title=title, year=year, score=score, score_count=score_count, poster=poster, providers=providerSearch.results)
+                        id=id, title=title, year=year, score=score, score_count=score_count, poster=poster, providers=providerResults, reviews=reviewResults)
                 # If cached, perform movie caching procedure
                 else:
                     newResult = MovieCache(id)
@@ -197,7 +209,7 @@ def TVCache(id):
         SELECT
             "TVResults".id AS "TVResults_id", "TVResults".title AS "TVResults_title", "TVResults".year AS "TVResults_year", "TVResults".score AS "TVResults_score",
             "TVResults".score_count AS "TVResults_score_count", "TVResults".poster AS "TVResults_poster", "TVResults".providers AS "TVResults_providers",
-            "TVResults".last_updated AS "TVResults_last_updated"
+            "TVResults".reviews AS "TVResults_reviews", "TVResults".last_updated AS "TVResults_last_updated"
         FROM "TVResults"
         WHERE "TVResults".id = %(id_1)s
             AND "TVResults".last_updated > CURRENT_TIMESTAMP - interval '%(cacheClock_1)s'
@@ -221,7 +233,7 @@ def MovieCache(id):
         SELECT
             "MovieResults".id AS "MovieResults_id", "MovieResults".title AS "MovieResults_title", "MovieResults".year AS "MovieResults_year", "MovieResults".score AS "MovieResults_score",
             "MovieResults".score_count AS "MovieResults_score_count", "MovieResults".poster AS "MovieResults_poster", "MovieResults".providers AS "MovieResults_providers",
-            "MovieResults".last_updated AS "MovieResults_last_updated"
+            "MovieResults".reviews AS "MovieResults_reviews", "MovieResults".last_updated AS "MovieResults_last_updated"
         FROM "MovieResults"
         WHERE "MovieResults".id = %(id_1)s
             AND "MovieResults".last_updated > CURRENT_TIMESTAMP - interval '%(cacheClock_1)s'
