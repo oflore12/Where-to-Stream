@@ -359,10 +359,6 @@ svg.score.small path.white {
   animation: dash 1s 0.5s ease-in-out backwards;
 }
 
-.modal-backdrop {
-  background-color: white;
-}
-
 .modal-dialog {
   max-width: 1000px;
   padding: 0 10px;
@@ -370,10 +366,14 @@ svg.score.small path.white {
 
 .modal-header {
   padding: 18px 16px;
+  box-shadow: 0 1px 3px 0 rgb(0 0 0 / 0.1), 0 1px 2px -1px rgb(0 0 0 / 0.1);
+  border: none;
+  z-index: 999;
 }
 
 .modal-content {
   box-shadow: 0 20px 25px -5px rgb(0 0 0 / 0.1), 0 8px 10px -6px rgb(0 0 0 / 0.1);
+  border: none;
 }
 
 .score-modal {
