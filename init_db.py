@@ -16,10 +16,15 @@ conn.autocommit = True
 
 cursor = conn.cursor()
 
-cursor.execute('DROP DATABASE IF EXISTS wts_db')
-cursor.execute('CREATE DATABASE wts_db')
-
-print("Where To Stream database sucessfully initialized.")
+# cursor.execute('DROP DATABASE IF EXISTS wts_db')
+cursor.execute(
+    "SELECT EXISTS(SELECT datname FROM pg_database WHERE datname = 'wts_db')")
+exists = cursor.fetchone()[0]
+if not exists:
+    cursor.execute('CREATE DATABASE wts_db')
+    print("Where To Stream database sucessfully initialized.")
+else:
+    print("Where To Stream database already exists.")
 
 # Closing the connection
 conn.close()
