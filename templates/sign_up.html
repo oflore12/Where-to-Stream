@@ -1,0 +1,41 @@
+{% extends 'base.html' %}
+
+{% block title %} Sign Up Page {% endblock %}
+
+{% block content %}
+
+<html>
+  <head>
+    <title>Sign Up Page</title>
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <link href="static/bootstrap.min.css" rel="stylesheet" media="screen">
+  </head>
+  <body>
+    <div class="container">
+      <br>	      
+      <h1>Sign up</h1>
+      <br>
+      <form action="" method="post">
+        <input type="text" placeholder="Username" name="username" value="{{
+          request.form.username }}">
+        <br>
+	 <input type="password" placeholder="Password" name="password" value="{{
+          request.form.password }}">
+	<br>
+	<input type="passwordcheck" placeholder="Reenter Password" name="passwordcheck" value="{{
+          request.form.passwordcheck }}">
+        <input class="btn btn-default" type="submit" value="Create Account">
+      </form>
+
+	<a href="http://127.0.0.1:5000/sign_in">Already have an account? Sign in! </a>
+  
+	{% if error %}
+
+                <p class="error"><strong>Error:</strong> {{ error }}
+        {% endif %}
+
+  </div>
+  </body>
+</html>
+
+{% endblock %}

@@ -55,6 +55,54 @@ def search():
 def filter():
     return render_template('filter.html')
 
+@app.route('/sign_in', methods=['GET', 'POST'])
+def sign_in():
+
+    useDBModels()
+
+    error = None
+    if request.method == 'POST':
+       #check if that username password pair  is in the database
+       exists = UserAccount.query.filter_by(username=request.form['username'], password = request.form['password']).first()
+
+       #returning error if username or password is wrong
+       if not exists:
+           error = 'Username or password is incorrect, enter correct information or sign up for account'
+
+       #need to set logged in as yes
+       #returning home after successful log in
+       else:
+          return redirect(url_for('home'))
+
+    return render_template('sign_in.html', error = error)
+
+@app.route('/sign_up', methods=['GET', 'POST'])
+def sign_up():
+
+    useDBModels()
+
+    error = None
+    if request.method == 'POST':
+
+       #check if that username key is in the database return error if is
+       exists = UserAccount.query.filter_by(username=request.form['username']).first()
+       if exists:
+            error = 'Username already exists, please log in instead'
+
+       #checking if entered passwords match
+       elif request.form['password'] != request.form['passwordcheck']:
+            error = 'Passwords do not match'
+
+       #returning home after successfully creating account
+       else:
+          newUser = UserAccount( username = request.form['username'], password = request.form['password']) 
+          db.session.add(newUser)
+          db.session.commit()
+          return redirect(url_for('home'))
+
+    return render_template('sign_up.html', error = error)
+
+
 
 @app.route('/suggestions')
 def suggestions():

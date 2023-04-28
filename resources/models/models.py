@@ -56,3 +56,12 @@ class QueryResultMapping(db.Model):
 
     def __repr__(self):
         return f'<QueryResultMapping: {self.q}, {self.tv_result}, {self.movie_result}>'
+
+
+class UserAccount(db.Model):
+   __tablename__ = 'UserAccounts'
+   username = db.Column(db.String(25), primary_key=True, nullable=False)
+   password = db.Column(db.String(25))
+
+   def __repr__(self):
+       return f'<UserAccount: {self.title} ({self.id})>'
