@@ -5,8 +5,7 @@ from sqlalchemy.orm.session import make_transient
 from .resources.sharedDB.sharedDB import db
 from .resources.models.models import *
 from flask_markdown import markdown
-from flask_login import login_user, logout_user, login_required
-from flask_login import LoginManager
+from flask_login import LoginManager, login_user, logout_user, login_required#, current_user
 
 app = Flask(__name__)
 markdown(app)
