@@ -5,10 +5,13 @@ from sqlalchemy.orm.session import make_transient
 from .resources.sharedDB.sharedDB import db
 from .resources.models.models import *
 from flask_markdown import markdown
+from flask_login import login_user, logout_user, login_required
+from flask_login import LoginManager
 
 app = Flask(__name__)
 markdown(app)
 
+app.config['SECRET_KEY'] = 'our-secret-key'
 app.config["SQLALCHEMY_DATABASE_URI"] = "postgresql://wts:team3@localhost:5432/wts_db"
 
 db.init_app(app)
@@ -19,6 +22,16 @@ tmdb.REQUESTS_TIMEOUT = 5
 
 # Defines the expiration time for cached API results
 CACHE_CLOCK = "1 minute"
+
+login_manager = LoginManager()
+login_manager.login_view = 'sign_in'
+login_manager.init_app(app)
+
+
+@login_manager.user_loader
+def load_user(user_id):
+    # since the user_id is just the primary key of our user table, use it in the query for the user
+    return UserAccount.query.get(user_id)
 
 
 @app.route('/')
@@ -51,57 +64,63 @@ def search():
     return redirect(url_for('home'))
 
 
-@app.route('/filter')
-def filter():
-    return render_template('filter.html')
-
 @app.route('/sign_in', methods=['GET', 'POST'])
 def sign_in():
-
     useDBModels()
 
     error = None
     if request.method == 'POST':
-       #check if that username password pair  is in the database
-       exists = UserAccount.query.filter_by(username=request.form['username'], password = request.form['password']).first()
+        # check if that username password pair  is in the database
+        exists = UserAccount.query.filter_by(
+            username=request.form['username'], password=request.form['password']).first()
 
-       #returning error if username or password is wrong
-       if not exists:
-           error = 'Username or password is incorrect, enter correct information or sign up for account'
+        # returning error if username or password is wrong
+        if not exists:
+            error = 'Username or password is incorrect, enter correct information or sign up for account'
 
-       #need to set logged in as yes
-       #returning home after successful log in
-       else:
-          return redirect(url_for('home'))
+        # need to set logged in as yes
+        # returning home after successful log in
+        else:
+            login_user(exists)
+            return redirect(url_for('home'))
 
-    return render_template('sign_in.html', error = error)
+    return render_template('sign_in.html', error=error)
+
 
 @app.route('/sign_up', methods=['GET', 'POST'])
 def sign_up():
-
     useDBModels()
 
     error = None
     if request.method == 'POST':
 
-       #check if that username key is in the database return error if is
-       exists = UserAccount.query.filter_by(username=request.form['username']).first()
-       if exists:
+        # check if that username key is in the database return error if is
+        exists = UserAccount.query.filter_by(
+            username=request.form['username']).first()
+        if exists:
             error = 'Username already exists, please log in instead'
 
-       #checking if entered passwords match
-       elif request.form['password'] != request.form['passwordcheck']:
+        # checking if entered passwords match
+        elif request.form['password'] != request.form['passwordcheck']:
             error = 'Passwords do not match'
 
-       #returning home after successfully creating account
-       else:
-          newUser = UserAccount( username = request.form['username'], password = request.form['password']) 
-          db.session.add(newUser)
-          db.session.commit()
-          return redirect(url_for('home'))
+        # returning home after successfully creating account
+        else:
+            newUser = UserAccount(
+                username=request.form['username'], password=request.form['password'])
+            db.session.add(newUser)
+            db.session.commit()
+            login_user(newUser)
+            return redirect(url_for('home'))
 
-    return render_template('sign_up.html', error = error)
+    return render_template('sign_up.html', error=error)
 
+
+@app.route('/sign_out', methods=['GET', 'POST'])
+@login_required
+def sign_out():
+    logout_user()
+    return redirect(url_for('home'))
 
 
 @app.route('/suggestions')
@@ -120,6 +139,11 @@ def suggestions():
             suggestions.append(result['title'].lower())
             counter += 1
     return suggestions
+
+
+@app.route('/filter')
+def filter():
+    return render_template('filter.html')
 
 
 def getResults(q, providerFilter):

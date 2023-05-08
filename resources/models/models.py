@@ -1,5 +1,6 @@
 from ..sharedDB.sharedDB import db
 from sqlalchemy.dialects.postgresql import JSON as SQL_JSON
+from flask_login import UserMixin
 
 
 class TVResult(db.Model):
@@ -58,10 +59,13 @@ class QueryResultMapping(db.Model):
         return f'<QueryResultMapping: {self.q}, {self.tv_result}, {self.movie_result}>'
 
 
-class UserAccount(db.Model):
-   __tablename__ = 'UserAccounts'
-   username = db.Column(db.String(25), primary_key=True, nullable=False)
-   password = db.Column(db.String(25))
+class UserAccount(UserMixin, db.Model):
+    __tablename__ = 'UserAccounts'
+    username = db.Column(db.String(25), primary_key=True, nullable=False)
+    password = db.Column(db.String(25))
 
-   def __repr__(self):
-       return f'<UserAccount: {self.title} ({self.id})>'
+    def __repr__(self):
+        return f'<UserAccount: {self.username}>'
+
+    def get_id(self):
+        return (self.username)

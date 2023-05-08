@@ -1,39 +1,23 @@
 {% extends 'base.html' %}
 
-{% block title %} Sign In Page {% endblock %}
+{% block title %} Sign In {% endblock %}
 
 {% block content %}
+<h1>Sign In</h1>
 
-<html>
-  <head>
-    <title>Sign In Page</title>
-    <meta name="viewport" content="width=device-width, initial-scale=1.0">
-    <link href="static/bootstrap.min.css" rel="stylesheet" media="screen">
-  </head>
-  <body>
-    <div class="container">
-      <br>
-      <h1>Login</h1>
-      <br>
-      <form action="" method="post">
-        <input type="text" placeholder="Username" name="username" value="{{
+<form action="" method="post">
+  <input type="text" placeholder="Username" name="username" value="{{
           request.form.username }}">
-       <br> 
-        <input type="password" placeholder="Password" name="password" value="{{
+  <br>
+  <input type="password" placeholder="Password" name="password" value="{{
           request.form.password }}">
+  <input class="btn btn-default" type="submit" value="Login">
+</form>
 
-        <input class="btn btn-default" type="submit" value="Login">
-      </form>    
+<a href="/sign_up">Don't have an account? Sign up! </a>
 
-	<a href="http://127.0.0.1:5000/sign_up">Don't have an account? Sign up! </a>
-
-	{% if error %}
-
-		<p class="error"><strong>Error:</strong> {{ error }}
-	{% endif %}
-
-    </div>
-  </body>
-</html>
+{% if error %}
+<p class="error"><strong>Error:</strong> {{ error }}</p>
+{% endif %}
 
 {% endblock %}
