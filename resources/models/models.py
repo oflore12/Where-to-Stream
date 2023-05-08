@@ -69,3 +69,14 @@ class UserAccount(UserMixin, db.Model):
 
     def get_id(self):
         return (self.username)
+
+
+class Watchlist(db.Model):
+    __tablename__ = 'Watchlist'
+    id = db.Column(db.Integer, primary_key=True, nullable=False)
+    user_id = db.Column(db.String(25), db.ForeignKey('UserAccounts.username'), nullable=False)
+    tv_id = db.Column(db.Integer, db.ForeignKey('TVResults.id'))
+    movie_id = db.Column(db.Integer, db.ForeignKey('MovieResults.id'))
+
+    def __repr__(self):
+        return f'<Watchlist id:{self.id} tv_id:{self.tv_id} movie_id:{self.movie_id} user_id:{self.user_id}>'

@@ -1,11 +1,11 @@
 import tmdbsimple as tmdb
-from flask import Flask, render_template, request, url_for, redirect
+from flask import Flask, render_template, request, url_for, redirect, jsonify
 import sqlalchemy
 from sqlalchemy.orm.session import make_transient
 from .resources.sharedDB.sharedDB import db
 from .resources.models.models import *
 from flask_markdown import markdown
-from flask_login import LoginManager, login_user, logout_user, login_required#, current_user
+from flask_login import LoginManager, login_user, logout_user, login_required, current_user
 
 app = Flask(__name__)
 markdown(app)
@@ -143,6 +143,82 @@ def suggestions():
 @app.route('/filter')
 def filter():
     return render_template('filter.html')
+
+
+@app.route('/watchlist/add/tv/<int:item_id>')
+@login_required
+def addTvToWatchlist(item_id):
+    useDBModels()
+
+    item = Watchlist.query.filter_by(
+        tv_id=item_id, user_id=current_user.get_id()).first()
+    if not item:
+        try:
+            newItem = Watchlist(user_id=current_user.get_id(),
+                                tv_id=item_id, movie_id=-1)
+            db.session.add(newItem)
+            db.session.commit()
+            return jsonify({'success': 'TV show added successfully.'}), 200
+        except Exception as e:
+            print(e)
+            return jsonify({'error': 'TV show not found.'}), 404
+    return jsonify({'error': 'Could not add TV show.'}), 400
+
+
+@app.route('/watchlist/add/movie/<int:item_id>')
+@login_required
+def addMovieToWatchlist(item_id):
+    useDBModels()
+
+    item = Watchlist.query.filter_by(
+        movie_id=item_id, user_id=current_user.get_id()).first()
+    if not item:
+        try:
+            newItem = Watchlist(user_id=current_user.get_id(),
+                                tv_id=-1, movie_id=item_id)
+            db.session.add(newItem)
+            db.session.commit()
+            return jsonify({'success': 'Movie added successfully.'}), 200
+        except Exception as e:
+            print(e)
+            return jsonify({'error': 'Movie not found.'}), 404
+    return jsonify({'error': 'Could not add movie.'}), 400
+
+
+@app.route('/watchlist/remove/tv/<int:item_id>')
+@login_required
+def removeTVFromWatchlist(item_id):
+    useDBModels()
+
+    item = Watchlist.query.filter_by(
+        tv_id=item_id, user_id=current_user.get_id()).first()
+    if not item:
+        return jsonify({'error': 'TV show not found.'}), 404
+    try:
+        db.session.delete(item)
+        db.session.commit()
+        return jsonify({'success': 'TV show removed successfully.'}), 200
+    except Exception as e:
+        print(e)
+    return jsonify({'error': 'Could not remove TV show.'}), 400
+
+
+@app.route('/watchlist/remove/movie/<int:item_id>')
+@login_required
+def removeMovieFromWatchlist(item_id):
+    useDBModels()
+
+    item = Watchlist.query.filter_by(
+        movie_id=item_id, user_id=current_user.get_id()).first()
+    if not item:
+        return jsonify({'error': 'Movie not found.'}), 404
+    try:
+        db.session.delete(item)
+        db.session.commit()
+        return jsonify({'success': 'Movie removed successfully.'}), 200
+    except Exception as e:
+        print(e)
+    return jsonify({'error': 'Could not remove movie.'}), 400
 
 
 def getResults(q, providerFilter):
