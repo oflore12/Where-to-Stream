@@ -273,6 +273,7 @@ def getResults(q, providerFilter):
                 # If cached, perform TV caching procedure
                 else:
                     newResult = TVCache(id)
+                    newResult.type = 'tv'
             # If media type is movie
             else:
                 # Check if the movie result is already cached
@@ -298,6 +299,7 @@ def getResults(q, providerFilter):
                 # If cached, perform movie caching procedure
                 else:
                     newResult = MovieCache(id)
+                    newResult.type = 'movie'
 
             # If new result not cached, add to the database and commit change
             if not exists:
@@ -335,9 +337,11 @@ def getResults(q, providerFilter):
             # If the cached result is a TV result
             if cached_result_id.tv_result != -1:
                 currentResult = TVCache(cached_result_id.tv_result)
+                currentResult.type = 'tv'
             # If the cached result is a movie result
             else:
                 currentResult = MovieCache(cached_result_id.movie_result)
+                currentResult.type = 'movie'
 
             # If there is no provider filter, add the current result to results
             if providerFilter == "all":

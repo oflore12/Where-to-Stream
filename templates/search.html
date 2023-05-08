@@ -45,17 +45,22 @@
 					{% endif %}
 				</h4>
 
-				{% if r.score_count == 0 %}
-				<div style="cursor: default;">
-					{{ score_gauge.scoreGaugeSmall(r.score, r.score_count) }}
-				</div>
-				{% else %}
-				<div style="margin-left: 50px; margin-bottom: -3px;">
-					<div data-bs-toggle="modal" data-bs-target="#reviews-{{r.id}}" style="cursor: pointer;">
+				<div style="display: flex; margin-left: 50px;">
+					<button class="watchlistButton" id="watchlist-{{r.type}}-{{r.id}}"
+						style="margin-right: 10px">Watchlist</button>
+
+					{% if r.score_count == 0 %}
+					<div style="cursor: default;">
 						{{ score_gauge.scoreGaugeSmall(r.score, r.score_count) }}
 					</div>
+					{% else %}
+					<div style="margin-bottom: -3px;">
+						<div data-bs-toggle="modal" data-bs-target="#reviews-{{r.id}}" style="cursor: pointer;">
+							{{ score_gauge.scoreGaugeSmall(r.score, r.score_count) }}
+						</div>
+					</div>
+					{% endif %}
 				</div>
-				{% endif %}
 			</div>
 
 			<div class="provTray">
