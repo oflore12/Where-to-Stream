@@ -46,8 +46,12 @@
 				</h4>
 
 				<div style="display: flex; margin-left: 50px;">
-					<button class="watchlistButton" id="watchlist-{{r.type}}-{{r.id}}"
-						style="margin-right: 10px">Watchlist</button>
+					{% if current_user.is_authenticated %}
+					<button class="watchlistButton" id="watchlist-{{r.type}}-{{r.id}}" data-is-added="{{r.watchlist}}"
+						style="margin-right: 10px">
+						Watchlist
+					</button>
+					{% endif %}
 
 					{% if r.score_count == 0 %}
 					<div style="cursor: default;">
@@ -175,5 +179,31 @@
 	}
 
 	spaceNoResults();
+
+	function addButtonClicked(type, itemId, isAdded) {
+		let newStatus = isAdded === 'True' ? 'remove' : 'add';
+		document.getElementById(`watchlist-${type}-${itemId}`).classList.add('disabled')
+		fetch(`/watchlist/${newStatus}/${type}/${itemId}`)
+			.then(response => {
+				return response.json();
+			})
+			.then(data => {
+				document.getElementById(`watchlist-${type}-${itemId}`).dataset.isAdded = isAdded === 'True' ? 'False' : 'True';
+				console.log(data)
+			})
+			.catch(error => {
+				console.error('Error removing item from watchlist:', error);
+			})
+			.finally(() => {
+				document.getElementById(`watchlist-${type}-${itemId}`).classList.remove('disabled')
+			});
+	}
+
+	document.addEventListener('click', function (event) {
+		if (event.target.matches('.watchlistButton')) {
+			let info = event.target.id.split('-')
+			addButtonClicked(info[1], info[2], event.target.dataset.isAdded)
+		}
+	}, false);
 </script>
 {% endblock %}

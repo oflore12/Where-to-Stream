@@ -470,3 +470,16 @@ svg.score.small path.white {
 .badge.five {
   background: #16a34a !important;
 }
+
+.watchlistButton[data-is-added="True"] {
+  background: #f00;
+}
+
+.watchlistButton[data-is-added="False"] {
+  background: #0f0;
+}
+
+.watchlistButton.disabled {
+  pointer-events: none;
+  background: #ccc;
+}

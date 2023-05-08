@@ -273,7 +273,11 @@ def getResults(q, providerFilter):
                 # If cached, perform TV caching procedure
                 else:
                     newResult = TVCache(id)
-                    newResult.type = 'tv'
+                newResult.type = 'tv'
+                if (current_user.is_authenticated):
+                    item = Watchlist.query.filter_by(
+                        tv_id=id, user_id=current_user.get_id()).first()
+                    newResult.watchlist = True if item else False
             # If media type is movie
             else:
                 # Check if the movie result is already cached
@@ -299,7 +303,11 @@ def getResults(q, providerFilter):
                 # If cached, perform movie caching procedure
                 else:
                     newResult = MovieCache(id)
-                    newResult.type = 'movie'
+                newResult.type = 'movie'
+                if (current_user.is_authenticated):
+                    item = Watchlist.query.filter_by(
+                        movie_id=id, user_id=current_user.get_id()).first()
+                    newResult.watchlist = True if item else False
 
             # If new result not cached, add to the database and commit change
             if not exists:
@@ -338,10 +346,18 @@ def getResults(q, providerFilter):
             if cached_result_id.tv_result != -1:
                 currentResult = TVCache(cached_result_id.tv_result)
                 currentResult.type = 'tv'
+                if (current_user.is_authenticated):
+                    item = Watchlist.query.filter_by(
+                        tv_id=cached_result_id.tv_result, user_id=current_user.get_id()).first()
+                    currentResult.watchlist = True if item else False
             # If the cached result is a movie result
             else:
                 currentResult = MovieCache(cached_result_id.movie_result)
                 currentResult.type = 'movie'
+                if (current_user.is_authenticated):
+                    item = Watchlist.query.filter_by(
+                        movie_id=cached_result_id.movie_result, user_id=current_user.get_id()).first()
+                    currentResult.watchlist = True if item else False
 
             # If there is no provider filter, add the current result to results
             if providerFilter == "all":
