@@ -25,25 +25,29 @@
 
 	{% for r in results %}
 	<div class="searchResults">
-		{% if r.poster %}
-		<img src="https://image.tmdb.org/t/p/w500{{ r.poster }}" alt="{{ r.title }}"
-			class="{{'notAvail' if not r.providers.get(country)}}" onload="this.classList.add('loadedImg')" />
-		{% else %}
-		<div class="noPoster {{'notAvail' if not r.providers.get(country)}}"></div>
-		{% endif %}
+		<a href="/details/{{r.type}}/{{r.id}}">
+			{% if r.poster %}
+			<img src="https://image.tmdb.org/t/p/w500{{ r.poster }}" alt="{{ r.title }}"
+				class="{{'notAvail' if not r.providers.get(country)}}" onload="this.classList.add('loadedImg')" />
+			{% else %}
+			<div class="noPoster {{'notAvail' if not r.providers.get(country)}}"></div>
+			{% endif %}
+		</a>
 
 		{{reviews.reviewsModal(r)}}
 
 		<div style="min-width: 0">
 			<div
 				style="display: flex; justify-content: space-between; align-items: flex-end; margin-top: 13px; margin-bottom: 22px;">
-				<h4 style="font-weight: 600; font-size: 28px; margin: 14px 0 0; line-height: 1;">{{r.title}}
+				<a href="/details/{{r.type}}/{{r.id}}" class="searchResultTitle"
+					style="font-weight: 600; font-size: 28px; margin: 14px 0 0; line-height: 1; color: black;">
+					<span>{{r.title}}</span>
 					{% if r.year %}
-					<span style="font-size: 20px; font-weight: 400; padding-left: 3px; opacity: 0.8">
+					<span style="font-size: 20px; font-weight: 400; padding-left: 3px; opacity: 0.8;">
 						({{ r.year }})
 					</span>
 					{% endif %}
-				</h4>
+				</a>
 
 				<div style="display: flex; margin-left: 50px;">
 					{% if current_user.is_authenticated %}

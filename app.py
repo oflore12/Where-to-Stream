@@ -63,6 +63,18 @@ def search():
     return redirect(url_for('home'))
 
 
+@app.route('/details/tv/<int:id>', methods=['GET'])
+def tvDetails(id):
+    item = TVResult.query.filter_by(id=id).first()
+    return render_template('details.html', item=item)
+
+
+@app.route('/details/movie/<int:id>', methods=['GET'])
+def movieDetails(id):
+    item = MovieResult.query.filter_by(id=id).first()
+    return render_template('details.html', item=item)
+
+
 @app.route('/sign_in', methods=['GET', 'POST'])
 def sign_in():
     useDBModels()

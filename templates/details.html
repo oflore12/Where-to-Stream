@@ -1,0 +1,7 @@
+{% extends 'base.html' %}
+
+{% block title %} {{item.title}} {% if item.year %} ({{ item.year }}) {% endif %} {% endblock %}
+
+{% block content %}
+{{item.title}} {% if item.year %} ({{ item.year }}) {% endif %}
+{% endblock %}

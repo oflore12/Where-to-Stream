@@ -33,8 +33,8 @@ body {
   align-items: flex-start;
 }
 
-.searchResults>img,
-.searchResults>.noPoster {
+.searchResults>a>img,
+.searchResults>a>.noPoster {
   width: 250px;
   height: auto;
   min-height: 375px;
@@ -43,18 +43,18 @@ body {
   background: rgb(248, 249, 250);
   margin-top: 32px;
   margin-right: 40px;
+  transition: opacity 1.5s, box-shadow 0.15s, transform 0.1s;
 }
 
-.searchResults>img {
+.searchResults>a>img {
   opacity: 0;
-  transition: opacity 1.5s, box-shadow 0.15s;
 }
 
-.searchResults>img.loadedImg {
+.searchResults>a>img.loadedImg {
   opacity: 1;
 }
 
-.searchResults>.noPoster {
+.searchResults>a>.noPoster {
   width: 250px;
   height: 375px;
   background-image: url(https://www.themoviedb.org/assets/2/v4/glyphicons/basic/glyphicons-basic-38-picture-grey-c2ebdbb057f2a7614185931650f8cee23fa137b93812ccb132b9df511df1cfac.svg);
@@ -63,9 +63,31 @@ body {
   background-size: 60%;
 }
 
-.searchResults>img.loadedImg.notAvail,
-.searchResults>.noPoster.notAvail {
+.searchResults>a>img.loadedImg.notAvail,
+.searchResults>a>.noPoster.notAvail {
   opacity: 0.4;
+}
+
+.searchResults>a>img:hover,
+.searchResults>a>.noPoster:hover {
+  transform: scale(1.02);
+}
+
+.searchResultTitle,
+.watchlistResultTitle {
+  text-decoration: none;
+  color: black;
+}
+
+.searchResultTitle:hover>span,
+.watchlistResultTitle:hover>span {
+  text-decoration: underline;
+  color: black;
+}
+
+.searchResultTitle:hover>span:last-of-type,
+.watchlistResultTitle:hover>span:last-of-type {
+  text-decoration: none !important;
 }
 
 .searchResults>div:last-of-type {
@@ -518,6 +540,12 @@ svg.score.small path.white {
   border-radius: 12px;
   background: rgb(248, 249, 250);
   box-shadow: 0 4px 6px -1px rgb(0 0 0 / 0.1), 0 2px 4px -2px rgb(0 0 0 / 0.1);
+  transition: transform 0.1s;
+}
+
+.watchlistItem img:hover,
+.watchlistItem .noPoster:hover {
+  transform: scale(1.02);
 }
 
 .watchlistItem .noPoster {

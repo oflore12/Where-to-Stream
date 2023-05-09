@@ -13,20 +13,24 @@
     {% for r in results %}
     <div id="watchlistItem-{{r.type}}-{{r.id}}">
         <div class="watchlistItem">
-            {% if r.poster %}
-            <img src="https://image.tmdb.org/t/p/w500{{ r.poster }}" alt="{{ r.title }}"
-                class="{{'notAvail' if not r.providers.get(country)}}" onload="this.classList.add('loadedImg')" />
-            {% else %}
-            <div class="noPoster {{'notAvail' if not r.providers.get(country)}}"></div>
-            {% endif %}
+            <a href="/details/{{r.type}}/{{r.id}}">
+                {% if r.poster %}
+                <img src="https://image.tmdb.org/t/p/w500{{ r.poster }}" alt="{{ r.title }}"
+                    class="{{'notAvail' if not r.providers.get(country)}}" onload="this.classList.add('loadedImg')" />
+                {% else %}
+                <div class="noPoster {{'notAvail' if not r.providers.get(country)}}"></div>
+                {% endif %}
+            </a>
 
-            <h2 style="font-size: 28px; font-weight: 600; margin: 0 40px 0 40px; flex: 1">{{r.title}}
+            <a href="/details/{{r.type}}/{{r.id}}"
+                style="font-size: 28px; font-weight: 600; margin: 0 40px 0 40px; flex: 1" class="watchlistResultTitle">
+                <span>{{r.title}}</span>
                 {% if r.year %}
                 <span style="font-size: 20px; font-weight: 400; padding-left: 3px; opacity: 0.8">
                     ({{ r.year }})
                 </span>
                 {% endif %}
-            </h2>
+            </a>
 
             <button type="button" class="btn btn-danger deleteItem" id="watchlistButton-{{r.type}}-{{r.id}}"
                 style="display: flex; align-items: center;">
