@@ -72,16 +72,18 @@ def sign_in():
         # check if that username password pair  is in the database
         exists = UserAccount.query.filter_by(
             username=request.form['username'], password=request.form['password']).first()
+        print(exists)
 
         # returning error if username or password is wrong
         if not exists:
-            error = 'Username or password is incorrect, enter correct information or sign up for account'
+            error = 'Username or password is incorrect, enter the correct information or sign up for an account.'
 
         # need to set logged in as yes
         # returning home after successful log in
         else:
             login_user(exists)
-            return redirect(url_for('home'))
+            next = request.args.get('next')
+            return redirect(next or url_for('home'))
 
     return render_template('sign_in.html', error=error)
 
@@ -97,7 +99,7 @@ def sign_up():
         exists = UserAccount.query.filter_by(
             username=request.form['username']).first()
         if exists:
-            error = 'Username already exists, please log in instead'
+            error = 'Username already exists, please sign in instead.'
 
         # checking if entered passwords match
         elif request.form['password'] != request.form['passwordcheck']:
@@ -120,6 +122,23 @@ def sign_up():
 def sign_out():
     logout_user()
     return redirect(url_for('home'))
+
+
+@app.route('/watchlist')
+@login_required
+def watchlist():
+    results = []
+    itemList = Watchlist.query.filter_by(user_id=current_user.get_id()).all()
+    for item in itemList:
+        if item.movie_id == -1:
+            result = TVResult.query.filter_by(id=item.tv_id).first()
+            result.type = 'tv'
+        else:
+            result = MovieResult.query.filter_by(id=item.movie_id).first()
+            result.type = 'movie'
+        results.append(result)
+    results.reverse()
+    return render_template('watchlist.html', results=results)
 
 
 @app.route('/suggestions')

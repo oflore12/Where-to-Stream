@@ -1,0 +1,80 @@
+{% extends 'base.html' %}
+
+{% block title %} My Watchlist {% endblock %}
+
+{% block content %}
+
+<h1 style="font-size: 2rem; text-align: center; margin: 50px 0 10px;">My Watchlist</h1>
+
+<hr>
+
+<div class="watchlistResults">
+    {% if results %}
+    {% for r in results %}
+    <div id="watchlistItem-{{r.type}}-{{r.id}}">
+        <div class="watchlistItem">
+            {% if r.poster %}
+            <img src="https://image.tmdb.org/t/p/w500{{ r.poster }}" alt="{{ r.title }}"
+                class="{{'notAvail' if not r.providers.get(country)}}" onload="this.classList.add('loadedImg')" />
+            {% else %}
+            <div class="noPoster {{'notAvail' if not r.providers.get(country)}}"></div>
+            {% endif %}
+
+            <h2 style="font-size: 28px; font-weight: 600; margin: 0 40px 0 40px; flex: 1">{{r.title}}
+                {% if r.year %}
+                <span style="font-size: 20px; font-weight: 400; padding-left: 3px; opacity: 0.8">
+                    ({{ r.year }})
+                </span>
+                {% endif %}
+            </h2>
+
+            <button type="button" class="btn btn-danger deleteItem" id="watchlistButton-{{r.type}}-{{r.id}}"
+                style="display: flex; align-items: center;">
+                <svg xmlns="http://www.w3.org/2000/svg" width="16" height="16" fill="currentColor"
+                    class="bi bi-trash3-fill" viewBox="0 0 16 16" style="margin-top: 1px; margin-right: 5px">
+                    <path
+                        d="M11 1.5v1h3.5a.5.5 0 0 1 0 1h-.538l-.853 10.66A2 2 0 0 1 11.115 16h-6.23a2 2 0 0 1-1.994-1.84L2.038 3.5H1.5a.5.5 0 0 1 0-1H5v-1A1.5 1.5 0 0 1 6.5 0h3A1.5 1.5 0 0 1 11 1.5Zm-5 0v1h4v-1a.5.5 0 0 0-.5-.5h-3a.5.5 0 0 0-.5.5ZM4.5 5.029l.5 8.5a.5.5 0 1 0 .998-.06l-.5-8.5a.5.5 0 1 0-.998.06Zm6.53-.528a.5.5 0 0 0-.528.47l-.5 8.5a.5.5 0 0 0 .998.058l.5-8.5a.5.5 0 0 0-.47-.528ZM8 4.5a.5.5 0 0 0-.5.5v8.5a.5.5 0 0 0 1 0V5a.5.5 0 0 0-.5-.5Z" />
+                </svg>
+                Remove
+            </button>
+        </div>
+
+        <hr>
+    </div>
+    {% endfor %}
+
+    {% else %}
+    <em>Your watchlist is empty!</em>
+    {% endif %}
+</div>
+
+<script>
+    function removeButtonClicked(type, itemId) {
+        document.getElementById(`watchlistButton-${type}-${itemId}`).classList.add('disabled')
+        fetch(`/watchlist/remove/${type}/${itemId}`)
+            .then(response => {
+                return response.json();
+            })
+            .then(data => {
+                document.getElementById(`watchlistItem-${type}-${itemId}`).remove();
+                if (document.querySelectorAll('.watchlistResults > div').length == 0) {
+                    let em = document.createElement("em")
+                    em.innerText = "Your watchlist is empty!"
+                    document.querySelector('.watchlistResults').prepend(em)
+                }
+                console.log(data)
+            })
+            .catch(error => {
+                console.error('Error removing item from watchlist:', error);
+            })
+    }
+
+    document.addEventListener('click', function (event) {
+        if (event.target.matches('.deleteItem')) {
+            let info = event.target.id.split('-')
+            removeButtonClicked(info[1], info[2])
+        }
+    }, false);
+</script>
+
+{% endblock %}

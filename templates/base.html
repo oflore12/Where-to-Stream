@@ -33,15 +33,25 @@
                 <li class="nav-item"><a href="/sign_up" class="nav-link link-primary ps-3 pe-0">Sign Up</a></li>
                 {% endif %}
                 {% if current_user.is_authenticated %}
-                <li class="nav-item"><span href="#" class="nav-link link-dark px-3">Welcome, {{current_user.username}}!</span></li>
-                <li class="nav-item"><a href="/sign_out" class="btn btn-primary">Sign Out</a></li>
+                <ul class="nav navbar-nav ms-auto">
+                    <li class="nav-item dropdown">
+                        <a href="#" class="nav-link dropdown-toggle" data-bs-toggle="dropdown">Welcome,
+                            {{current_user.username}}!</a>
+                        <div class="dropdown-menu dropdown-menu-end">
+                            <a class="dropdown-item" href="/watchlist">My Watchlist</a>
+                            <div class="dropdown-divider"></div>
+                            <a href="/sign_out" class="dropdown-item">Sign Out</a>
+                        </div>
+                    </li>
+                </ul>
                 {% endif %}
             </ul>
         </div>
     </nav>
     <section class="container mainContainer">
         <header class="pt-4 pb-1">
-            <h1 class="display-5" style="margin-top: 15px; margin-bottom: -2px">Where to Stream?</h1>
+            <h1 class="display-5" style="margin-top: 30px; margin-bottom: -2px; text-align: center;">Where to Stream?
+            </h1>
         </header>
         {% block content %}{% endblock %}
     </section>

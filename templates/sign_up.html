@@ -3,25 +3,26 @@
 {% block title %} Sign Up {% endblock %}
 
 {% block content %}
-<h1>Sign up</h1>
+<div class="credentialPortal">
+    <h1>Sign Up</h1>
 
-<form action="" method="post">
-  <input type="text" placeholder="Username" name="username" value="{{
+    <form method="post">
+        <input type="text" class="form-control" placeholder="Username" name="username" value="{{
           request.form.username }}">
-  <br>
-  <input type="password" placeholder="Password" name="password" value="{{
+        <input type="password" class="form-control" placeholder="Password" name="password" value="{{
           request.form.password }}">
-  <br>
-  <input type="password" placeholder="Reenter Password" name="passwordcheck" value="{{
+        <input type="password" class="form-control" placeholder="Confirm Password" name="passwordcheck" value="{{
           request.form.passwordcheck }}">
-  <input class="btn btn-default" type="submit" value="Create Account">
-</form>
+        <input class="btn btn-primary" type="submit" value="Sign Up">
+    </form>
 
-<a href="/sign_in">Already have an account? Sign in! </a>
+    <a href="/sign_in">Already have an account? Sign in!</a>
+</div>
 
 {% if error %}
-
-<p class="error"><strong>Error:</strong> {{ error }}</p>
+<div class="alert alert-danger form-alert" role="alert">
+    <strong>Error:</strong> {{ error }}
+</div>
 {% endif %}
 
 {% endblock %}
