@@ -50,10 +50,9 @@
 					{% endif %}
 				</a>
 
-				<div style="display: flex; margin-left: 50px; font-size: 25px;">
+				<div style="display: flex; margin-bottom: -4px; margin-left: 50px; font-size: 25px;">
 					{% if current_user.is_authenticated %}
-					<button class="watchlistButton" id="watchlist-{{r.type}}-{{r.id}}" data-is-added="{{r.watchlist}}"
-						style="margin-right: 10px">
+					<button class="watchlistButton" id="watchlist-{{r.type}}-{{r.id}}" data-is-added="{{r.watchlist}}">
 						<span id="add" style="pointer-events: none">
 							<i class="bi bi-bookmark" id="empty" style="pointer-events: none"></i>
       						<i class="bi bi-bookmark-plus" id="plus" style="pointer-events: none"></i>
