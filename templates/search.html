@@ -7,6 +7,7 @@
 
 {% block content %}
 {{ search_bar.mainSearchBar(q, provider) }}
+<link rel="stylesheet" href="https://cdn.jsdelivr.net/npm/bootstrap-icons@1.10.5/font/bootstrap-icons.css">
 
 <section class="searchSection" style="flex-grow: 1">
 	{% if not results %}
@@ -49,11 +50,18 @@
 					{% endif %}
 				</a>
 
-				<div style="display: flex; margin-left: 50px;">
+				<div style="display: flex; margin-left: 50px; font-size: 25px;">
 					{% if current_user.is_authenticated %}
 					<button class="watchlistButton" id="watchlist-{{r.type}}-{{r.id}}" data-is-added="{{r.watchlist}}"
 						style="margin-right: 10px">
-						Watchlist
+						<span id="add" style="pointer-events: none">
+							<i class="bi bi-bookmark" id="empty" style="pointer-events: none"></i>
+      						<i class="bi bi-bookmark-plus" id="plus" style="pointer-events: none"></i>
+						</span>
+						<span id="remove" style="pointer-events: none">
+							<i class="bi bi-bookmark-fill" id="fill" style="pointer-events: none"></i>
+							<i class="bi bi-bookmark-dash" id="dash" style="pointer-events: none"></i>
+						</span>
 					</button>
 					{% endif %}
 

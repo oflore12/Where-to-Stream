@@ -557,15 +557,62 @@ svg.score.small path.white {
   background-size: 60%;
 }
 
+.watchlistButton {
+  background: transparent;
+  border:none;
+  
+}
+
 .watchlistButton[data-is-added="True"] {
-  background: #f00;
+  color:gold;
+}
+
+.watchlistButton[data-is-added="True"]:hover {
+  color:darkred;
+}
+
+.watchlistButton[data-is-added="True"] #add {
+  display: none;
+}
+
+.watchlistButton[data-is-added="True"] #remove #dash {
+  display:none;
+}
+
+.watchlistButton[data-is-added="True"]:hover #remove #dash {
+  display: block;
+}
+
+.watchlistButton[data-is-added="True"]:hover #remove #fill {
+  display: none;
 }
 
 .watchlistButton[data-is-added="False"] {
-  background: #0f0;
+  color: gray;
+}
+
+.watchlistButton[data-is-added="False"]:hover {
+  color: green;
+}
+
+.watchlistButton[data-is-added="False"] #remove{
+  display: none;
+}
+
+.watchlistButton[data-is-added="False"] #add #plus {
+  display:none;
+}
+
+.watchlistButton[data-is-added="False"]:hover #add #plus {
+  display: block;
+}
+
+.watchlistButton[data-is-added="False"]:hover #add #empty {
+  display: none;
 }
 
 .watchlistButton.disabled {
   pointer-events: none;
+  color: #ccc;
   background: #ccc;
 }
