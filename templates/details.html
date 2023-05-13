@@ -1,4 +1,5 @@
 {% extends 'base.html' %}
+{% import 'providers.html' as providers %}
 
 {% block title %} {{item.title}} {% if item.year %} ({{ item.year }}) {% endif %} {% endblock %}
 
@@ -11,6 +12,8 @@
 <body>
 
 <div id = "myData"></div>
+
+{{ providers.tray(item) }}
 
 <script>
 
@@ -33,7 +36,7 @@ fetch("https://api.themoviedb.org/3/{{item.media_type}}/{{item.id}}?api_key=523e
 
   })
   .catch(function (error) {
-	console.error('Media data wasn't gathered correctly');
+	console.error('Media data wasn\'t gathered correctly');
   });
 
 
@@ -73,7 +76,7 @@ fetch("https://api.themoviedb.org/3/{{item.media_type}}/{{item.id}}/credits?api_
         appendActorData(data);      
   })
   .catch(function (error) {
-        console.error('Actor data wasn't gathered correctly');
+        console.error('Actor data wasn\'t gathered correctly');
   });
 
 
