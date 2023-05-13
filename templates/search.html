@@ -2,6 +2,7 @@
 {% import 'search_bar.html' as search_bar %}
 {% import 'score_gauge.html' as score_gauge %}
 {% import 'reviews.html' as reviews %}
+{% import 'watchlist_button.html' as watchlist_button %}
 
 {% block title %}Search{% endblock %}
 
@@ -52,19 +53,8 @@
 
 				<div style="display: flex; margin-left: 50px; font-size: 25px;">
 					{% if current_user.is_authenticated %}
-					<button class="watchlistButton" id="watchlist-{{r.type}}-{{r.id}}" data-is-added="{{r.watchlist}}"
-						style="margin-right: 10px">
-						<span id="add" style="pointer-events: none">
-							<i class="bi bi-bookmark" id="empty" style="pointer-events: none"></i>
-      						<i class="bi bi-bookmark-plus" id="plus" style="pointer-events: none"></i>
-						</span>
-						<span id="remove" style="pointer-events: none">
-							<i class="bi bi-bookmark-fill" id="fill" style="pointer-events: none"></i>
-							<i class="bi bi-bookmark-dash" id="dash" style="pointer-events: none"></i>
-						</span>
-					</button>
+					{{watchlist_button.watchlistButton(r)}}
 					{% endif %}
-
 					{% if r.score_count == 0 %}
 					<div style="cursor: default;">
 						{{ score_gauge.scoreGaugeSmall(r.score, r.score_count) }}
