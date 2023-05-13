@@ -3,6 +3,7 @@
 {% import 'score_gauge.html' as score_gauge %}
 {% import 'reviews.html' as reviews %}
 {% import 'watchlist_button.html' as watchlist_button %}
+{% import 'providers.html' as providers %}
 
 {% block title %}Search{% endblock %}
 
@@ -51,7 +52,7 @@
 					{% endif %}
 				</a>
 
-				<div style="display: flex; margin-left: 50px; font-size: 25px;">
+				<div style="display: flex; margin-bottom: -4px; margin-left: 50px; font-size: 25px;">
 					{% if current_user.is_authenticated %}
 					{{watchlist_button.watchlistButton(r)}}
 					{% endif %}
@@ -69,87 +70,7 @@
 				</div>
 			</div>
 
-			<div class="provTray">
-				{% if r.providers.get(country).flatrate %}
-				<div class="provRow">
-					<div class="provColumn vertical" style="background: rgba(0,0,0,0.9)">STREAM</div>
-					<div class="provColumn icons">
-						{% for f in r.providers.get(country).flatrate %}
-						<div class="iconContainer">
-							{% set imageUrl = "https://image.tmdb.org/t/p/w500" + f.logo_path %}
-							<img src="{{imageUrl}}" alt="{{f.provider_name}}" width="75" height="75"
-								onload="this.classList.add('loadedImg')" data-bs-toggle="tooltip"
-								data-bs-title="{{f.provider_name}}" data-bs-custom-class="custom-tooltip" />
-						</div>
-						{% endfor %}
-					</div>
-				</div>
-				{% endif %}
-
-				{% if r.providers.get(country).buy %}
-				<div class="provRow">
-					<div class="provColumn vertical" style="background: rgba(0,0,0,0.7)">BUY</div>
-					<div class="provColumn icons">
-						{% for b in r.providers.get(country).buy %}
-						<div class="iconContainer">
-							{% set imageUrl = "https://image.tmdb.org/t/p/w500" + b.logo_path %}
-							<img src="{{imageUrl}}" alt="{{b.provider_name}}" width="75" height="75"
-								onload="this.classList.add('loadedImg')" data-bs-toggle="tooltip"
-								data-bs-title="{{b.provider_name}}" data-bs-custom-class="custom-tooltip" />
-						</div>
-						{% endfor %}
-					</div>
-				</div>
-				{% endif %}
-
-				{% if r.providers.get(country).rent %}
-				<div class="provRow">
-					<div class="provColumn vertical" style="background: rgba(0,0,0,0.45)">RENT</div>
-					<div class="provColumn icons">
-						{% for p in r.providers.get(country).rent %}
-						<div class="iconContainer">
-							{% set imageUrl = "https://image.tmdb.org/t/p/w500" + p.logo_path %}
-							<img src="{{imageUrl}}" alt="{{p.provider_name}}" width="75" height="75"
-								onload="this.classList.add('loadedImg')" data-bs-toggle="tooltip"
-								data-bs-title="{{p.provider_name}}" data-bs-custom-class="custom-tooltip" />
-						</div>
-						{% endfor %}
-					</div>
-				</div>
-				{% endif %}
-
-				{% if r.providers.get(country).ads %}
-				<div class="provRow">
-					<div class="provColumn vertical" style="background: rgba(0,0,0,0.25); color: black">ADS</div>
-					<div class="provColumn icons">
-						{% for a in r.providers.get(country).ads %}
-						<div class="iconContainer">
-							{% set imageUrl = "https://image.tmdb.org/t/p/w500" + a.logo_path %}
-							<img src="{{imageUrl}}" alt="{{a.provider_name}}" width="75" height="75"
-								onload="this.classList.add('loadedImg')" data-bs-toggle="tooltip"
-								data-bs-title="{{a.provider_name}}" data-bs-custom-class="custom-tooltip" />
-						</div>
-						{% endfor %}
-					</div>
-				</div>
-				{% endif %}
-
-				{% if r.providers.get(country).free %}
-				<div class="provRow">
-					<div class="provColumn vertical" style="background: rgba(0,0,0,0.1); color: black">FREE</div>
-					<div class="provColumn icons">
-						{% for f in r.providers.get(country).free %}
-						<div class="iconContainer">
-							{% set imageUrl = "https://image.tmdb.org/t/p/w500" + f.logo_path %}
-							<img src="{{imageUrl}}" alt="{{f.provider_name}}" width="75" height="75"
-								onload="this.classList.add('loadedImg')" data-bs-toggle="tooltip"
-								data-bs-title="{{f.provider_name}}" data-bs-custom-class="custom-tooltip" />
-						</div>
-						{% endfor %}
-					</div>
-				</div>
-				{% endif %}
-			</div>
+			{{ providers.tray(r) }}
 
 			{% if not r.providers.get(country) %}
 			<p class="notAvailableMsg">Not available from any streaming providers.</p>

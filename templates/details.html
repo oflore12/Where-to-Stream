@@ -1,7 +1,99 @@
 {% extends 'base.html' %}
+{% import 'providers.html' as providers %}
 
 {% block title %} {{item.title}} {% if item.year %} ({{ item.year }}) {% endif %} {% endblock %}
 
 {% block content %}
+
+
+
 {{item.title}} {% if item.year %} ({{ item.year }}) {% endif %}
+
+<body>
+
+<div id = "myData"></div>
+
+{{ providers.tray(item) }}
+
+<script>
+
+
+fetch("https://api.themoviedb.org/3/{{item.media_type}}/{{item.id}}?api_key=523e00cfc7fcc6bed883c38162ea974d")
+  .then(function (response){
+	return response.json();
+  })
+  .then(function (data) { 
+	
+	if (data.original_title)
+	{
+	appendMovieData(data);
+	}
+
+	else
+	{
+	appendTvData(data);
+	}
+
+  })
+  .catch(function (error) {
+	console.error('Media data wasn\'t gathered correctly');
+  });
+
+
+function appendMovieData(data) {
+	var mainContainer = document.getElementById("myData");
+		var div = document.createElement("div");
+		div.innerHTML = 'Overview:' + data.overview +
+	                        "<br />" + 'Revenue: ' + data.revenue +
+				"<br />" + 'Runtime: ' + data.runtime +
+				"<br />" + 'Released or Upcoming?: ' + data.status;
+		mainContainer.appendChild(div);
+	}
+
+
+function appendTvData(data) {
+        var mainContainer = document.getElementById("myData");
+                var div = document.createElement("div");
+                div.innerHTML = 'Overview:' + data.overview +
+                                "<br />" + 'Still Airing or Finished: ' + data.status +
+				"<br />" + 'Number of Seasons: ' + data.number_of_seasons +
+				"<br />" + 'Number of Episodes: ' + data.number_of_episodes;
+
+                mainContainer.appendChild(div);
+        }
+
+</script>
+
+<div id = "actorData"></div>
+
+<script>
+
+fetch("https://api.themoviedb.org/3/{{item.media_type}}/{{item.id}}/credits?api_key=523e00cfc7fcc6bed883c38162ea974d")
+  .then(function (response){
+        return response.json();
+  })
+  .then(function (data) { 
+        appendActorData(data);      
+  })
+  .catch(function (error) {
+        console.error('Actor data wasn\'t gathered correctly');
+  });
+
+
+function appendActorData(data) {
+        var mainContainer = document.getElementById("actorData");
+                for (var i = 0; i < data.cast.length; i++)
+		{
+		var div = document.createElement("div");
+                div.innerHTML = 'Char Name: ' + data.cast[i].character +
+				"<br />" + 'Actor Name: ' + data.cast[i].name;		
+                mainContainer.appendChild(div);
+		}
+        }
+
+</script>
+
+
+</body>
+
 {% endblock %}

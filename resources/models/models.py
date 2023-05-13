@@ -13,6 +13,7 @@ class TVResult(db.Model):
     poster = db.Column(db.String(500))
     providers = db.Column(SQL_JSON)
     reviews = db.Column(SQL_JSON)
+    media_type = "tv"
     last_updated = db.Column(db.DateTime(timezone=True),
                              server_default=db.func.now(), onupdate=db.func.current_timestamp())
 
@@ -30,6 +31,7 @@ class MovieResult(db.Model):
     poster = db.Column(db.String(500))
     providers = db.Column(SQL_JSON)
     reviews = db.Column(SQL_JSON)
+    media_type = "movie"
     last_updated = db.Column(db.DateTime(timezone=True),
                              server_default=db.func.now(), onupdate=db.func.current_timestamp())
 
