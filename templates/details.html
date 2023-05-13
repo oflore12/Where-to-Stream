@@ -1,5 +1,6 @@
 {% extends 'base.html' %}
 {% import 'providers.html' as providers %}
+{% import 'reviews.html' as reviews %}
 
 {% block title %} {{item.title}} {% if item.year %} ({{ item.year }}) {% endif %} {% endblock %}
 
@@ -13,11 +14,7 @@
 
 <div id = "myData"></div>
 
-{{ providers.tray(item) }}
-
 <script>
-
-
 fetch("https://api.themoviedb.org/3/{{item.media_type}}/{{item.id}}?api_key=523e00cfc7fcc6bed883c38162ea974d")
   .then(function (response){
 	return response.json();
@@ -92,6 +89,11 @@ function appendActorData(data) {
         }
 
 </script>
+
+
+
+{{ providers.tray(item) }}
+{{ reviews.commentary(item) }}
 
 
 </body>
