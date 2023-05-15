@@ -3,18 +3,9 @@
 {% block title %}Filter Search{% endblock %}
 {% block content %}
 <div class="flex-shrink-0 p-1" style="width: 250px;">
-  <button class="btn btn-toggle align-items-center rounded border-1" type="button" data-bs-toggle="collapse" href="#filterOptions" aria-expanded="false">Filter</button>
-  <div class="collapse" id="filterOptions">
+  <button class="btn btn-toggle align-items-center" type="button" data-bs-toggle="collapse" href="#filterOptions" aria-expanded="false">Filter Your Seach!</button>
+  <div class="collapse " id="filterOptions">
     <ul class="list-unstyled">
-
-      <li>
-        <select class="form-select-indicator-color:$gray-800; form-select" onChange="handelOptions()" id=optionList>
-          <option selected>Choose an option</option>
-          <option value="movie">Movie</option>
-          <option value="tv">TV Shows</option>
-        </select>
-      </li>
-
 
       <li>
         <button class="btn btn-toggle d-inline-flex align-items-center border-0" data-bs-toggle="collapse" data-bs-target="#genre-collapse">Genre</button>
@@ -22,7 +13,6 @@
           <p id="genreList"></p>
         </div>
       </li>
-
 
 
       <li>
@@ -33,22 +23,16 @@
       </li>
 
 
-
-
       <li>
-        <button class="btn btn-toggle d-inline-flex align-items-center border-0" data-bs-toggle="collapse" data-bs-target="#country-collapse" aria-expanded="false">Country</button>
-        <div class="collapse" id="country-collapse">
-          <p id="countryList"></p>
-        </div>
+        <button class="btn btn d-inline-flex align-items-center border-0">Watch Region</button>
+        <p id="countryList"></p>
       </li>
-
 
 
       <li>
         <button class="btn btn-toggle d-inline-flex align-items-center rounded border-0 collapsed" data-bs-toggle="collapse" data-bs-target="#year-collapse" aria-expanded="false">Release Year</button>
         <div class="collapse" id="year-collapse">
           <div class="d-flex ps-1 border-0">
-
 
             <p style="font-size:80%;">1900</p>
             <input type="range" min="1900" max="2023" value="2023" class="form-range" id="yearFilter" onClick="getYear()">
@@ -65,7 +49,6 @@
         <div class="collapse" id="rating-collapse">
           <div class="d-inline-flex align-content-center">
 
-
             <p style="font-size:80%;">1</p>
             <input type="range" class="form-range" min="1" max="10" step="1" value="" id="rateFilter" onClick="getRating()">
             <p style="font-size:80%;">10</p>
@@ -75,8 +58,9 @@
         </div>
       </li>
 
-
-
+      <li>
+        <button type="button" class="btn btn-success btn-sm mx-auto" style="width: 200px" id="search" onClick="enableSearch()">Search</button>
+      </li>
     </ul>
   </div>
 </div>
@@ -84,19 +68,79 @@
 
 <div class="d-flex flex-wrap align-content-auto p-3" id="results">
 </div>
-<script> 
+
+<script>
 var genreFilter = "";
 var payingFilter = "";
 var countryFilter = "";
 var yearFilter = "";
 var ratingFilter = "";
 var searchType = "";
+const base_URL = 'https://api.themoviedb.org/3/discover/movie?api_key=523e00cfc7fcc6bed883c38162ea974d&language=en-US&sort_by=popularity.desc&include_adult=false&include_video=false&page=1';
 const IMG_URL = 'https://image.tmdb.org/t/p/w500';
 
-
+const button1 = document.getElementById("search");
+button1.disabled = true;
 
 //genre option filter
-const genres = [{"id":28,"name":"Action"},{"id":12,"name":"Adventure"},{"id":16,"name":"Animation"},{"id":35,"name":"Comedy"},{"id":80,"name":"Crime"},{"id":99,"name":"Documentary"},{"id":18,"name":"Drama"},{"id":10751,"name":"Family"},{"id":14,"name":"Fantasy"},{"id":36,"name":"History"},{"id":27,"name":"Horror"},{"id":10402,"name":"Music"},{"id":9648,"name":"Mystery"},{"id":10749,"name":"Romance"},{"id":878,"name":"Science Fiction"},{"id":10770,"name":"TV Movie"},{"id":53,"name":"Thriller"},{"id":10752,"name":"War"},{"id":37,"name":"Western"}];
+const genres = [{
+  "id": 28,
+  "name": "Action"
+}, {
+  "id": 12,
+  "name": "Adventure"
+}, {
+  "id": 16,
+  "name": "Animation"
+}, {
+  "id": 35,
+  "name": "Comedy"
+}, {
+  "id": 80,
+  "name": "Crime"
+}, {
+  "id": 99,
+  "name": "Documentary"
+}, {
+  "id": 18,
+  "name": "Drama"
+}, {
+  "id": 10751,
+  "name": "Family"
+}, {
+  "id": 14,
+  "name": "Fantasy"
+}, {
+  "id": 36,
+  "name": "History"
+}, {
+  "id": 27,
+  "name": "Horror"
+}, {
+  "id": 10402,
+  "name": "Music"
+}, {
+  "id": 9648,
+  "name": "Mystery"
+}, {
+  "id": 10749,
+  "name": "Romance"
+}, {
+  "id": 878,
+  "name": "Science Fiction"
+}, {
+  "id": 10770,
+  "name": "TV Movie"
+}, {
+  "id": 53,
+  "name": "Thriller"
+}, {
+  "id": 10752,
+  "name": "War"
+}, {
+  "id": 37,
+  "name": "Western"
+}];
 let genreslist = `<select class="form-select-sm border-0" id="genreSelected" onChange="getGenre()">`;
 genreslist += `<option value="All_G" selected>All Genres</option>`;
 for (const x of genres) {
@@ -105,21 +149,33 @@ for (const x of genres) {
 genreslist += `</select>`;
 document.getElementById("genreList").innerHTML = genreslist;
 
-
-
 //paying option filter
-const payOptions = ["Flatate", "Free", "Ads", "Rent", "Buy"]
+const payOptions = [{
+  "id": "flatrate",
+  "name": "Flatrate"
+}, {
+  "id": "free",
+  "name": "Free"
+}, {
+  "id": "ads",
+  "name": "Ads"
+}, {
+  "id": "rent",
+  "name": "Rent"
+}, {
+  "id": "buy",
+  "name": "Buy"
+}];
 let payList = `<select class="form-select-sm border-0" id="paySelected" onChange="getPayingOption()">`;
 payList += `<option value="All_PO" selected>All Paying Options</option>`;
 for (const x of payOptions) {
-  payList += `<option value="${x}">${x}</option>`;
+  payList += `<option value="${x.id}">${x.name}</option>`;
 }
 payList += `</select>`;
 document.getElementById("payingList").innerHTML = payList;
 
 //Country/Region Filter
-const listOfCountries = [
-  {
+const listOfCountries = [{
     "iso_3166_1": "AD",
     "english_name": "Andorra",
     "native_name": "Andorra"
@@ -1370,7 +1426,6 @@ const listOfCountries = [
     "native_name": "Zimbabwe"
   }
 ];
-
 let countrylist = `<select class="form-select-sm border-0" id="countrySelected" onChange="getCountry()">`;
 countrylist += `<option value="US" selected>United States of America</option>`;
 countrylist += `<option value="All_C">All Countries</option>`;
@@ -1381,81 +1436,60 @@ countrylist += `</select>`;
 document.getElementById("countryList").innerHTML = countrylist;
 
 
-
-
 function getGenre() {
-  genreFilter = document.getElementById('genreSelected');
-  if (genreFilter.value != "") {
-    getMovies("https://api.themoviedb.org/3/discover/movie?api_key=523e00cfc7fcc6bed883c38162ea974d&language=en-US&sort_by=popularity.desc&include_adult=false&include_video=false&page=1&with_genres=" + genreFilter.value);
-  }
+  genreFilter = '&with_genres=' + document.getElementById('genreSelected').value;
+  button1.disabled = false;
 }
 
 function getPayingOption() {
-  payingFilter = document.getElementById('paySelected');
-  if (payingFilter.value != "") {
-    getMovies("https://api.themoviedb.org/3/discover/movie?api_key=523e00cfc7fcc6bed883c38162ea974d&language=en-US&sort_by=popularity.desc&include_adult=false&include_video=false&page=1&with_watch_monetization_types=" + payingFilter.value);
-  }
+  payingFilter = '&with_watch_monetization_types=' + document.getElementById('paySelected').value;
+  button1.disabled = false;
 }
 
 function getCountry() {
-  countryFilter = document.getElementById('countrySelected');
-  console.log(countryFilter.value);
-  if (countryFilter.value != "") {
-    getMovies("https://api.themoviedb.org/3/discover/movie?api_key=523e00cfc7fcc6bed883c38162ea974d&language=en-US&sort_by=popularity.desc&include_adult=false&include_video=false&page=1&watch_region="+countryFilter.value);
+  countryFilter = "&watch_region=" + document.getElementById('countrySelected').value;
+  if (yearFilter != "" || ratingFilter != "" || genreFilter != "" || payingFilter != "") {
+    button1.disabled = false;
   }
 }
-  
+
 function getYear() {
-  yearFilter = document.getElementById("yearFilter");
+  yearf = document.getElementById("yearFilter");
   var year = document.getElementById("yearValue");
-  year.innerHTML = yearFilter.value;
-  yearFilter.oninput = function() {
+  year.innerHTML = yearf.value;
+  yearf.oninput = function() {
     year.innerHTML = this.value;
   }
-
-  if (yearFilter.value.value != "") {
-    getMovies("https://api.themoviedb.org/3/discover/movie?api_key=523e00cfc7fcc6bed883c38162ea974d&language=en-US&sort_by=popularity.desc&include_adult=false&include_video=false&page=1&year=" + yearFilter.value);
-  }
+  yearFilter = "&year=" + yearf.value
 }
 
 function getRating() {
-  ratingFilter = document.getElementById("rateFilter");
-  var rate = ratingFilter.value
-  console.log(rate);
+  ratingOption = document.getElementById("rateFilter");
+  var rate = ratingOption.value
   if (rate == 0) {
-    getMovies("https://api.themoviedb.org/3/discover/movie?api_key=523e00cfc7fcc6bed883c38162ea974d&language=en-US&sort_by=popularity.desc&include_adult=false&include_video=false&page=1&vote_average.gte=0&vote_average.lte=0.9&with_original_language=en");
+    ratingFilter = "&vote_average.gte=0&vote_average.lte=0.9&with_original_language=en";
+  } else if (rate == 1) {
+    ratingFilter = "&vote_average.gte=1&vote_average.lte=1.9&with_original_language=en";
+  } else if (rate == 2) {
+    ratingFilter = "&vote_average.gte=2&vote_average.lte=2.9&with_original_language=en";
+  } else if (rate == 3) {
+    ratingFilter = "&vote_average.gte=3&vote_average.lte=3.9&with_original_language=en";
+  } else if (rate == 4) {
+    ratingFilter = "&vote_average.gte=4&vote_average.lte=4.9&with_original_language=en";
+  } else if (rate == 5) {
+    ratingFilter = "&vote_average.gte=5&vote_average.lte=5.9&with_original_language=en";
+  } else if (rate == 6) {
+    ratingFilter = "&vote_average.gte=6&vote_average.lte=6.9&with_original_language=en";
+  } else if (rate == 7) {
+    ratingFilter = "&vote_average.gte=7&vote_average.lte=7.9&with_original_language=en";
+  } else if (rate == 8) {
+    ratingFilter = "&vote_average.gte=8&vote_average.lte=8.9&with_original_language=en";
+  } else if (rate == 9) {
+    ratingFilter = "&vote_average.gte=9&vote_average.lte=9.9&with_original_language=en";
+  } else if (rate == 10) {
+    ratingFilter = "&vote_average.gte=10&with_original_language=en";
   }
-
-  else if (rate == 1) {
-    getMovies("https://api.themoviedb.org/3/discover/movie?api_key=523e00cfc7fcc6bed883c38162ea974d&language=en-US&sort_by=popularity.desc&include_adult=false&include_video=false&page=1&vote_average.gte=1&vote_average.lte=1.9&with_original_language=en");
-  }
-   else if (rate == 2) {
-    getMovies("https://api.themoviedb.org/3/discover/movie?api_key=523e00cfc7fcc6bed883c38162ea974d&language=en-US&sort_by=popularity.desc&include_adult=false&include_video=false&page=1&vote_average.gte=2&vote_average.lte=2.9&with_original_language=en");
-  }
- else if (rate == 3) {
-    getMovies("https://api.themoviedb.org/3/discover/movie?api_key=523e00cfc7fcc6bed883c38162ea974d&language=en-US&sort_by=popularity.desc&include_adult=false&include_video=false&page=1&vote_average.gte=3&vote_average.lte=3.9&with_original_language=en");
-  }
-else  if (rate == 4) {
-    getMovies("https://api.themoviedb.org/3/discover/movie?api_key=523e00cfc7fcc6bed883c38162ea974d&language=en-US&sort_by=popularity.desc&include_adult=false&include_video=false&page=1&vote_average.gte=4&vote_average.lte=4.9&with_original_language=en");
-  }
- else if (rate == 5) {
-    getMovies("https://api.themoviedb.org/3/discover/movie?api_key=523e00cfc7fcc6bed883c38162ea974d&language=en-US&sort_by=popularity.desc&include_adult=false&include_video=false&page=1&vote_average.gte=5&vote_average.lte=5.9&with_original_language=en");
-  }
-  else if (rate == 6) {
-    getMovies("https://api.themoviedb.org/3/discover/movie?api_key=523e00cfc7fcc6bed883c38162ea974d&language=en-US&sort_by=popularity.desc&include_adult=false&include_video=false&page=1&vote_average.gte=6&vote_average.lte=6.9&with_original_language=en");
-  }
- else if (rate == 7) {
-    getMovies("https://api.themoviedb.org/3/discover/movie?api_key=523e00cfc7fcc6bed883c38162ea974d&language=en-US&sort_by=popularity.desc&include_adult=false&include_video=false&page=1&vote_average.gte=7&vote_average.lte=7.9&with_original_language=en");
-  }
-else  if (rate == 8) {
-    getMovies("https://api.themoviedb.org/3/discover/movie?api_key=523e00cfc7fcc6bed883c38162ea974d&language=en-US&sort_by=popularity.desc&include_adult=false&include_video=false&page=1&vote_average.gte=8&vote_average.lte=8.9&with_original_language=en");
-  }
-else  if (rate == 9) {
-    getMovies("https://api.themoviedb.org/3/discover/movie?api_key=523e00cfc7fcc6bed883c38162ea974d&language=en-US&sort_by=popularity.desc&include_adult=false&include_video=false&page=1&vote_average.gte=9&vote_average.lte=9.9&with_original_language=en");
-  }
- else if (rate == 10) {
-    getMovies("https://api.themoviedb.org/3/discover/movie?api_key=523e00cfc7fcc6bed883c38162ea974d&language=en-US&sort_by=popularity.desc&include_adult=false&include_video=false&page=1&vote_average.gte=10&with_original_language=en");
-  }
+  button1.disabled = false;
 }
 
 function getMovies(url) {
@@ -1463,6 +1497,11 @@ function getMovies(url) {
   let itemsOfMovies = "";
   fetch(url).then(res => res.json()).then(data => {
     listOfMovies = data.results;
+
+    if (listOfMovies.length == 0) {
+      console.log("no movie results");
+    }
+
     for (const x of listOfMovies) {
 
       itemsOfMovies += cardItem(x.title, x.overview, IMG_URL + x.poster_path, x.id);
@@ -1475,12 +1514,45 @@ function getMovies(url) {
 
 
 function cardItem(y, a, b, id) {
+
   var x = '<div class="card" style="width: 18rem;">';
   x += '<img src=' + b + ' class="card-img-top" alt="...">';
-  x += '<div class="card-body">';
+  x += '<div class="card-body d-flex flex-column">';
   x += '<h6 class="card-title">' + y + '</h6>'
-  x += '<p class="card-text">' + a + '</p></div></div>'
+  x += '<p class="card-text">' + a + '</p>';
+  x += '<button type="button" class="mt-auto btn btn-outline-primary btn-sm" id=' + id + ' value=' + id + ' onClick="getID(' + id + ')"';
+  x += '>More Details!</button></div></div>';
   return x;
+}
+
+
+function getID(id) {
+  movieID = document.getElementById(id);
+  if (movieID != "") {
+    console.log(movieID.value);
+  }
+}
+
+
+function enableSearch() {
+  if (countryFilter != "") {
+    getMovies(base_URL + yearFilter + ratingFilter + genreFilter + "&watch_region=US" + countryFilter + payingFilter);
+    button1.disabled = true;
+    genreFilter = "";
+    payingFilter = "";
+    countryFilter = "";
+    yearFilter = "";
+    ratingFilter = "";
+  } else {
+    getMovies(base_URL + yearFilter + ratingFilter + genreFilter + "&watch_region=US" + payingFilter);
+    button1.disabled = true;
+    genreFilter = "";
+    payingFilter = "";
+    countryFilter = "";
+    yearFilter = "";
+    ratingFilter = "";
+  }
+
 }
 
 </script>
