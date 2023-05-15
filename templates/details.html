@@ -40,10 +40,10 @@ fetch("https://api.themoviedb.org/3/{{item.media_type}}/{{item.id}}?api_key=523e
 function appendMovieData(data) {
 	var mainContainer = document.getElementById("myData");
 		var div = document.createElement("div");
-		div.innerHTML = 'Overview:' + data.overview +
-	                        "<br />" + 'Revenue: ' + data.revenue +
-				"<br />" + 'Runtime: ' + data.runtime +
-				"<br />" + 'Released or Upcoming?: ' + data.status;
+		div.innerHTML = "<br />" +'Overview: ' + data.overview +
+	                        "<br />" + "<br />" + 'Revenue: $' + data.revenue +
+				"<br />" + "<br />" + 'Runtime: ' + data.runtime + ' min' +
+				"<br />" + "<br />" + 'Released or Upcoming?: ' + data.status;
 		mainContainer.appendChild(div);
 	}
 
@@ -51,10 +51,10 @@ function appendMovieData(data) {
 function appendTvData(data) {
         var mainContainer = document.getElementById("myData");
                 var div = document.createElement("div");
-                div.innerHTML = 'Overview:' + data.overview +
-                                "<br />" + 'Still Airing or Finished: ' + data.status +
-				"<br />" + 'Number of Seasons: ' + data.number_of_seasons +
-				"<br />" + 'Number of Episodes: ' + data.number_of_episodes;
+                div.innerHTML = "<br />" + 'Overview: ' + data.overview +
+                                "<br />" + "<br />" + 'Still Airing or Finished: ' + data.status +
+				"<br />" + "<br />" + 'Number of Seasons: ' + data.number_of_seasons +
+				"<br />" + "<br />" + 'Number of Episodes: ' + data.number_of_episodes;
 
                 mainContainer.appendChild(div);
         }
