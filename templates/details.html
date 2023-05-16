@@ -57,12 +57,19 @@
 
 
     function appendMovieData(data) {
+        const formatter = new Intl.NumberFormat('en-US', {
+            style: 'currency',
+            currency: 'USD',
+            minimumFractionDigits: 0,
+            maximumFractionDigits: 0,
+        });
+
         var mainContainer = document.getElementById("myData");
         var div = document.createElement("div");
         div.innerHTML = '<p><b>Overview:</b> ' + data.overview +
-            "</p>" + '<p><b>Revenue:</b> $' + data.revenue +
+            "</p>" + '<p><b>Revenue:</b> ' + formatter.format(data.revenue) +
             "</p>" + '<p><b>Runtime:</b> ' + data.runtime + ' min' +
-            "</p>" + '<p><b>Released or Upcoming?:</b> ' + data.status+ '</p>';
+            "</p>" + '<p><b>Released or Upcoming?:</b> ' + data.status + '</p>';
         mainContainer.appendChild(div);
     }
 
@@ -73,7 +80,7 @@
         div.innerHTML = '<p><b>Overview:</b> ' + data.overview +
             "</p>" + '<p><b>Still Airing or Finished?:</b> ' + data.status +
             "</p>" + '<p><b>Number of Seasons:</b> ' + data.number_of_seasons + ' min' +
-            "</p>" + '<p><b>Number of Episodes:</b> ' + data.number_of_episodes+ '</p>';
+            "</p>" + '<p><b>Number of Episodes:</b> ' + data.number_of_episodes + '</p>';
         mainContainer.appendChild(div);
     }
 </script>
