@@ -624,7 +624,7 @@ svg.score.small path.white {
   display: flex;
   border-radius: 12px;
   align-items: flex-end;
-  margin: 20px -20px 40px;
+  margin: 20px -20px 80px;
   padding: 5px 20px;
 }
 
@@ -653,7 +653,7 @@ svg.score.small path.white {
   font-weight: 600;
   text-shadow: 0 0 10px rgba(0, 0, 0, 0.25);
   font-size: 3rem;
-  margin-bottom: 22px;
+  margin-bottom: 6px;
   line-height: 0.95;
 }
 
@@ -661,6 +661,17 @@ svg.score.small path.white {
   opacity: 0.8;
   font-size: 2.25rem;
   font-weight: 500;
+}
+
+.detailsHeader h1,
+.detailsHeader p {
+  text-shadow: 0 0 8px rgba(0, 0, 0, 0.33);
+}
+
+.detailsHeader p>b {
+  padding-right: 8px;
+  opacity: 0.55;
+  font-style: normal;
 }
 
 .detailsHeader .score #color,
@@ -675,6 +686,7 @@ svg.score.small path.white {
   border-radius: 12px;
   padding: 8px 15px;
   display: flex;
+  margin-top: 25px;
 }
 
 .detailsHeader .widgetTray .watchlistButton {

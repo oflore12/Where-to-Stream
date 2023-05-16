@@ -8,140 +8,139 @@
 
 {% block content %}
 {% set country = "US" %}
-<div class="detailsHeader"
-    style="background-image: linear-gradient(to right, rgb(32, 57, 95) calc((50vw - 170px) - 340px), rgba(32, 48, 95, 0.84) 50%, rgba(32, 54, 95, 0.84) 100%), url('https://www.themoviedb.org/t/p/w1920_and_h800_multi_faces{{item.backdrop}}');">
-    <div>
-        {% if item.poster %}
-        <img src="https://image.tmdb.org/t/p/w500{{ item.poster }}" alt="{{ item.title }}"
-            class="{{'notAvail' if not item.providers.get(country)}}" onload="this.classList.add('loadedImg')" />
-        {% else %}
-        <div class="noPoster {{'notAvail' if not item.providers.get(country)}}"></div>
-        {% endif %}
-    </div>
-    <div
-        style="display: flex; flex-direction: column; align-items: flex-start; cursor: default; padding: 0 0 15px 30px;">
-        <h1>{{item.title}} {% if item.year %} <span>({{ item.year }}) {% endif %}</span></h1>
-        <div class="widgetTray">
-            {% if current_user.is_authenticated %}
-            {{watchlistButton.main(item)}}
-            <span class="divider"></span>
+<div class="searchSection">
+    <div class="detailsHeader"
+        style="background-image: linear-gradient(to right, rgb(32, 57, 95) calc((50vw - 170px) - 340px), rgba(32, 48, 95, 0.84) 50%, rgba(32, 54, 95, 0.84) 100%), url('https://www.themoviedb.org/t/p/w1920_and_h800_multi_faces{{item.backdrop}}');">
+        <div>
+            {% if item.poster %}
+            <img src="https://image.tmdb.org/t/p/w500{{ item.poster }}" alt="{{ item.title }}"
+                class="{{'notAvail' if not item.providers.get(country)}}" onload="this.classList.add('loadedImg')" />
+            {% else %}
+            <div class="noPoster {{'notAvail' if not item.providers.get(country)}}"></div>
             {% endif %}
-            {{score.scoreGaugeSmall(item.score, item.score_count)}}
+        </div>
+        <div
+            style="display: flex; flex-direction: column; align-items: flex-start; cursor: default; padding: 0 0 15px 30px;">
+            <h1>{{item.title}} {% if item.year %} <span>({{ item.year }}) {% endif %}</span></h1>
+            <div id="myData" style="margin-top: 8px;"></div>
+            <div class="widgetTray">
+                {% if current_user.is_authenticated %}
+                {{watchlistButton.main(item)}}
+                <span class="divider"></span>
+                {% endif %}
+                {{score.scoreGaugeSmall(item.score, item.score_count)}}
+            </div>
         </div>
     </div>
-</div>
 
-<h3 class="detailsSubTitle">Details</h3>
+    <script>
+        fetch("https://api.themoviedb.org/3/{{item.media_type}}/{{item.id}}?api_key=523e00cfc7fcc6bed883c38162ea974d")
+            .then(function (response) {
+                return response.json();
+            })
+            .then(function (data) {
 
-<div id="myData" style="margin-top: 8px;"></div>
+                if (data.original_title) {
+                    appendMovieData(data);
+                }
 
-<script>
-    fetch("https://api.themoviedb.org/3/{{item.media_type}}/{{item.id}}?api_key=523e00cfc7fcc6bed883c38162ea974d")
-        .then(function (response) {
-            return response.json();
-        })
-        .then(function (data) {
+                else {
+                    appendTvData(data);
+                }
 
-            if (data.original_title) {
-                appendMovieData(data);
-            }
-
-            else {
-                appendTvData(data);
-            }
-
-        })
-        .catch(function (error) {
-            console.error('Media data wasn\'t gathered correctly');
-        });
+            })
+            .catch(function (error) {
+                console.error('Media data wasn\'t gathered correctly');
+            });
 
 
-    function appendMovieData(data) {
-        const formatter = new Intl.NumberFormat('en-US', {
-            style: 'currency',
-            currency: 'USD',
-            minimumFractionDigits: 0,
-            maximumFractionDigits: 0,
-        });
+        function appendMovieData(data) {
+            const formatter = new Intl.NumberFormat('en-US', {
+                style: 'currency',
+                currency: 'USD',
+                minimumFractionDigits: 0,
+                maximumFractionDigits: 0,
+            });
 
-        var mainContainer = document.getElementById("myData");
-        var div = document.createElement("div");
-        div.innerHTML = '<p><b>Overview:</b> ' + data.overview +
-            "</p>" + '<p><b>Revenue:</b> ' + formatter.format(data.revenue) +
-            "</p>" + '<p><b>Runtime:</b> ' + data.runtime + ' min' +
-            "</p>" + '<p><b>Released or Upcoming?:</b> ' + data.status + '</p>';
-        mainContainer.appendChild(div);
-    }
-
-
-    function appendTvData(data) {
-        var mainContainer = document.getElementById("myData");
-        var div = document.createElement("div");
-        div.innerHTML = '<p><b>Overview:</b> ' + data.overview +
-            "</p>" + '<p><b>Still Airing or Finished?:</b> ' + data.status +
-            "</p>" + '<p><b>Number of Seasons:</b> ' + data.number_of_seasons + 
-            "</p>" + '<p><b>Number of Episodes:</b> ' + data.number_of_episodes + '</p>';
-        mainContainer.appendChild(div);
-    }
-</script>
-
-<h3 class="detailsSubTitle">Streaming Providers</h3>
-
-{{ providers.tray(item) }}
-
-{% if not item.providers.get(country) %}
-<p class="notAvailableMsg">Not available from any streaming providers.</p>
-{% endif %}
-
-<h3 class="detailsSubTitle">Cast</h3>
-
-<div id="actorData"></div>
-<div id="actorData2"></div>
-
-<script>
-    fetch("https://api.themoviedb.org/3/{{item.media_type}}/{{item.id}}/credits?api_key=523e00cfc7fcc6bed883c38162ea974d")
-        .then(function (response) {
-            return response.json();
-        })
-        .then(function (data) {
-            appendActorData(data);
-        })
-        .catch(function (error) {
-            console.error('Actor data wasn\'t gathered correctly');
-        });
-
-
-    function appendActorData(data) {
-        var mainContainer = document.getElementById("actorData");
-        length = data.cast.length > 10 ? 10 : data.cast.length
-        if (length === 0) {
-            mainContainer.remove()
-            mainContainer = document.getElementById("actorData2");
-            var div = document.createElement("p");
-            div.innerHTML += "No cast data available."
-            div.classList.add("notAvailableMsg")
-            div.style.margin = "5px 0 6px"
-            mainContainer.appendChild(div);
-        }
-        for (var i = 0; i < length; i++) {
+            var mainContainer = document.getElementById("myData");
             var div = document.createElement("div");
-            let profile_path = data.cast[i].profile_path ? "https://www.themoviedb.org/t/p/w138_and_h175_face" + data.cast[i].profile_path : "https://www.themoviedb.org/assets/2/v4/glyphicons/basic/glyphicons-basic-4-user-grey-d8fe957375e70239d6abdd549fd7568c89281b2179b5f4470e2e12895792dfa5.svg"
-            div.innerHTML += "<img src='" + profile_path + "' />"
-            div.innerHTML += '<p>' + data.cast[i].name + '</p>'
-            div.innerHTML += '<p>' + data.cast[i].character + '</p>'
+            div.innerHTML = '<p><b>Overview:</b> ' + data.overview +
+                "</p>" + '<p><b>Revenue:</b> ' + formatter.format(data.revenue) +
+                "</p>" + '<p><b>Runtime:</b> ' + data.runtime + ' min' +
+                "</p>" + '<p><b>Released or Upcoming?:</b> ' + data.status + '</p>';
             mainContainer.appendChild(div);
         }
-    }
-</script>
 
-<h3 class="detailsSubTitle">Commentary Reviews</h3>
 
-<div class="detailsReviews">
-    {{ reviews.commentary(item) }}
+        function appendTvData(data) {
+            var mainContainer = document.getElementById("myData");
+            var div = document.createElement("div");
+            div.innerHTML = '<p><b>Overview:</b> ' + data.overview +
+                "</p>" + '<p><b>Still Airing or Finished?:</b> ' + data.status +
+                "</p>" + '<p><b>Number of Seasons:</b> ' + data.number_of_seasons +
+                "</p>" + '<p><b>Number of Episodes:</b> ' + data.number_of_episodes + '</p>';
+            mainContainer.appendChild(div);
+        }
+    </script>
 
-    {% if not item.reviews %}
-    <p class="notAvailableMsg" style="margin: 5px 0 6px;">None currently available.</p>
+    <h3 class="detailsSubTitle">Streaming Providers</h3>
+
+    {{ providers.tray(item) }}
+
+    {% if not item.providers.get(country) %}
+    <p class="notAvailableMsg">Not available from any streaming providers.</p>
     {% endif %}
+
+    <h3 class="detailsSubTitle">Cast</h3>
+
+    <div id="actorData"></div>
+    <div id="actorData2"></div>
+
+    <script>
+        fetch("https://api.themoviedb.org/3/{{item.media_type}}/{{item.id}}/credits?api_key=523e00cfc7fcc6bed883c38162ea974d")
+            .then(function (response) {
+                return response.json();
+            })
+            .then(function (data) {
+                appendActorData(data);
+            })
+            .catch(function (error) {
+                console.error('Actor data wasn\'t gathered correctly');
+            });
+
+
+        function appendActorData(data) {
+            var mainContainer = document.getElementById("actorData");
+            length = data.cast.length > 10 ? 10 : data.cast.length
+            if (length === 0) {
+                mainContainer.remove()
+                mainContainer = document.getElementById("actorData2");
+                var div = document.createElement("p");
+                div.innerHTML += "No cast data available."
+                div.classList.add("notAvailableMsg")
+                div.style.margin = "5px 0 6px"
+                mainContainer.appendChild(div);
+            }
+            for (var i = 0; i < length; i++) {
+                var div = document.createElement("div");
+                let profile_path = data.cast[i].profile_path ? "https://www.themoviedb.org/t/p/w138_and_h175_face" + data.cast[i].profile_path : "https://www.themoviedb.org/assets/2/v4/glyphicons/basic/glyphicons-basic-4-user-grey-d8fe957375e70239d6abdd549fd7568c89281b2179b5f4470e2e12895792dfa5.svg"
+                div.innerHTML += "<img src='" + profile_path + "' />"
+                div.innerHTML += '<p>' + data.cast[i].name + '</p>'
+                div.innerHTML += '<p>' + data.cast[i].character + '</p>'
+                mainContainer.appendChild(div);
+            }
+        }
+    </script>
+
+    <h3 class="detailsSubTitle">Commentary Reviews</h3>
+
+    <div class="detailsReviews">
+        {{ reviews.commentary(item) }}
+
+        {% if not item.reviews %}
+        <p class="notAvailableMsg" style="margin: 5px 0 6px;">None currently available.</p>
+        {% endif %}
+    </div>
 </div>
 
 {{watchlistButton.script()}}
