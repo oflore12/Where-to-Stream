@@ -683,6 +683,70 @@ svg.score.small path.white {
 }
 
 .detailsHeader .divider {
-  border-left: 1px solid rgba(0,0,0,0.15);
+  border-left: 1px solid rgba(0, 0, 0, 0.15);
   margin-right: 17px;
+}
+
+#actorData {
+  display: flex;
+  border-radius: 12px;
+  box-shadow: 0 1px 3px 0 rgb(0 0 0 / 0.1), 0 1px 2px -1px rgb(0 0 0 / 0.1);
+  background: rgb(248, 249, 250);
+  margin-top: 15px;
+  overflow-x: auto;
+}
+
+#actorData>div {
+  min-width: 140px;
+  max-width: 140px;
+  margin: 10px;
+  border: 1px solid rgb(227, 227, 227);
+  box-shadow: rgba(0, 0, 0, 0.1) 0px 2px 8px 0px;
+  border-radius: 8px;
+  overflow: hidden;
+  padding-bottom: 10px;
+  background-color: white;
+}
+
+#actorData img {
+  width: 100%;
+  height: 175px;
+  background-color: rgb(219, 219, 219);
+}
+
+#actorData>div p {
+  margin: 0;
+  padding: 0 10px;
+}
+
+#actorData>div p:first-of-type {
+  font-weight: bold;
+  padding-top: 10px;
+  padding-bottom: 0;
+  font-size: 16px;
+}
+
+#actorData>div p:last-of-type {
+  font-size: 14.4px;
+}
+
+.detailsSubTitle {
+  margin-top: 50px;
+  margin-bottom: 0;
+}
+
+.detailsReviews {
+  margin-bottom: 20px;
+}
+
+.detailsReviews .reviewBlock {
+  margin: 15px 0;
+}
+
+hr {
+  color: rgba(0, 0, 0, 0.4);
+}
+
+#myData p {
+  margin-bottom: 6px;
 }
