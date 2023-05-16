@@ -7,84 +7,96 @@
 {% block title %} {{item.title}} {% if item.year %} ({{ item.year }}) {% endif %} {% endblock %}
 
 {% block content %}
-{% set country = "US" %}
-<div class="detailsHeader"
-    style="background-image: linear-gradient(to right, rgb(32, 57, 95) calc((50vw - 170px) - 340px), rgba(32, 48, 95, 0.84) 50%, rgba(32, 54, 95, 0.84) 100%), url('https://www.themoviedb.org/t/p/w1920_and_h800_multi_faces{{item.backdrop}}');">
-    <div>
-        {% if item.poster %}
-        <img src="https://image.tmdb.org/t/p/w500{{ item.poster }}" alt="{{ item.title }}"
-            class="{{'notAvail' if not item.providers.get(country)}}" onload="this.classList.add('loadedImg')" />
-        {% else %}
-        <div class="noPoster {{'notAvail' if not item.providers.get(country)}}"></div>
-        {% endif %}
-    </div>
-    <div
-        style="display: flex; flex-direction: column; align-items: flex-start; cursor: default; padding: 0 0 15px 30px;">
-        <h1>{{item.title}} {% if item.year %} <span>({{ item.year }}) {% endif %}</span></h1>
-        <div class="widgetTray">
-            {% if current_user.is_authenticated %}
-            {{watchlistButton.main(item)}}
-            <span class="divider"></span>
-            {% endif %}
-            {{score.scoreGaugeSmall(item.score, item.score_count)}}
-        </div>
-    </div>
+<style>
+  div.row {
+    margin: 0;
+    padding: 1;
+    align-self: auto;
+    max-height: 300px;
+    overflow: auto;
+  }
+
+  div.card {
+    border: 0;
+    width: 11rem;
+  }
+
+  div.p2 {
+    flex-direction: row;
+    flex-wrap: nowrap;
+    justify-content: normal;
+    align-items: normal;
+  }
+
+</style>
+
+<div class="d-flex p-3" id="myData">
+  <div class="p-2">
+    <img class="ml-0 " style="border-radius: 5%; width:300px;" id="poster" alt="Generic placeholder image">
+  </div>
+  <div class="col p-2">
+    <h1 style="color:white;text-align:center">{{item.title}}{% if item.year %} ({{ item.year }}) {% endif %}</h1>
+    <p style="color:white;" id="general_info"></p>
+    <h4 style="color:white;">Overview</h4>
+    <p style="color:white;" id='overview'></p>
+    <p style="color:white;" id='revenue'></p>
+    <p style="color:white;" id='release_upcoming'></p>
+    <p style="color:white;" id="user_score"></p>
+    <p style="color:white;" id='runtime'></p>
+  </div>
+
+</div>
+<div class="widgetTray d-flex">
+  {% if current_user.is_authenticated %}
+  {{watchlistButton.main(item)}}
+  <span class="divider"></span>
+  {% endif %}
+  {{score.scoreGaugeSmall(item.score, item.score_count)}}
 </div>
 
-<h3 class="detailsSubTitle">Details</h3>
-
-<div id="myData" style="margin-top: 8px;"></div>
-
 <script>
-    fetch("https://api.themoviedb.org/3/{{item.media_type}}/{{item.id}}?api_key=523e00cfc7fcc6bed883c38162ea974d")
-        .then(function (response) {
-            return response.json();
-        })
-        .then(function (data) {
+  const IMG_URL = 'https://image.tmdb.org/t/p/w500';
+  fetch("https://api.themoviedb.org/3/{{item.media_type}}/{{item.id}}?api_key=523e00cfc7fcc6bed883c38162ea974d")
+    .then(function(response) {
+      return response.json();
+    })
+    .then(function(data) {
 
-            if (data.original_title) {
-                appendMovieData(data);
-            }
+      if (data.original_title) {
+        appendMovieData(data);
+      } else {
+        appendTvData(data);
+      }
 
-            else {
-                appendTvData(data);
-            }
-
-        })
-        .catch(function (error) {
-            console.error('Media data wasn\'t gathered correctly');
-        });
-
-
-    function appendMovieData(data) {
-        const formatter = new Intl.NumberFormat('en-US', {
-            style: 'currency',
-            currency: 'USD',
-            minimumFractionDigits: 0,
-            maximumFractionDigits: 0,
-        });
-
-        var mainContainer = document.getElementById("myData");
-        var div = document.createElement("div");
-        div.innerHTML = '<p><b>Overview:</b> ' + data.overview +
-            "</p>" + '<p><b>Revenue:</b> ' + formatter.format(data.revenue) +
-            "</p>" + '<p><b>Runtime:</b> ' + data.runtime + ' min' +
-            "</p>" + '<p><b>Released or Upcoming?:</b> ' + data.status + '</p>';
-        mainContainer.appendChild(div);
-    }
+    })
+    .catch(function(error) {
+      console.error('Media data wasn\'t gathered correctly');
+    });
 
 
-    function appendTvData(data) {
-        var mainContainer = document.getElementById("myData");
-        var div = document.createElement("div");
-        div.innerHTML = '<p><b>Overview:</b> ' + data.overview +
-            "</p>" + '<p><b>Still Airing or Finished?:</b> ' + data.status +
-            "</p>" + '<p><b>Number of Seasons:</b> ' + data.number_of_seasons + ' min' +
-            "</p>" + '<p><b>Number of Episodes:</b> ' + data.number_of_episodes + '</p>';
-        mainContainer.appendChild(div);
-    }
+  function appendMovieData(data) {
+    itemsOfMovies = 'border-radius: 15px; background-image: linear-gradient(rgba(20,10.5, 10.5, .9), rgba(31.5, 10.5, 10.5, 0.84) ), url(' + IMG_URL + data.backdrop_path + ');background-repeat: no-repeat;background-attachment: initial; background-size: cover;';
+    document.getElementById("myData").style = itemsOfMovies;
+    document.getElementById("poster").src = IMG_URL + data.poster_path;
+    document.getElementById("overview").innerHTML = data.overview;
+    document.getElementById("revenue").innerHTML = "Revenue: " + data.revenue;
+    document.getElementById("user_score").innerHTML = "User Score: " + data.vote_average;
+    document.getElementById("release_upcoming").innerHTML = 'Released or Upcoming?: ' + data.status + ' on ' + data.release_date;
+    document.getElementById("runtime").innerHTML = data.runtime + ' min(s)';
+  }
+
+
+  function appendTvData(data) {
+    itemsOfMovies = 'border-radius: 15px; background-image: linear-gradient(rgba(20,10.5, 10.5, .9), rgba(31.5, 10.5, 10.5, 0.84) ), url(' + IMG_URL + data.backdrop_path + ');background-repeat: no-repeat;background-attachment: initial; background-size: cover;';
+    document.getElementById("myData").style = itemsOfMovies;
+    document.getElementById("poster").src = IMG_URL + data.poster_path;
+    document.getElementById("overview").innerHTML = data.overview;
+    document.getElementById("user_score").innerHTML = "User Score: " + data.vote_average;
+    document.getElementById("release_upcoming").innerHTML = 'Still Airing or Finished: ' + data.status + ' on ' + data.release_date;
+    document.getElementById("runtime").innerHTML = 'Number of Seasons: ' + data.number_of_seasons + "<br />" + "<br />" + 'Number of Episodes: ' + data.number_of_episodes;
+  }
+
 </script>
-
 <h3 class="detailsSubTitle">Streaming Providers</h3>
 
 {{ providers.tray(item) }}
@@ -94,55 +106,49 @@
 {% endif %}
 
 <h3 class="detailsSubTitle">Cast</h3>
+<div class="container-fuild">
+  <div class="row" id="actorData"></div>
+</div>
 
-<div id="actorData"></div>
-<div id="actorData2"></div>
 
 <script>
-    fetch("https://api.themoviedb.org/3/{{item.media_type}}/{{item.id}}/credits?api_key=523e00cfc7fcc6bed883c38162ea974d")
-        .then(function (response) {
-            return response.json();
-        })
-        .then(function (data) {
-            appendActorData(data);
-        })
-        .catch(function (error) {
-            console.error('Actor data wasn\'t gathered correctly');
-        });
+  fetch("https://api.themoviedb.org/3/{{item.media_type}}/{{item.id}}/credits?api_key=523e00cfc7fcc6bed883c38162ea974d")
+    .then(function(response) {
+      return response.json();
+    })
+    .then(function(data) {
+      appendActorData(data);
+    })
+    .catch(function(error) {
+      console.error('Actor data wasn\'t gathered correctly');
+    });
 
 
-    function appendActorData(data) {
-        var mainContainer = document.getElementById("actorData");
-        length = data.cast.length > 10 ? 10 : data.cast.length
-        if (length === 0) {
-            mainContainer.remove()
-            mainContainer = document.getElementById("actorData2");
-            var div = document.createElement("p");
-            div.innerHTML += "No cast data available."
-            div.classList.add("notAvailableMsg")
-            div.style.margin = "5px 0 6px"
-            mainContainer.appendChild(div);
-        }
-        for (var i = 0; i < length; i++) {
-            var div = document.createElement("div");
-            let profile_path = data.cast[i].profile_path ? "https://www.themoviedb.org/t/p/w138_and_h175_face" + data.cast[i].profile_path : "https://www.themoviedb.org/assets/2/v4/glyphicons/basic/glyphicons-basic-4-user-grey-d8fe957375e70239d6abdd549fd7568c89281b2179b5f4470e2e12895792dfa5.svg"
-            div.innerHTML += "<img src='" + profile_path + "' />"
-            div.innerHTML += '<p>' + data.cast[i].name + '</p>'
-            div.innerHTML += '<p>' + data.cast[i].character + '</p>'
-            mainContainer.appendChild(div);
-        }
+  function appendActorData(data) {
+    let x = "";
+    for (var i = 0; i < data.cast.length; i++) {
+      x += '<div class="p-2 card">';
+      x += '<img src=' + IMG_URL + data.cast[i].profile_path + ' class="card-img-top" alt="Not Found">';
+      x += '<p class="card-title">' + "Character Name:<br>" + data.cast[i].character + '</br></p>'
+      x += '<p class="card-text">' + "Actor Name:<br>" + data.cast[i].name + '</br></p></div>';
     }
+    document.getElementById("actorData").innerHTML = x;
+  }
+
 </script>
+
 
 <h3 class="detailsSubTitle">Commentary Reviews</h3>
 
 <div class="detailsReviews">
-    {{ reviews.commentary(item) }}
 
-    {% if not item.reviews %}
-    <p class="notAvailableMsg" style="margin: 5px 0 6px;">None currently available.</p>
-    {% endif %}
+  {{ reviews.commentary(item) }}
+
+  {% if not item.reviews %}
+  <p class="notAvailableMsg" style="margin: 5px 0 6px;">None currently available.</p>
+  {% endif %}
 </div>
 
 {{watchlistButton.script()}}
+
 {% endblock %}
