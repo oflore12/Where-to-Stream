@@ -4,12 +4,12 @@
 {% import 'reviews.html' as reviews %}
 {% import 'watchlist_button.html' as watchlist_button %}
 {% import 'providers.html' as providers %}
+{% import 'watchlist_button.html' as watchlistButton %}
 
 {% block title %}Search{% endblock %}
 
 {% block content %}
 {{ search_bar.mainSearchBar(q, provider) }}
-<link rel="stylesheet" href="https://cdn.jsdelivr.net/npm/bootstrap-icons@1.10.5/font/bootstrap-icons.css">
 
 <section class="searchSection" style="flex-grow: 1">
 	{% if not results %}
@@ -54,7 +54,7 @@
 
 				<div style="display: flex; margin-bottom: -4px; margin-left: 50px; font-size: 25px;">
 					{% if current_user.is_authenticated %}
-					{{watchlist_button.watchlistButton(r)}}
+					{{watchlistButton.main(r)}}
 					{% endif %}
 					{% if r.score_count == 0 %}
 					<div style="cursor: default;">
@@ -103,4 +103,5 @@
 
 	spaceNoResults();
 </script>
+{{watchlistButton.script()}}
 {% endblock %}

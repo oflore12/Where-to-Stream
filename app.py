@@ -66,13 +66,23 @@ def search():
 @app.route('/details/tv/<int:id>', methods=['GET'])
 def tvDetails(id):
     item = TVResult.query.filter_by(id=id).first()
-    return render_template('details.html', item=item)
+    if (current_user.is_authenticated):
+        test = Watchlist.query.filter_by(
+            tv_id=id, user_id=current_user.get_id()).first()
+        item.watchlist = True if test else False
+        item.type = 'tv'
+    return render_template('details.html', item=item, details=True)
 
 
 @app.route('/details/movie/<int:id>', methods=['GET'])
 def movieDetails(id):
     item = MovieResult.query.filter_by(id=id).first()
-    return render_template('details.html', item=item)
+    if (current_user.is_authenticated):
+        test = Watchlist.query.filter_by(
+            movie_id=id, user_id=current_user.get_id()).first()
+        item.watchlist = True if test else False
+        item.type = 'movie'
+    return render_template('details.html', item=item, details=True)
 
 
 @app.route('/sign_in', methods=['GET', 'POST'])
@@ -278,6 +288,7 @@ def getResults(q, providerFilter):
             score = round(result["vote_average"] * 10, 1)
             score_count = result["vote_count"]
             poster = result["poster_path"]
+            backdrop = result["backdrop_path"]
 
             # If media type is TV
             if media_type == "tv":
@@ -300,7 +311,7 @@ def getResults(q, providerFilter):
                     reviewResults = tvSearch.results
 
                     newResult = TVResult(
-                        id=id, title=title, year=year, score=score, score_count=score_count, poster=poster, providers=providerResults, reviews=reviewResults)
+                        id=id, title=title, year=year, score=score, score_count=score_count, poster=poster, backdrop=backdrop, providers=providerResults, reviews=reviewResults)
                 # If cached, perform TV caching procedure
                 else:
                     newResult = TVCache(id)
@@ -330,7 +341,7 @@ def getResults(q, providerFilter):
                     reviewResults = movieSearch.results
 
                     newResult = MovieResult(
-                        id=id, title=title, year=year, score=score, score_count=score_count, poster=poster, providers=providerResults, reviews=reviewResults)
+                        id=id, title=title, year=year, score=score, score_count=score_count, poster=poster, backdrop=backdrop, providers=providerResults, reviews=reviewResults)
                 # If cached, perform movie caching procedure
                 else:
                     newResult = MovieCache(id)
@@ -409,7 +420,7 @@ def TVCache(id):
         SELECT
             "TVResults".id AS "TVResults_id", "TVResults".title AS "TVResults_title", "TVResults".year AS "TVResults_year", "TVResults".score AS "TVResults_score",
             "TVResults".score_count AS "TVResults_score_count", "TVResults".poster AS "TVResults_poster", "TVResults".providers AS "TVResults_providers",
-            "TVResults".reviews AS "TVResults_reviews", "TVResults".last_updated AS "TVResults_last_updated"
+            "TVResults".reviews AS "TVResults_reviews", "TVResults".last_updated AS "TVResults_last_updated", "TVResults".backdrop AS "TVResults_backdrop"
         FROM "TVResults"
         WHERE "TVResults".id = %(id_1)s
             AND "TVResults".last_updated > CURRENT_TIMESTAMP - interval '%(cacheClock_1)s'
@@ -433,7 +444,7 @@ def MovieCache(id):
         SELECT
             "MovieResults".id AS "MovieResults_id", "MovieResults".title AS "MovieResults_title", "MovieResults".year AS "MovieResults_year", "MovieResults".score AS "MovieResults_score",
             "MovieResults".score_count AS "MovieResults_score_count", "MovieResults".poster AS "MovieResults_poster", "MovieResults".providers AS "MovieResults_providers",
-            "MovieResults".reviews AS "MovieResults_reviews", "MovieResults".last_updated AS "MovieResults_last_updated"
+            "MovieResults".reviews AS "MovieResults_reviews", "MovieResults".last_updated AS "MovieResults_last_updated", "MovieResults".backdrop AS "MovieResults_backdrop"
         FROM "MovieResults"
         WHERE "MovieResults".id = %(id_1)s
             AND "MovieResults".last_updated > CURRENT_TIMESTAMP - interval '%(cacheClock_1)s'

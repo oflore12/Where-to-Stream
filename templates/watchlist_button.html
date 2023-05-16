@@ -1,44 +1,43 @@
-{% macro watchlistButton(r) -%}
-
-
-<button class="watchlistButton" id="watchlist-{{r.type}}-{{r.id}}" data-is-added="{{r.watchlist}}"
-	style="margin-right: 10px">
-	<span id="add" style="pointer-events: none">
-		<i class="bi bi-bookmark" id="empty" style="pointer-events: none"></i>
-		<i class="bi bi-bookmark-plus" id="plus" style="pointer-events: none"></i>
-	</span>
-	<span id="remove" style="pointer-events: none">
-		<i class="bi bi-bookmark-fill" id="fill" style="pointer-events: none"></i>
-		<i class="bi bi-bookmark-dash" id="dash" style="pointer-events: none"></i>
-	</span>
+{% macro main(r) -%}
+<button class="watchlistButton" id="watchlist-{{r.type}}-{{r.id}}" data-is-added="{{r.watchlist}}">
+    <span id="add" style="pointer-events: none">
+        <i class="bi bi-bookmark" id="empty" style="pointer-events: none"></i>
+        <i class="bi bi-bookmark-plus" id="plus" style="pointer-events: none"></i>
+    </span>
+    <span id="remove" style="pointer-events: none">
+        <i class="bi bi-bookmark-fill" id="fill" style="pointer-events: none"></i>
+        <i class="bi bi-bookmark-dash" id="dash" style="pointer-events: none"></i>
+    </span>
 </button>
+{%- endmacro %}
 
+{% macro script() -%}
 <script>
-	function addButtonClicked(type, itemId, isAdded) {
-		let newStatus = isAdded === 'True' ? 'remove' : 'add';
-		document.getElementById(`watchlist-${type}-${itemId}`).classList.add('disabled')
-		fetch(`/watchlist/${newStatus}/${type}/${itemId}`)
-			.then(response => {
-				return response.json();
-			})
-			.then(data => {
-				document.getElementById(`watchlist-${type}-${itemId}`).dataset.isAdded = isAdded === 'True' ? 'False' : 'True';
-				console.log(data)
-			})
-			.catch(error => {
-				console.error('Error removing item from watchlist:', error);
-			})
-			.finally(() => {
-				document.getElementById(`watchlist-${type}-${itemId}`).classList.remove('disabled')
-			});
-	}
+    function addButtonClicked(type, itemId, isAdded) {
+        let newStatus = isAdded === 'True' ? 'remove' : 'add';
+        document.getElementById(`watchlist-${type}-${itemId}`).classList.add('disabled')
+        fetch(`/watchlist/${newStatus}/${type}/${itemId}`)
+            .then(response => {
+                return response.json();
+            })
+            .then(data => {
+                document.getElementById(`watchlist-${type}-${itemId}`).dataset.isAdded = isAdded === 'True' ? 'False' : 'True';
+                console.log(data)
+            })
+            .catch(error => {
+                console.error('Error removing item from watchlist:', error);
+            })
+            .finally(() => {
+                document.getElementById(`watchlist-${type}-${itemId}`).classList.remove('disabled')
+            });
+    }
 
-	document.addEventListener('click', function (event) {
-		if (event.target.matches('.watchlistButton')) {
-			let info = event.target.id.split('-')
-			addButtonClicked(info[1], info[2], event.target.dataset.isAdded)
-		}
-	}, false);
+    document.addEventListener('click', function (event) {
+        if (event.target.matches('.watchlistButton')) {
+            let info = event.target.id.split('-')
+            console.log(info)
+            addButtonClicked(info[1], info[2], event.target.dataset.isAdded)
+        }
+    }, false);
 </script>
-
 {%- endmacro %}

@@ -11,6 +11,7 @@ class TVResult(db.Model):
     score = db.Column(db.Float)
     score_count = db.Column(db.Integer)
     poster = db.Column(db.String(500))
+    backdrop = db.Column(db.String(500))
     providers = db.Column(SQL_JSON)
     reviews = db.Column(SQL_JSON)
     media_type = "tv"
@@ -29,6 +30,7 @@ class MovieResult(db.Model):
     score = db.Column(db.Float)
     score_count = db.Column(db.Integer)
     poster = db.Column(db.String(500))
+    backdrop = db.Column(db.String(500))
     providers = db.Column(SQL_JSON)
     reviews = db.Column(SQL_JSON)
     media_type = "movie"
