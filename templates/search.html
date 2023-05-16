@@ -3,12 +3,12 @@
 {% import 'score_gauge.html' as score_gauge %}
 {% import 'reviews.html' as reviews %}
 {% import 'providers.html' as providers %}
+{% import 'watchlist_button.html' as watchlistButton %}
 
 {% block title %}Search{% endblock %}
 
 {% block content %}
 {{ search_bar.mainSearchBar(q, provider) }}
-<link rel="stylesheet" href="https://cdn.jsdelivr.net/npm/bootstrap-icons@1.10.5/font/bootstrap-icons.css">
 
 <section class="searchSection" style="flex-grow: 1">
 	{% if not results %}
@@ -53,16 +53,7 @@
 
 				<div style="display: flex; margin-bottom: -4px; margin-left: 50px; font-size: 25px;">
 					{% if current_user.is_authenticated %}
-					<button class="watchlistButton" id="watchlist-{{r.type}}-{{r.id}}" data-is-added="{{r.watchlist}}">
-						<span id="add" style="pointer-events: none">
-							<i class="bi bi-bookmark" id="empty" style="pointer-events: none"></i>
-							<i class="bi bi-bookmark-plus" id="plus" style="pointer-events: none"></i>
-						</span>
-						<span id="remove" style="pointer-events: none">
-							<i class="bi bi-bookmark-fill" id="fill" style="pointer-events: none"></i>
-							<i class="bi bi-bookmark-dash" id="dash" style="pointer-events: none"></i>
-						</span>
-					</button>
+					{{watchlistButton.main(r)}}
 					{% endif %}
 
 					{% if r.score_count == 0 %}
@@ -111,31 +102,6 @@
 	}
 
 	spaceNoResults();
-
-	function addButtonClicked(type, itemId, isAdded) {
-		let newStatus = isAdded === 'True' ? 'remove' : 'add';
-		document.getElementById(`watchlist-${type}-${itemId}`).classList.add('disabled')
-		fetch(`/watchlist/${newStatus}/${type}/${itemId}`)
-			.then(response => {
-				return response.json();
-			})
-			.then(data => {
-				document.getElementById(`watchlist-${type}-${itemId}`).dataset.isAdded = isAdded === 'True' ? 'False' : 'True';
-				console.log(data)
-			})
-			.catch(error => {
-				console.error('Error removing item from watchlist:', error);
-			})
-			.finally(() => {
-				document.getElementById(`watchlist-${type}-${itemId}`).classList.remove('disabled')
-			});
-	}
-
-	document.addEventListener('click', function (event) {
-		if (event.target.matches('.watchlistButton')) {
-			let info = event.target.id.split('-')
-			addButtonClicked(info[1], info[2], event.target.dataset.isAdded)
-		}
-	}, false);
 </script>
+{{watchlistButton.script()}}
 {% endblock %}

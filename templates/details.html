@@ -1,91 +1,108 @@
 {% extends 'base.html' %}
 {% import 'providers.html' as providers %}
 {% import 'reviews.html' as reviews %}
+{% import 'score_gauge.html' as score %}
+{% import 'watchlist_button.html' as watchlistButton %}
 
 {% block title %} {{item.title}} {% if item.year %} ({{ item.year }}) {% endif %} {% endblock %}
 
 {% block content %}
+{% set is_details_page = True %}
+<div class="detailsHeader"
+        style="background-image: linear-gradient(to right, rgb(32, 57, 95) calc((50vw - 170px) - 340px), rgba(32, 48, 95, 0.84) 50%, rgba(32, 54, 95, 0.84) 100%), url('https://www.themoviedb.org/t/p/w1920_and_h800_multi_faces{{item.backdrop}}');">
+        <div>
+                {% if item.poster %}
+                <img src="https://image.tmdb.org/t/p/w500{{ item.poster }}" alt="{{ item.title }}"
+                        class="{{'notAvail' if not item.providers.get(country)}}"
+                        onload="this.classList.add('loadedImg')" />
+                {% else %}
+                <div class="noPoster {{'notAvail' if not item.providers.get(country)}}"></div>
+                {% endif %}
+        </div>
+        <div
+                style="display: flex; flex-direction: column; align-items: flex-start; cursor: default; padding: 0 0 15px 30px;">
+                <h1>{{item.title}} {% if item.year %} <span>({{ item.year }}) {% endif %}</span></h1>
+                <div class="widgetTray">
+                        {% if current_user.is_authenticated %}
+                        {{watchlistButton.main(item)}}
+                        <span class="divider"></span>
+                        {% endif %}
+                        {{score.scoreGaugeSmall(item.score, item.score_count)}}
+                </div>
+        </div>
+</div>
 
-
-
-{{item.title}} {% if item.year %} ({{ item.year }}) {% endif %}
-
-<body>
-
-<div id = "myData"></div>
+<div id="myData"></div>
 
 <script>
-fetch("https://api.themoviedb.org/3/{{item.media_type}}/{{item.id}}?api_key=523e00cfc7fcc6bed883c38162ea974d")
-  .then(function (response){
-	return response.json();
-  })
-  .then(function (data) { 
-	
-	if (data.original_title)
-	{
-	appendMovieData(data);
-	}
+        fetch("https://api.themoviedb.org/3/{{item.media_type}}/{{item.id}}?api_key=523e00cfc7fcc6bed883c38162ea974d")
+                .then(function (response) {
+                        return response.json();
+                })
+                .then(function (data) {
 
-	else
-	{
-	appendTvData(data);
-	}
+                        if (data.original_title) {
+                                appendMovieData(data);
+                        }
 
-  })
-  .catch(function (error) {
-	console.error('Media data wasn\'t gathered correctly');
-  });
+                        else {
+                                appendTvData(data);
+                        }
+
+                })
+                .catch(function (error) {
+                        console.error('Media data wasn\'t gathered correctly');
+                });
 
 
-function appendMovieData(data) {
-	var mainContainer = document.getElementById("myData");
-		var div = document.createElement("div");
-		div.innerHTML = "<br />" +'Overview: ' + data.overview +
-	                        "<br />" + "<br />" + 'Revenue: $' + data.revenue +
-				"<br />" + "<br />" + 'Runtime: ' + data.runtime + ' min' +
-				"<br />" + "<br />" + 'Released or Upcoming?: ' + data.status;
-		mainContainer.appendChild(div);
-	}
-
-
-function appendTvData(data) {
-        var mainContainer = document.getElementById("myData");
+        function appendMovieData(data) {
+                var mainContainer = document.getElementById("myData");
                 var div = document.createElement("div");
                 div.innerHTML = "<br />" + 'Overview: ' + data.overview +
-                                "<br />" + "<br />" + 'Still Airing or Finished: ' + data.status +
-				"<br />" + "<br />" + 'Number of Seasons: ' + data.number_of_seasons +
-				"<br />" + "<br />" + 'Number of Episodes: ' + data.number_of_episodes;
+                        "<br />" + "<br />" + 'Revenue: $' + data.revenue +
+                        "<br />" + "<br />" + 'Runtime: ' + data.runtime + ' min' +
+                        "<br />" + "<br />" + 'Released or Upcoming?: ' + data.status;
+                mainContainer.appendChild(div);
+        }
+
+
+        function appendTvData(data) {
+                var mainContainer = document.getElementById("myData");
+                var div = document.createElement("div");
+                div.innerHTML = "<br />" + 'Overview: ' + data.overview +
+                        "<br />" + "<br />" + 'Still Airing or Finished: ' + data.status +
+                        "<br />" + "<br />" + 'Number of Seasons: ' + data.number_of_seasons +
+                        "<br />" + "<br />" + 'Number of Episodes: ' + data.number_of_episodes;
 
                 mainContainer.appendChild(div);
         }
 
 </script>
 
-<div id = "actorData"></div>
+<div id="actorData"></div>
 
 <script>
 
-fetch("https://api.themoviedb.org/3/{{item.media_type}}/{{item.id}}/credits?api_key=523e00cfc7fcc6bed883c38162ea974d")
-  .then(function (response){
-        return response.json();
-  })
-  .then(function (data) { 
-        appendActorData(data);      
-  })
-  .catch(function (error) {
-        console.error('Actor data wasn\'t gathered correctly');
-  });
+        fetch("https://api.themoviedb.org/3/{{item.media_type}}/{{item.id}}/credits?api_key=523e00cfc7fcc6bed883c38162ea974d")
+                .then(function (response) {
+                        return response.json();
+                })
+                .then(function (data) {
+                        appendActorData(data);
+                })
+                .catch(function (error) {
+                        console.error('Actor data wasn\'t gathered correctly');
+                });
 
 
-function appendActorData(data) {
-        var mainContainer = document.getElementById("actorData");
-                for (var i = 0; i < data.cast.length; i++)
-		{
-		var div = document.createElement("div");
-                div.innerHTML = 'Char Name: ' + data.cast[i].character +
-				"<br />" + 'Actor Name: ' + data.cast[i].name;		
-                mainContainer.appendChild(div);
-		}
+        function appendActorData(data) {
+                var mainContainer = document.getElementById("actorData");
+                for (var i = 0; i < data.cast.length; i++) {
+                        var div = document.createElement("div");
+                        div.innerHTML = 'Char Name: ' + data.cast[i].character +
+                                "<br />" + 'Actor Name: ' + data.cast[i].name;
+                        mainContainer.appendChild(div);
+                }
         }
 
 </script>
@@ -96,6 +113,5 @@ function appendActorData(data) {
 {{ reviews.commentary(item) }}
 
 
-</body>
-
+{{watchlistButton.script()}}
 {% endblock %}

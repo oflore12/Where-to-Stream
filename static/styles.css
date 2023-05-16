@@ -559,18 +559,18 @@ svg.score.small path.white {
 
 .watchlistButton {
   background: transparent;
-  border:none;
+  border: none;
   margin-top: 2px;
   margin-right: 20px;
   display: inline-block;
 }
 
 .watchlistButton[data-is-added="True"] {
-  color:gold;
+  color: gold;
 }
 
 .watchlistButton[data-is-added="True"]:hover {
-  color:darkred;
+  color: darkred;
 }
 
 .watchlistButton[data-is-added="True"] #add {
@@ -578,7 +578,7 @@ svg.score.small path.white {
 }
 
 .watchlistButton[data-is-added="True"] #remove #dash {
-  display:none;
+  display: none;
 }
 
 .watchlistButton[data-is-added="True"]:hover #remove #dash {
@@ -597,12 +597,12 @@ svg.score.small path.white {
   color: green;
 }
 
-.watchlistButton[data-is-added="False"] #remove{
+.watchlistButton[data-is-added="False"] #remove {
   display: none;
 }
 
 .watchlistButton[data-is-added="False"] #add #plus {
-  display:none;
+  display: none;
 }
 
 .watchlistButton[data-is-added="False"]:hover #add #plus {
@@ -617,4 +617,72 @@ svg.score.small path.white {
   pointer-events: none;
   color: #ccc;
   background: #ccc;
+}
+
+.detailsHeader {
+  color: white;
+  display: flex;
+  border-radius: 12px;
+  align-items: flex-end;
+  margin: 20px -20px 40px;
+  padding: 5px 20px;
+}
+
+.detailsHeader img,
+.detailsHeader .noPoster {
+  width: 300px;
+  height: auto;
+  border-radius: 12px;
+  background: rgb(248, 249, 250);
+  box-shadow: 0 4px 6px -1px rgb(0 0 0 / 0.1), 0 2px 4px -2px rgb(0 0 0 / 0.1);
+  transition: transform 0.1s;
+  transform: translateY(40px);
+  margin-top: -20px;
+}
+
+.detailsHeader .noPoster {
+  width: 300px;
+  height: 450px;
+  background-image: url(https://www.themoviedb.org/assets/2/v4/glyphicons/basic/glyphicons-basic-38-picture-grey-c2ebdbb057f2a7614185931650f8cee23fa137b93812ccb132b9df511df1cfac.svg);
+  background-repeat: no-repeat;
+  background-position: center center;
+  background-size: 60%;
+}
+
+.detailsHeader h1 {
+  font-weight: 600;
+  text-shadow: 0 0 10px rgba(0, 0, 0, 0.25);
+  font-size: 3rem;
+  margin-bottom: 22px;
+  line-height: 0.95;
+}
+
+.detailsHeader h1 span {
+  opacity: 0.8;
+  font-size: 2.25rem;
+  font-weight: 500;
+}
+
+.detailsHeader .score #color,
+.detailsHeader .score #white {
+  animation-delay: 0s;
+}
+
+.detailsHeader .widgetTray {
+  background: rgba(255, 255, 255, 1);
+  color: black;
+  box-shadow: 0 4px 6px -1px rgb(0 0 0 / 0.1), 0 2px 4px -2px rgb(0 0 0 / 0.1);
+  border-radius: 12px;
+  padding: 8px 15px;
+  display: flex;
+}
+
+.detailsHeader .widgetTray .watchlistButton {
+  font-size: 22px;
+  margin-right: 14px;
+}
+
+.detailsHeader .divider {
+  border-left: 1px solid rgba(0,0,0,0.15);
+  margin-right: 17px;
 }
