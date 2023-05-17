@@ -181,10 +181,21 @@ def suggestions():
     return suggestions
 
 
-@app.route('/filter')
-def filter():
-    return render_template('filter.html')
+@app.route('/filter/movie')
+def filterMovie():
+    search = tmdb.Genres().movie_list()
+    genres = search["genres"]
+    countries = tmdb.Configuration().countries()
+    pay =  [{ "id": "flatrate","name": "Flatrate"}, {"id": "free", "name": "Free"}, {"id": "ads", "name": "Ads"}, {"id": "rent","name": "Rent"}, {"id": "buy","name": "Buy"}]
+    return render_template('filter.html',type="movie",genres=genres,countries=countries,pay=pay)
 
+@app.route('/filter/tv')
+def filterTv():
+    search = tmdb.Genres().tv_list()
+    genres = search["genres"]
+    countries = tmdb.Configuration().countries()
+    pay =  [{ "id": "flatrate","name": "Flatrate"}, {"id": "free", "name": "Free"}, {"id": "ads", "name": "Ads"}, {"id": "rent","name": "Rent"}, {"id": "buy","name": "Buy"}]
+    return render_template('filter.html',type="tv",genres=genres,countries=countries,pay=pay)
 
 @app.route('/watchlist/add/tv/<int:item_id>')
 @login_required
