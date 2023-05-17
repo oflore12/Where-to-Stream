@@ -783,6 +783,7 @@ hr {
   overflow: hidden;
   padding-bottom: 10px;
   background-color: white;
+  cursor: pointer;
 }
 
 #popularData img {

@@ -6,52 +6,57 @@
 {% block content %}
 {{ search_bar.mainSearchBar('', None) }}
 
-
-
-
-
-
 <div id="popularData"></div>
 
 <script>
+	fetch("https://api.themoviedb.org/3/trending/all/week?api_key=523e00cfc7fcc6bed883c38162ea974d&language=en-US")
+		.then(function (response) {
+			return response.json();
+		})
+		.then(function (data) {
+			appendPopularData(data);
 
-fetch("https://api.themoviedb.org/3/trending/all/week?api_key=523e00cfc7fcc6bed883c38162ea974d&language=en-US")
-        .then(function (response) {
-            return response.json();
-        })
-        .then(function (data) {
-                appendPopularData(data);
+		})
+		.catch(function (error) {
+			console.error('Carosel data wasn\'t gathered correctly');
+		});
 
-        })
-        .catch(function (error) {
-            console.error('Carosel data wasn\'t gathered correctly');
-        });
+	function appendPopularData(data) {
+		var mainContainer = document.getElementById("popularData");
 
+		for (var i = 0; i < 20; i++) {
+			var div = document.createElement("div");
 
-    function appendPopularData(data) {
-        var mainContainer = document.getElementById("popularData");
+			div.dataset.id = data.results[i].id
+			div.dataset.mediaType = data.results[i].media_type
 
-	for (var i = 0; i < 20; i++) {
-        
-		var div = document.createElement("div");
-        	let poster_path =  data.results[i].poster_path ? "https://image.tmdb.org/t/p/w150_and_h225_bestv2" + data.results[i].poster_path : "https://www.themoviedb.org/assets/2/v4/glyphicons/basic/glyphicons-basic-38-picture-grey-c2ebdbb057f2a7614185931650f8cee23fa137b93812ccb132b9df511df1cfac.svg"
-		div.innerHTML += "<img src='" + poster_path + "' />"
+			let poster_path = data.results[i].poster_path ? "https://image.tmdb.org/t/p/w150_and_h225_bestv2" + data.results[i].poster_path : "https://www.themoviedb.org/assets/2/v4/glyphicons/basic/glyphicons-basic-38-picture-grey-c2ebdbb057f2a7614185931650f8cee23fa137b93812ccb132b9df511df1cfac.svg"
+			div.innerHTML += "<img src='" + poster_path + "' />"
 
-		if (data.results[i].title)
-		{
-		div.innerHTML +='<p>' + data.results[i].title + '</p>'
+			if (data.results[i].title) {
+				div.innerHTML += '<p>' + data.results[i].title + '</p>'
+			}
+			else {
+				div.innerHTML += '<p>' + data.results[i].name + '</p>'
+			}
+			mainContainer.appendChild(div);
 		}
-		else
-		{
-		div.innerHTML +='<p>' + data.results[i].name + '</p>'
-		}
-        	mainContainer.appendChild(div);
 	}
-    }
 
+	document.addEventListener('click', async function (event) {
+		if (event.target.closest('#popularData div') || event.target.closest('#popularData div p')) {
+			document.querySelector(".loaderWrapper").classList.add("loading")
 
+			const pTag = event.target.closest('#popularData div').querySelector('p');
+			if (pTag) {
+				const text = pTag.textContent;
+				const response = await fetch('/search?' + new URLSearchParams({
+					q: text,
+					providers: 'all'
+				}));
+				window.location.replace("/details/" + event.target.closest('#popularData div').dataset.mediaType + "/" + event.target.closest('#popularData div').dataset.id);
+			}
+		}
+	})
 </script>
-
-
-
 {% endblock %}
