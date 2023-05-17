@@ -5,4 +5,53 @@
 
 {% block content %}
 {{ search_bar.mainSearchBar('', None) }}
+
+
+
+
+
+
+<div id="popularData"></div>
+
+<script>
+
+fetch("https://api.themoviedb.org/3/trending/all/week?api_key=523e00cfc7fcc6bed883c38162ea974d&language=en-US")
+        .then(function (response) {
+            return response.json();
+        })
+        .then(function (data) {
+                appendPopularData(data);
+
+        })
+        .catch(function (error) {
+            console.error('Carosel data wasn\'t gathered correctly');
+        });
+
+
+    function appendPopularData(data) {
+        var mainContainer = document.getElementById("popularData");
+
+	for (var i = 0; i < 20; i++) {
+        
+		var div = document.createElement("div");
+        	let poster_path =  data.results[i].poster_path ? "https://image.tmdb.org/t/p/w150_and_h225_bestv2" + data.results[i].poster_path : "https://www.themoviedb.org/assets/2/v4/glyphicons/basic/glyphicons-basic-4-user-grey-d8fe957375e70239d6abdd549fd7568c89281b2179b5f4470e2e12895792dfa5.svg"
+		div.innerHTML += "<img src='" + poster_path + "' />"
+
+		if (data.results[i].title)
+		{
+		div.innerHTML +='<p>' + data.results[i].title + '</p>'
+		}
+		else
+		{
+		div.innerHTML +='<p>' + data.results[i].name + '</p>'
+		}
+        	mainContainer.appendChild(div);
+	}
+    }
+
+
+</script>
+
+
+
 {% endblock %}
