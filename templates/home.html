@@ -34,7 +34,7 @@ fetch("https://api.themoviedb.org/3/trending/all/week?api_key=523e00cfc7fcc6bed8
 	for (var i = 0; i < 20; i++) {
         
 		var div = document.createElement("div");
-        	let poster_path =  data.results[i].poster_path ? "https://image.tmdb.org/t/p/w150_and_h225_bestv2" + data.results[i].poster_path : "https://www.themoviedb.org/assets/2/v4/glyphicons/basic/glyphicons-basic-4-user-grey-d8fe957375e70239d6abdd549fd7568c89281b2179b5f4470e2e12895792dfa5.svg"
+        	let poster_path =  data.results[i].poster_path ? "https://image.tmdb.org/t/p/w150_and_h225_bestv2" + data.results[i].poster_path : "https://www.themoviedb.org/assets/2/v4/glyphicons/basic/glyphicons-basic-38-picture-grey-c2ebdbb057f2a7614185931650f8cee23fa137b93812ccb132b9df511df1cfac.svg"
 		div.innerHTML += "<img src='" + poster_path + "' />"
 
 		if (data.results[i].title)
