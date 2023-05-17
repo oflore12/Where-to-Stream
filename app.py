@@ -66,6 +66,12 @@ def search():
 @app.route('/details/tv/<int:id>', methods=['GET'])
 def tvDetails(id):
     item = TVResult.query.filter_by(id=id).first()
+    if not item:
+        search = tmdb.TV(id=id)
+        getResults(search.info()['name'], 'all')
+        item = TVResult.query.filter_by(id=id).first()
+    if not item:
+        return redirect(url_for('home'))
     if (current_user.is_authenticated):
         test = Watchlist.query.filter_by(
             tv_id=id, user_id=current_user.get_id()).first()
@@ -77,6 +83,12 @@ def tvDetails(id):
 @app.route('/details/movie/<int:id>', methods=['GET'])
 def movieDetails(id):
     item = MovieResult.query.filter_by(id=id).first()
+    if not item:
+        search = tmdb.Movies(id=id)
+        getResults(search.info()['title'], 'all')
+        item = MovieResult.query.filter_by(id=id).first()
+    if not item:
+        return redirect(url_for('home'))
     if (current_user.is_authenticated):
         test = Watchlist.query.filter_by(
             movie_id=id, user_id=current_user.get_id()).first()
