@@ -49,11 +49,11 @@
 
 			const pTag = event.target.closest('#popularData div').querySelector('p');
 			if (pTag) {
-				const text = pTag.textContent;
+				/* const text = pTag.textContent;
 				const response = await fetch('/search?' + new URLSearchParams({
 					q: text,
 					providers: 'all'
-				}));
+				})); */
 				window.location.replace("/details/" + event.target.closest('#popularData div').dataset.mediaType + "/" + event.target.closest('#popularData div').dataset.id);
 			}
 		}

@@ -65,6 +65,8 @@ def search():
 
 @app.route('/details/tv/<int:id>', methods=['GET'])
 def tvDetails(id):
+    useDBModels()
+
     item = TVResult.query.filter_by(id=id).first()
     if not item:
         search = tmdb.TV(id=id)
@@ -82,6 +84,8 @@ def tvDetails(id):
 
 @app.route('/details/movie/<int:id>', methods=['GET'])
 def movieDetails(id):
+    useDBModels()
+
     item = MovieResult.query.filter_by(id=id).first()
     if not item:
         search = tmdb.Movies(id=id)
@@ -198,16 +202,20 @@ def filterMovie():
     search = tmdb.Genres().movie_list()
     genres = search["genres"]
     countries = tmdb.Configuration().countries()
-    pay =  [{ "id": "flatrate","name": "Flatrate"}, {"id": "free", "name": "Free"}, {"id": "ads", "name": "Ads"}, {"id": "rent","name": "Rent"}, {"id": "buy","name": "Buy"}]
-    return render_template('filter.html',type="movie",genres=genres,countries=countries,pay=pay)
+    pay = [{"id": "flatrate", "name": "Flatrate"}, {"id": "free", "name": "Free"}, {
+        "id": "ads", "name": "Ads"}, {"id": "rent", "name": "Rent"}, {"id": "buy", "name": "Buy"}]
+    return render_template('filter.html', type="movie", genres=genres, countries=countries, pay=pay)
+
 
 @app.route('/filter/tv')
 def filterTv():
     search = tmdb.Genres().tv_list()
     genres = search["genres"]
     countries = tmdb.Configuration().countries()
-    pay =  [{ "id": "flatrate","name": "Flatrate"}, {"id": "free", "name": "Free"}, {"id": "ads", "name": "Ads"}, {"id": "rent","name": "Rent"}, {"id": "buy","name": "Buy"}]
-    return render_template('filter.html',type="tv",genres=genres,countries=countries,pay=pay)
+    pay = [{"id": "flatrate", "name": "Flatrate"}, {"id": "free", "name": "Free"}, {
+        "id": "ads", "name": "Ads"}, {"id": "rent", "name": "Rent"}, {"id": "buy", "name": "Buy"}]
+    return render_template('filter.html', type="tv", genres=genres, countries=countries, pay=pay)
+
 
 @app.route('/watchlist/add/tv/<int:item_id>')
 @login_required
