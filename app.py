@@ -55,6 +55,9 @@ def search():
         try:
             results = getResults(q, provider)
         except Exception as e:
+            if Query.query.filter_by(q=q).first():
+                db.session.delete(Query.query.filter_by(q=q).first())
+                db.session.commit()
             print(e)
             results = []
 
