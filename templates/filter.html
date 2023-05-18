@@ -236,6 +236,7 @@
 
   //unable to get this to work ...
   function getDetails(id, type) {
+    document.querySelector(".loaderWrapper").classList.add("loading")
     window.location.replace("/details/" + type + "/" + id);
   }
 </script>
