@@ -5,12 +5,14 @@
 
 <p id="searchType" hidden>{{type}}</p>
 <div class="flex-shrink-0 p-1" style="width: 250px;" id="filterMenu">
-  <button class="btn btn-toggle align-items-center" type="button" data-bs-toggle="collapse" href="#filterOptions" aria-expanded="false">Filter Your Seach!</button>
+  <button class="btn btn-toggle align-items-center" type="button" data-bs-toggle="collapse" href="#filterOptions"
+    aria-expanded="false">Filter Your Search!</button>
   <div class="collapse " id="filterOptions">
     <ul class="list-unstyled">
 
       <li>
-        <button class="btn btn-toggle d-inline-flex align-items-center border-0" data-bs-toggle="collapse" data-bs-target="#genre-collapse">Genre</button>
+        <button class="btn btn-toggle d-inline-flex align-items-center border-0" data-bs-toggle="collapse"
+          data-bs-target="#genre-collapse">Genre</button>
         <div class="collapse" id="genre-collapse">
           <select class="form-select-sm border-0" id="genreSelected" onChange="getGenre()">
             <option value="All_G" selected>All Genres</option>
@@ -23,16 +25,17 @@
 
 
       <li>
-        <button class="btn btn-toggle d-inline-flex align-items-center border-0" data-bs-toggle="collapse" data-bs-target="#paying-Option-collapse" aria-expanded="false">Paying Option</button>
+        <button class="btn btn-toggle d-inline-flex align-items-center border-0" data-bs-toggle="collapse"
+          data-bs-target="#paying-Option-collapse" aria-expanded="false">Paying Option</button>
         <div class="collapse" id="paying-Option-collapse">
-        <select class="form-select-sm border-0" id="paySelected" onChange="getPayingOption()">
-        <option value="All_PO" selected>All Paying Options</option>
-        {% for p in pay %}
-        {% if p%}
-        <option value={{p.id}}>{{p.name}}</option>
-        {% endif%}
-        {% endfor %}
-        </select>
+          <select class="form-select-sm border-0" id="paySelected" onChange="getPayingOption()">
+            <option value="All_PO" selected>All Paying Options</option>
+            {% for p in pay %}
+            {% if p%}
+            <option value={{p.id}}>{{p.name}}</option>
+            {% endif%}
+            {% endfor %}
+          </select>
         </div>
       </li>
 
@@ -40,22 +43,24 @@
       <li>
         <button class="btn btn d-inline-flex align-items-center border-0">Watch Region</button>
         <select class="form-select-sm border-0" id="countrySelected" onChange="getCountry()">
-        <option value="US" selected>United States of America</option>
-        <option value="All_C">All Countries</option>
-        {% for c in countries %}
-        <option value={{c.iso_3166_1}}>{{c.english_name}}</option>`;
-        {% endfor %}
+          <option value="US" selected>United States of America</option>
+          <option value="All_C">All Countries</option>
+          {% for c in countries %}
+          <option value={{c.iso_3166_1}}>{{c.english_name}}</option>`;
+          {% endfor %}
         </select>
       </li>
 
 
       <li>
-        <button class="btn btn-toggle d-inline-flex align-items-center rounded border-0 collapsed" data-bs-toggle="collapse" data-bs-target="#year-collapse" aria-expanded="false">Release Year</button>
+        <button class="btn btn-toggle d-inline-flex align-items-center rounded border-0 collapsed"
+          data-bs-toggle="collapse" data-bs-target="#year-collapse" aria-expanded="false">Release Year</button>
         <div class="collapse" id="year-collapse">
           <div class="d-flex ps-1 border-0">
 
             <p style="font-size:80%;">1900</p>
-            <input type="range" min="1900" max="2023" value="2023" class="form-range" id="yearFilter" onClick="getYear()">
+            <input type="range" min="1900" max="2023" value="2023" class="form-range" id="yearFilter"
+              onClick="getYear()">
             <p style="font-size:80%;">2023</p>
 
           </div>
@@ -65,12 +70,14 @@
 
 
       <li>
-        <button class="btn btn-toggle d-inline-flex align-items-center rounded border-0 collapsed" data-bs-toggle="collapse" data-bs-target="#rating-collapse" aria-expanded="false">Ratings</button>
+        <button class="btn btn-toggle d-inline-flex align-items-center rounded border-0 collapsed"
+          data-bs-toggle="collapse" data-bs-target="#rating-collapse" aria-expanded="false">Ratings</button>
         <div class="collapse" id="rating-collapse">
           <div class="d-inline-flex align-content-center">
 
             <p style="font-size:80%;">1</p>
-            <input type="range" class="form-range" min="1" max="10" step="1" value="" id="rateFilter" onClick="getRating()">
+            <input type="range" class="form-range" min="1" max="10" step="1" value="" id="rateFilter"
+              onClick="getRating()">
             <p style="font-size:80%;">10</p>
 
           </div>
@@ -79,7 +86,8 @@
       </li>
 
       <li>
-        <button type="button" class="btn btn-success btn-sm mx-auto" style="width: 200px" id="search" onClick="enableSearch()">Search</button>
+        <button type="button" class="btn btn-success btn-sm mx-auto" style="width: 200px" id="search"
+          onClick="enableSearch()">Search</button>
       </li>
     </ul>
   </div>
@@ -89,148 +97,146 @@
 <div class="d-flex flex-wrap align-content-auto p-3" id="results">
 </div>
 
-<div class="mx-auto" style= "width: 200px;">
-<button type="button" class="btn btn-warning align-self-center fixed-bottom" id="resetBtn" onClick="window.location.reload()">Restart Search</button>
+<div class="mx-auto" style="width: 200px;">
+  <button type="button" class="btn btn-warning align-self-center fixed-bottom" id="resetBtn"
+    onClick="window.location.reload()">Restart Search</button>
 </div>
 
 <script>
-var genreFilter = "";
-var payingFilter = "";
-var countryFilter = "";
-var yearFilter = "";
-var ratingFilter = "";
-var searchType = "";
-const movie_url = 'https://api.themoviedb.org/3/discover/movie?api_key=523e00cfc7fcc6bed883c38162ea974d&language=en-US&sort_by=popularity.desc&include_adult=false&include_video=false&page=1';
-const tv_url = 'https://api.themoviedb.org/3/discover/tv?api_key=523e00cfc7fcc6bed883c38162ea974d&language=en-US&sort_by=popularity.desc&include_adult=false&include_video=false&page=1';
-const IMG_URL = 'https://image.tmdb.org/t/p/w500';
+  var genreFilter = "";
+  var payingFilter = "";
+  var countryFilter = "";
+  var yearFilter = "";
+  var ratingFilter = "";
+  var searchType = "";
+  const movie_url = 'https://api.themoviedb.org/3/discover/movie?api_key=523e00cfc7fcc6bed883c38162ea974d&language=en-US&sort_by=popularity.desc&include_adult=false&include_video=false&page=1';
+  const tv_url = 'https://api.themoviedb.org/3/discover/tv?api_key=523e00cfc7fcc6bed883c38162ea974d&language=en-US&sort_by=popularity.desc&include_adult=false&include_video=false&page=1';
+  const IMG_URL = 'https://image.tmdb.org/t/p/w500';
 
-const search = document.getElementById("search");
-search.disabled = true;
+  const search = document.getElementById("search");
+  search.disabled = true;
 
-function getGenre() {
-  genreFilter = '&with_genres=' + document.getElementById('genreSelected').value;
-  search.disabled = false;
-}
-
-function getPayingOption() {
-  payingFilter = '&with_watch_monetization_types=' + document.getElementById('paySelected').value;
-  search.disabled = false;
-}
-
-function getCountry() {
-  countryFilter = "&watch_region=" + document.getElementById('countrySelected').value;
-  if (yearFilter != "" || ratingFilter != "" || genreFilter != "" || payingFilter != "") {
+  function getGenre() {
+    genreFilter = '&with_genres=' + document.getElementById('genreSelected').value;
     search.disabled = false;
   }
-}
 
-function getYear() {
-  yearf = document.getElementById("yearFilter");
-  var year = document.getElementById("yearValue");
-  year.innerHTML = yearf.value;
-  yearf.oninput = function() {
-    year.innerHTML = this.value;
+  function getPayingOption() {
+    payingFilter = '&with_watch_monetization_types=' + document.getElementById('paySelected').value;
+    search.disabled = false;
   }
-  yearFilter = "&year=" + yearf.value
-  search.disabled = false;
-}
 
-function getRating() {
-  ratingOption = document.getElementById("rateFilter");
-  var rate = ratingOption.value
-  if (rate == 0) {
-    ratingFilter = "&vote_average.gte=0&vote_average.lte=0.9&with_original_language=en";
-  } else if (rate == 1) {
-    ratingFilter = "&vote_average.gte=1&vote_average.lte=1.9&with_original_language=en";
-  } else if (rate == 2) {
-    ratingFilter = "&vote_average.gte=2&vote_average.lte=2.9&with_original_language=en";
-  } else if (rate == 3) {
-    ratingFilter = "&vote_average.gte=3&vote_average.lte=3.9&with_original_language=en";
-  } else if (rate == 4) {
-    ratingFilter = "&vote_average.gte=4&vote_average.lte=4.9&with_original_language=en";
-  } else if (rate == 5) {
-    ratingFilter = "&vote_average.gte=5&vote_average.lte=5.9&with_original_language=en";
-  } else if (rate == 6) {
-    ratingFilter = "&vote_average.gte=6&vote_average.lte=6.9&with_original_language=en";
-  } else if (rate == 7) {
-    ratingFilter = "&vote_average.gte=7&vote_average.lte=7.9&with_original_language=en";
-  } else if (rate == 8) {
-    ratingFilter = "&vote_average.gte=8&vote_average.lte=8.9&with_original_language=en";
-  } else if (rate == 9) {
-    ratingFilter = "&vote_average.gte=9&vote_average.lte=9.9&with_original_language=en";
-  } else if (rate == 10) {
-    ratingFilter = "&vote_average.gte=10&with_original_language=en";
-  }
-  search.disabled = false;
-}
-
-function getItems(url,search_type) {
-  let listOfItems = [];
-  let items = "";
-  fetch(url).then(res => res.json()).then(data => {
-    listOfItems = data.results;
-
-    if (listOfItems.length == 0) {
-      items='<div class="alert alert-dark" role="alert"> No Results :( sorry</div>'
-    }
-    if(search_type){
-    for (const x of listOfItems) {
-      items += cardItem(x.name, x.overview, IMG_URL + x.poster_path, x.id);
-    }
-  }
-  else{
-    for (const x of listOfItems) {
-      items += cardItem(x.title, x.overview, IMG_URL + x.poster_path, x.id);
+  function getCountry() {
+    countryFilter = "&watch_region=" + document.getElementById('countrySelected').value;
+    if (yearFilter != "" || ratingFilter != "" || genreFilter != "" || payingFilter != "") {
+      search.disabled = false;
     }
   }
 
-    document.getElementById("results").innerHTML = items;
-  })
-}
-
-function cardItem(title, overview, poster, id) {
-
-  var x = '<div class="card" style="width: 18rem;">';
-  x += '<img src=' + poster + ' class="card-img-top" alt="...">';
-  x += '<div class="card-body d-flex flex-column">';
-  x += '<h6 class="card-title">' + title + '</h6>'
-  x += '<p class="card-text">' + overview + '</p>';
-  x += '<button type="button" class="mt-auto btn btn-outline-secondary btn-sm" id=' + id + ' value=' + title + ' onClick="getDetails(' + id + ')"';
-  x += '>See Details!</button></div></div>';
-  return x;
-}
-
-const resetbtn = document.getElementById("resetBtn");
-resetbtn.hidden=true;
-
-function enableSearch() {
-  //false for movie
-  let search_type = true;
-  if(document.getElementById("searchType").innerText == "movie"){
-    search_type=false;
-    base_URL=movie_url;
-  }else base_URL=tv_url;
-
-  if (countryFilter != "") {
-    document.getElementById("filterMenu").hidden=true;
-    getItems(base_URL + yearFilter + ratingFilter + genreFilter + countryFilter + payingFilter,search_type);
-    search.disabled = true;
-    resetbtn.hidden=false;
-    
-  } else {
-    document.getElementById("filterMenu").hidden=true;
-    getItems(base_URL + yearFilter + ratingFilter + genreFilter + "&watch_region=US" + payingFilter,search_type);
-    search.disabled = true;
-    resetbtn.hidden=false;
+  function getYear() {
+    yearf = document.getElementById("yearFilter");
+    var year = document.getElementById("yearValue");
+    year.innerHTML = yearf.value;
+    yearf.oninput = function () {
+      year.innerHTML = this.value;
+    }
+    yearFilter = "&year=" + yearf.value
+    search.disabled = false;
   }
-}
 
-//unable to get this to work ...
-function getDetails(id){
-  let type = document.getElementById("search_type").innerText;
-  let details = document.getElementById(id);
-  let title = details.value;
-  window.location.replace("/details/" + type + "/" + id;
-}
+  function getRating() {
+    ratingOption = document.getElementById("rateFilter");
+    var rate = ratingOption.value
+    if (rate == 0) {
+      ratingFilter = "&vote_average.gte=0&vote_average.lte=0.9&with_original_language=en";
+    } else if (rate == 1) {
+      ratingFilter = "&vote_average.gte=1&vote_average.lte=1.9&with_original_language=en";
+    } else if (rate == 2) {
+      ratingFilter = "&vote_average.gte=2&vote_average.lte=2.9&with_original_language=en";
+    } else if (rate == 3) {
+      ratingFilter = "&vote_average.gte=3&vote_average.lte=3.9&with_original_language=en";
+    } else if (rate == 4) {
+      ratingFilter = "&vote_average.gte=4&vote_average.lte=4.9&with_original_language=en";
+    } else if (rate == 5) {
+      ratingFilter = "&vote_average.gte=5&vote_average.lte=5.9&with_original_language=en";
+    } else if (rate == 6) {
+      ratingFilter = "&vote_average.gte=6&vote_average.lte=6.9&with_original_language=en";
+    } else if (rate == 7) {
+      ratingFilter = "&vote_average.gte=7&vote_average.lte=7.9&with_original_language=en";
+    } else if (rate == 8) {
+      ratingFilter = "&vote_average.gte=8&vote_average.lte=8.9&with_original_language=en";
+    } else if (rate == 9) {
+      ratingFilter = "&vote_average.gte=9&vote_average.lte=9.9&with_original_language=en";
+    } else if (rate == 10) {
+      ratingFilter = "&vote_average.gte=10&with_original_language=en";
+    }
+    search.disabled = false;
+  }
+
+  function getItems(url, search_type) {
+    let listOfItems = [];
+    let items = "";
+    fetch(url).then(res => res.json()).then(data => {
+      listOfItems = data.results;
+
+      if (listOfItems.length == 0) {
+        items = '<div class="alert alert-dark" role="alert"> No Results :( sorry</div>'
+      }
+      if (search_type) {
+        for (const x of listOfItems) {
+          items += cardItem(x.name, x.overview, IMG_URL + x.poster_path, x.id, 'tv');
+        }
+      }
+      else {
+        for (const x of listOfItems) {
+          items += cardItem(x.title, x.overview, IMG_URL + x.poster_path, x.id, 'movie');
+        }
+      }
+
+      document.getElementById("results").innerHTML = items;
+    })
+  }
+
+  function cardItem(title, overview, poster, id, type) {
+
+    var x = '<div class="card" style="width: 18rem;">';
+    x += '<img src=' + poster + ' class="card-img-top" alt="...">';
+    x += '<div class="card-body d-flex flex-column">';
+    x += '<h6 class="card-title">' + title + '</h6>'
+    x += '<p class="card-text">' + overview + '</p>';
+    x += '<button type="button" class="mt-auto btn btn-outline-secondary btn-sm" data-id="' + id + '" data-type="' + title + '" onClick="getDetails(' + id + ', \'' + type + '\')"';
+    x += '>See Details!</button></div></div>';
+    return x;
+  }
+
+  const resetbtn = document.getElementById("resetBtn");
+  resetbtn.hidden = true;
+
+  function enableSearch() {
+    //false for movie
+    let search_type = true;
+    if (document.getElementById("searchType").innerText == "movie") {
+      search_type = false;
+      base_URL = movie_url;
+    } else base_URL = tv_url;
+
+    if (countryFilter != "") {
+      document.getElementById("filterMenu").hidden = true;
+      getItems(base_URL + yearFilter + ratingFilter + genreFilter + countryFilter + payingFilter, search_type);
+      search.disabled = true;
+      resetbtn.hidden = false;
+
+    } else {
+      document.getElementById("filterMenu").hidden = true;
+      getItems(base_URL + yearFilter + ratingFilter + genreFilter + "&watch_region=US" + payingFilter, search_type);
+      search.disabled = true;
+      resetbtn.hidden = false;
+    }
+  }
+
+  //unable to get this to work ...
+  function getDetails(id, type) {
+    window.location.replace("/details/" + type + "/" + id);
+  }
 </script>
 {% endblock %}
