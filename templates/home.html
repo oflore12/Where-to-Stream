@@ -6,23 +6,24 @@
 {% block content %}
 {{ search_bar.mainSearchBar('', None) }}
 
+<div class="searchSection">
+	<h3 class="homeSubTitle">
+		<div class="flame">
+			<div class="smoke smk-1"></div>
+			<div class="smoke smk-2"></div>
+			<div class="smoke smk-3"></div>
+			<div class="smoke smk-4"></div>
+			<div class="smoke smk-5"></div>
 
-<h3 class="homeSubTitle">
-	<div class="flame">
-		<div class="smoke smk-1"></div>
-		<div class="smoke smk-2"></div>
-		<div class="smoke smk-3"></div>
-		<div class="smoke smk-4"></div>
-		<div class="smoke smk-5"></div>
-
-		<div class="flm-part flipped red"></div>
-		<div class="flm-part orng"></div>
-		<div class="flm-part flipped ylw"></div>
-		<div class="flm-part wht"></div>
-	</div>
-	<span>Trending This Week</span>
-</h3>
-<div id="popularData"></div>
+			<div class="flm-part flipped red"></div>
+			<div class="flm-part orng"></div>
+			<div class="flm-part flipped ylw"></div>
+			<div class="flm-part wht"></div>
+		</div>
+		<span>Hot This Week</span>
+	</h3>
+	<div id="popularData"></div>
+</div>
 
 <script>
 	fetch("https://api.themoviedb.org/3/trending/all/week?api_key=523e00cfc7fcc6bed883c38162ea974d&language=en-US")
